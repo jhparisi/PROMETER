@@ -1,0 +1,38 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.eszaworker">
+         <uses-permission android:name="android.permission.INTERNET"/>
+         <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+         <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <application
+        android:name="io.flutter.app.FlutterApplication"
+        android:label="eszaworker"
+        tools:replace="android:label"
+        android:icon="@mipmap/ic_launcher">
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/LaunchTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="FLUTTER_NOTIFICATION_CLICK" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <service android:name="com.transistorsoft.locationmanager.service.TrackingService" android:foregroundServiceType="location" />
+        <service android:name="com.transistorsoft.locationmanager.service.LocationRequestService" android:foregroundServiceType="location" />
+
+        <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="1505a16d86dc39b3f9c2dd3bc132c8d2ced3f4ac2403a83b27329e8dc977105f" />
+        <!-- <meta-data android:name="com.transistorsoft.locationmanager.ENCRYPTION_PASSWORD" android:value="transistorsoft" /> -->
+
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
+    </application>
+</manifest>
