@@ -69,6 +69,58 @@ class _PTRepostarState extends State<PTRepostar>{
 
   @override 
   Widget build(BuildContext context){
+
+    //***************************AlertDialog*************************************************//
+    showAlertDialog(BuildContext context, String pregunta, String datos,Color color, int btnAceptar) {
+      List<Widget> accion = new List<Widget>();
+      
+      // set up the buttons
+      Widget botonCancelar = FlatButton(
+        child: Text("Cancelar"),
+        onPressed:  () {
+          Navigator.pop(context);
+        },
+      );
+      Widget botonAceptar = FlatButton(
+        child: Text("Aceptar"),
+        onPressed:  () {
+          Navigator.pop(context);
+          loadRefuel(_combustible, kmsController.text, _carPlateRepostar, priceController.text, litreController.text, DateTime.now().toString(), _idUser.toString());
+          prd.show();
+          Future.delayed(Duration(seconds: 3)).then((value) {
+            prd.hide().whenComplete(() {
+              _dbprovider.deleteRefuelLocal(_idUser.toString());
+              _repository.fetchRefuelLocal(_combustible, kmsController.text, litreController.text, _carPlateRepostar, priceController.text, DateTime.now().toString(), _idUser.toString());
+              getPlayPause();
+            });
+          });
+        },
+      );
+
+      if(btnAceptar==1){
+        accion.add(botonAceptar);
+        accion.add(botonCancelar);
+      }
+      else{
+        accion.add(botonCancelar);
+      }
+      // set up the AlertDialog
+      AlertDialog alert = AlertDialog(
+        title: Text(pregunta),
+        content: Text(datos, style: TextStyle(color: color),),
+        actions: accion,
+      );
+      // show the dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
+      
+    }
+    //***************************FIN AlertDialog*************************************************//
+
     //getVerifyDataLocal();
     _menu.getVerifyDataLocal(_idUser);
     
@@ -156,17 +208,21 @@ class _PTRepostarState extends State<PTRepostar>{
                       TextFormField(
                         controller: kmsController,
                         decoration: InputDecoration(
-                          labelText: 'Kilometros al repostar:',
+                          labelText: 'Kilometros al repostar:'
                         ),
                         keyboardType: TextInputType.number,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Debes indicar los kilometros';
+                            showAlertDialog(context,"Error!","Debes indicar los kilometros",Colors.red, 0);
+                            return "Debes indicar los kilometros";
                           }
                           else if(int.parse(kmsController.text) < lastKM && lastCarPlate == _carPlateRepostar){
+                            var indicados = kmsController.text;
+                            showAlertDialog(context,"Error!","Los Km indicados ($indicados) no pueden ser inferiores \na los valores del último repostaje ($lastKM).\n¿Estas seguro de querer guardar estos valores?",Colors.red,1);
                             return 'Los Km indicados no pueden ser inferiores \na los valores del último repostaje';
                           }
-                          else if(int.parse(kmsController.text)> (lastKM+1500) && lastKM!=0){
+                          else if(int.parse(kmsController.text)> (lastKM+1000) && lastKM!=0){
+                            showAlertDialog(context,"Error!",'El Kilómetraje, no puede ser superior a los \n1.000km adicionales al último repostaje (' + lastKM.toString() + ' Km).\n¿Estas seguro de querer guardar estos valores?',Colors.red,1);
                             /* fbar = new Flushbar(
                               flushbarPosition: FlushbarPosition.TOP,
                               message: 'El Kilómetraje, no puede ser superior a los \n1.500km adicionales al último repostaje (' + lastKM.toString() + ' Km)',
@@ -190,6 +246,7 @@ class _PTRepostarState extends State<PTRepostar>{
                         keyboardType: TextInputType.number,
                         validator: (value) {
                           if (value.isEmpty) {
+                            showAlertDialog(context,"Error!","Debes indicar el importe",Colors.red, 0);
                             return 'Debes indicar el importe';
                           }
                           return null;
@@ -203,6 +260,7 @@ class _PTRepostarState extends State<PTRepostar>{
                         keyboardType: TextInputType.number,
                         validator: (value) {
                           if (value.isEmpty) {
+                            showAlertDialog(context,"Error!","Debes indicar los Litros",Colors.red, 0);
                             return 'Debes indicar los Litros';
                           }
                           return null;
@@ -213,6 +271,7 @@ class _PTRepostarState extends State<PTRepostar>{
                       ),
                       RaisedButton(
                         onPressed: () {
+                          
                           if (_formKey.currentState.validate()) {
                             loadRefuel(_combustible, kmsController.text, _carPlateRepostar, priceController.text, litreController.text, DateTime.now().toString(), _idUser.toString());
                             prd.show();
@@ -225,7 +284,7 @@ class _PTRepostarState extends State<PTRepostar>{
                             });
                           }
                         },
-                        child: Text('Terminar'),
+                        child: Text('Repostar'),
                         color: Colors.blue,
                         textColor: Colors.white,
                       )

@@ -5,7 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:get_version/get_version.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
+import 'menu.dart';
+
 DBProvider _dbprovider = DBProvider.get();
+Menu _menu = new Menu();
 int versionDB=0;
 
 String appName = "";
@@ -92,6 +95,7 @@ class _PTAcercaState extends State<PTAcerca> {
         centerTitle: true,
         title: Text("Acerca de", textAlign: TextAlign.center),
       ),
+      drawer: _menu.getDrawer(context),
       body: new Container(
         child: ListView(
           children: <Widget>[

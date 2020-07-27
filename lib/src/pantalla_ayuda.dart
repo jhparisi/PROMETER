@@ -6,11 +6,14 @@ import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'dart:io' as Io;
 import 'dart:convert';
 
+import 'menu.dart';
+
 const String telefonoWS="+34651405480";
 const String mensajeContacto="Hola, necesito ayuda con la aplicación PRO-METER.\n¿Puedes ayudarme?";
 const String telefonoContacto ="900264438";
 const String urlPreguntas ="https://www.ezsa.es/";
-  
+Menu _menu = new Menu();
+
 class PTAyuda extends StatefulWidget {
   static const String routeName = "/pantalla_ayuda";
   PTAyuda({Key key}) : super(key: key);
@@ -48,7 +51,7 @@ class _PTAyudaState extends State<PTAyuda> {
         centerTitle: true,
         title: Text("Ayuda y FQAs", textAlign: TextAlign.center),
       ),
-      //drawer: _menu.getDrawer(context),
+      drawer: _menu.getDrawer(context),
       body: Container(
         child: ListView(
           children: <Widget>[

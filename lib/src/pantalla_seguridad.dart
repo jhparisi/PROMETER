@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'menu.dart';
+
 const String politica="La aceptación de las presentes condiciones generales de materia de política de privacidad y protección de datos personales supone para el usuario su conformidad y consentimiento expreso al tratamiento de los datos facilitados a EZSA SANIDAD AMBIENTAL S.L. a través del portal www.ezsa.es.";
 
 const String identificativo ="La empresa titular de dominio web es Ezsa Sanidad Ambiental S.L. (en adelante “EZSA”), con domicilio a estos efectos en Calle Azorín, 10, 09005 (Burgos) número de C.I.F.: B09321928 y con correo electrónico de contacto: ezsa@ezsa.es del sitio web.\nUSUARIOS: El acceso y/o uso de este portal de EZSA atribuye la condición de USUARIO, que acepta, desde dicho acceso y/o uso, la Condiciones Legales aquí reflejadas. Las citadas Condiciones serán de aplicación independientemente de las Condiciones Generales de Uso que en su caso resulten de obligado cumplimiento.\nUSO DEL PORTAL:  www.ezsa.es proporciona el acceso a multitud de informaciones, servicios, programas o datos (en adelante, «los contenidos») en Internet.  El USUARIO asume la responsabilidad del uso del portal. Dicha responsabilidad se extiende al registro que fuese necesario para acceder a determinados servicios o contenidos. En dicho registro el USUARIO será responsable de aportar información veraz y lícita. Como consecuencia de este registro, al USUARIO se le puede proporcionar una contraseña de la que será responsable, comprometiéndose a hacer un uso diligente y confidencial de la misma.\nEl USUARIO se compromete a hacer un uso adecuado de los contenidos y servicios (como por ejemplo servicios de chat, foros de discusión o grupos de noticias) que Nombre de la empresa creadora del sitio web ofrece a través de su portal y con carácter enunciativo pero no limitativo, a no emplearlos para (i) incurrir en actividades ilícitas, ilegales o contrarias a la buena fe y al orden público; (ii) difundir contenidos o propaganda de carácter racista, xenófobo, pornográfico-ilegal, de apología del terrorismo o atentatorio contra los derechos humanos; (iii) provocar daños en los sistemas físicos y lógicos de Avanzadi Digital Solutions S.L., de sus proveedores o de terceras personas, introducir o difundir en la red virus informáticos o cualesquiera otros sistemas físicos o lógicos que sean susceptibles de provocar los daños anteriormente mencionados; (iv) intentar acceder y, en su caso, utilizar las cuentas de correo electrónico de otros usuarios y modificar o manipular sus mensajes. EZSA se reserva el derecho de retirar todos aquellos comentarios y aportaciones que vulneren el respeto a la dignidad de la persona, que sean discriminatorios, xenófobos, racistas, pornográficos, que atenten contra la juventud o la infancia, el orden o la seguridad pública o que, a su juicio, no resultaran adecuados para su publicación. En cualquier caso, EZSA no será responsable de las opiniones vertidas por los usuarios a través de los foros, chats, u otras herramientas de participación.";
@@ -28,6 +30,8 @@ const String modificacionP ="EZSA web podrá modificar en cualquier momento las 
 
 const String legislacion ="Las relaciones establecidas entre el Usuario y el titular de la página web se regirán por lo dispuesto en la normativa vigente acerca de la legislación aplicable y la jurisdicción competente. No obstante, para los casos en los que la normativa permita la posibilidad a las partes de someterse voluntariamente a un fuero. EZSA SANIDAD AMBIENTAL S.L. y el Usuario, con renuncia expresa a cualquier otro fuero que pudiera corresponderles, se someten a los Juzgados y Tribunales competentes conforme al Art 90.2 del Real Decreto Legislativo 1/2007, de 16 de Noviembre por el que se aprueba el texto refundido de la Ley General Para la Defensa de los Consumidores y Usuarios y con Leyes Complementarias.";
 
+Menu _menu = new Menu();
+
 class PTSeguridad extends StatefulWidget {
   static const String routeName = "/pantalla_seguridad";
   PTSeguridad({Key key}) : super(key: key);
@@ -49,7 +53,7 @@ class _PTSeguridadState extends State<PTSeguridad> {
         centerTitle: true,
         title: Text("Seguridad y Privacidad", textAlign: TextAlign.center),
       ),
-      //drawer: _menu.getDrawer(context),
+      drawer: _menu.getDrawer(context),
       body: new Container(
         padding: EdgeInsets.only(bottom: 10.0, left: 10.0, right: 10.0),
         alignment: new FractionalOffset(0.5, 0.0),
