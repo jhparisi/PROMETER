@@ -11,6 +11,7 @@ import 'package:eszaworker/src/services/location_service.dart';
 import 'package:eszaworker/src/services/stoppable_service.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 //import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:eszaworker/src/pantalla_finalizar_trayecto.dart';
@@ -58,6 +59,10 @@ String _motionActivity;
 String _odometer;
 String _content;
 int acompanante=0;
+bool _first = true;
+double _fontSize = 18;
+Color _color = Colors.blue;
+
 JsonEncoder encoder = new JsonEncoder.withIndent("     ");
 
 enum InfoButtons { play, stop }
@@ -92,10 +97,17 @@ class _PTCerrarRutaState extends State<PTCerrarRuta> with WidgetsBindingObserver
     _odometer = '0';
     Menu _menu = new Menu();
     userId = _menu.getuserId().toString();
-    dateBeginning = widget.data.dateBeginning;
+    if(widget.data.dateBeginning!=""){
+      dateBeginning = widget.data.dateBeginning;
+    }
+    else{
+     getLocalPlayPause();
+      print("EL VALOR DE DATEBE ES::::" + dateBeginning.toString());
+    }
     if(userId=="0"){
       userId= widget.data.userId.toString();
     }
+
     print("VALOR CARGADO DEL USERID"+userId);
     addPlayPause(1);//PLAY
     WidgetsBinding.instance.addObserver(this);
@@ -145,9 +157,13 @@ class _PTCerrarRutaState extends State<PTCerrarRuta> with WidgetsBindingObserver
     servicesToManage.forEach((service) {
       if (state == AppLifecycleState.resumed) {
         service.start();
+        print("VIENE DEL RESUMED");
+        print("TIEMPO DEL CRONOMETRO: " +tiempocronometro);
         //cronometro();
-      } else {
+      } 
+      else {
         service.stop();
+        print("EL STATE ES: " + state.toString());
         //cronometro();
       }
     });
@@ -155,6 +171,7 @@ class _PTCerrarRutaState extends State<PTCerrarRuta> with WidgetsBindingObserver
   
   @override 
   Widget build(BuildContext context){
+    print("SE ACTUALIZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     acompanante = _menu.getAcompanante();
     prdF = new ProgressDialog(context);
     prdF.style(
@@ -196,7 +213,16 @@ class _PTCerrarRutaState extends State<PTCerrarRuta> with WidgetsBindingObserver
                           Padding(padding: EdgeInsets.only(top: 30.0),),
                           Text('Tiempo de trabajo', style: TextStyle(fontSize: 12.0) ),
                           Padding(padding: EdgeInsets.only(top: 10.0),),
-                          Text("$tiempocronometro", style: TextStyle(fontSize: 40.0),),                        
+                          Text("$tiempocronometro", style: TextStyle(fontSize: 20.0),), 
+                          AnimatedDefaultTextStyle(
+                            duration: const Duration(milliseconds: 300),
+                            style: TextStyle(
+                              fontSize: _fontSize,
+                              color: _color,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            child: Text('Trabajando'),
+                          ),                       
                           Row(
                             children: <Widget>[
                               Expanded(
@@ -417,6 +443,9 @@ class _PTCerrarRutaState extends State<PTCerrarRuta> with WidgetsBindingObserver
     var horaInicial =dateBeginning;
     
     Timer.periodic(Duration(seconds: 1), (timer){
+      _fontSize = _first ? 18 : 12;
+      _color = _first ? Colors.blue : Colors.green;
+      _first = !_first;
       if(estaPausado==false){
         if(horaPausa!="0"){
           horaInicial = horaReinicia;
@@ -571,5 +600,13 @@ class _PTCerrarRutaState extends State<PTCerrarRuta> with WidgetsBindingObserver
 
   void _onConnectivityChange(bg.ConnectivityChangeEvent event) {
     print('$event');
+  }
+
+  Future<List<PlayPauseTracking>> getLocalPlayPause() async{
+    List<PlayPauseTracking> list = await _dbprovider.getPlayAndPause();
+    if(list != null){
+      dateBeginning =list[0].dateBeginning;
+    }
+    return list;
   }
 }
