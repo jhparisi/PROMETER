@@ -50,6 +50,7 @@ bool _matriculaVisible = true;
 var checkedValue = false;
 String _matriculaUsuario;
 String _selectedMatricula;
+bool matriculaSeleccionada = false;
 Flushbar fbarPDA = new Flushbar(
   flushbarPosition: FlushbarPosition.TOP,
   backgroundColor: Colors.red,
@@ -340,9 +341,9 @@ class _PTInicialState extends State<PTInicial> {
                             ) ,
                             isExpanded: true,
                             value: _selectedMatricula,
-                            validator: (value) {
-                              if (carPlateController.text.isEmpty && _matriculaVisible==true) {
-                                fbarMatriculaSeleccionada.show(context);
+                            validator: (value) {                              
+                              if (matriculaSeleccionada==false && _matriculaVisible==true) {
+                                //fbarMatriculaSeleccionada.show(context);
                                 return 'Debes indicar una matrícula para iniciar';
                               }
                               return null;
@@ -351,6 +352,7 @@ class _PTInicialState extends State<PTInicial> {
                               setState(() {                          
                                 _selectedMatricula = newValue;
                                 carPlateController.text = newValue;
+                                matriculaSeleccionada =true;
                               });
                             },
                             items: _listMatriculas.map((matricula) {
@@ -421,10 +423,14 @@ class _PTInicialState extends State<PTInicial> {
           var val = list.length-1;
           //for(var i=0;i<list.length; i++){
             numPhoneController.text = list[val].numPhone;
-            //carPlateController.text = list[val].carPlate;
+            carPlateController.text = list[val].carPlate;
             _matriculaUsuario = list[val].carPlate;
             _idUser = list[val].userId;
             _dni = list[val].dni; 
+            if(list[val].carPlate!=""){
+              _selectedMatricula = list[val].carPlate;
+              matriculaSeleccionada = true;
+            }
             //_acompananteInt = list[val].acompanante;            
             _dbprovider.deleteDataLocal(null);
           //}          

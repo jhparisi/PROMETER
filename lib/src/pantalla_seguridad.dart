@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'menu.dart';
 
@@ -28,7 +29,7 @@ const String generalidades ="EZSA perseguirá el incmplimiento de las presentes 
 
 const String modificacionP ="EZSA web podrá modificar en cualquier momento las condiciones aquí determinadas, siendo debidamente publicadas como aquí aparecen. La vigencia de las citadas condiciones irá en función de su exposición y estarán vigentes hasta que sean modificadas por otras debidamente publicadas.";
 
-const String legislacion ="Las relaciones establecidas entre el Usuario y el titular de la página web se regirán por lo dispuesto en la normativa vigente acerca de la legislación aplicable y la jurisdicción competente. No obstante, para los casos en los que la normativa permita la posibilidad a las partes de someterse voluntariamente a un fuero. EZSA SANIDAD AMBIENTAL S.L. y el Usuario, con renuncia expresa a cualquier otro fuero que pudiera corresponderles, se someten a los Juzgados y Tribunales competentes conforme al Art 90.2 del Real Decreto Legislativo 1/2007, de 16 de Noviembre por el que se aprueba el texto refundido de la Ley General Para la Defensa de los Consumidores y Usuarios y con Leyes Complementarias.";
+const String legislacion ="Las relaciones establecidas entre el Usuario y el titular de la página web se regirán por lo dispuesto en la normativa vigente acerca de la legislación aplicable y la jurisdicción competente. No obstante, para los casos en los que la normativa permita la posibilidad a las partes de someterse voluntariamente a un fuero. EZSA SANIDAD AMBIENTAL S.L. y el Usuario, con renuncia expresa a cualquier otro fuero que pudiera corresponderles, se someten a los Juzgados y Tribunales competentes conforme al Art 90.2 del Real Decreto Legislativo 1/2007, de 16 de Noviembre por el que se aprueba el texto refundido de la Ley General Para la Defensa de los Consumidores y Usuarios y con Leyes Complementarias."; 
 
 Menu _menu = new Menu();
 
@@ -57,18 +58,18 @@ class _PTSeguridadState extends State<PTSeguridad> {
       body: new Container(
         padding: EdgeInsets.only(bottom: 10.0, left: 10.0, right: 10.0),
         alignment: new FractionalOffset(0.5, 0.0),
-        child: Flexible(
+        child: Container(
           child: ListView(
             children: <Widget>[
               Padding(padding: EdgeInsets.only(bottom: 10.0, left: 10.0, right: 10.0)),
               Text("Politica de Privacidad",style:TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),textAlign: TextAlign.left, ),
               Padding(padding: EdgeInsets.only(bottom: 10.0, left: 10.0, right: 10.0)),
               Text("$politica",style:TextStyle(fontSize: 10.0),textAlign: TextAlign.left),
-              Padding(padding: EdgeInsets.only(bottom: 10.0, left: 10.0, right: 10.0)),
+              Padding(padding: EdgeInsets.only(bottom: 10.0, left: 10.0, right: 10.0)),              
               Text("DATOS IDENTIFICATIVOS",style:TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),textAlign: TextAlign.left, ),
               Padding(padding: EdgeInsets.only(bottom: 10.0, left: 10.0, right: 10.0)),
               Text("$identificativo",style:TextStyle(fontSize: 10.0),textAlign: TextAlign.left),
-              Padding(padding: EdgeInsets.only(bottom: 10.0, left: 10.0, right: 10.0)),
+              Padding(padding: EdgeInsets.only(bottom: 10.0, left: 10.0, right: 10.0)),              
               Text("PROTECCIÓN DE DATOS",style:TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),textAlign: TextAlign.left, ),
               Padding(padding: EdgeInsets.only(bottom: 10.0, left: 10.0, right: 10.0)),
               Text("$proteccion",style:TextStyle(fontSize: 10.0),textAlign: TextAlign.left),
@@ -115,7 +116,15 @@ class _PTSeguridadState extends State<PTSeguridad> {
               Padding(padding: EdgeInsets.only(bottom: 10.0, left: 10.0, right: 10.0)),
               Text("LEGISLACIÓN APLICABLE Y JURISDICCIÓN",style:TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),textAlign: TextAlign.left, ),
               Padding(padding: EdgeInsets.only(bottom: 10.0, left: 10.0, right: 10.0)),
-              Text("$legislacion",style:TextStyle(fontSize: 10.0),textAlign: TextAlign.left),
+              Text("$legislacion",style:TextStyle(fontSize: 10.0),textAlign: TextAlign.left), 
+              Padding(padding: EdgeInsets.only(bottom: 10.0, left: 10.0, right: 10.0)),
+              Center(
+                child: InkWell(
+                  child: new Text('Seguir leyendo', style:  TextStyle(color: Colors.blue, fontSize: 12.0),),
+                  onTap: () => launch('https://www.ezsa.es/politica-de-privacidad/')
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(bottom: 10.0, left: 10.0, right: 10.0)),
             ]
           )
         ),
