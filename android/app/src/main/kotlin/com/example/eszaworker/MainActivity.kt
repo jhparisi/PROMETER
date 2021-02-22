@@ -1,4 +1,4 @@
-package com.example.eszaworker
+package com.ezsa.prometer
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

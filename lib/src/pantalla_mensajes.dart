@@ -1,12 +1,9 @@
 import 'package:eszaworker/class/MensajesChatClass.dart';
 import 'package:eszaworker/class/MensajesClass.dart';
 import 'package:eszaworker/resources/db_provider.dart';
-import 'package:eszaworker/src/pantalla_proxima.dart';
 import 'package:flutter/material.dart';
 import 'package:eszaworker/src/pantalla_chat_list.dart';
 import 'package:eszaworker/src/pantalla_contactos.dart';
-
-import 'listitem_mensajes.dart';
 import 'menu.dart';
 //import 'menu.dart';
 
@@ -23,9 +20,9 @@ class PTMensajes extends StatefulWidget {
   _PTMensajesState createState() => new _PTMensajesState();
 }
 
-class _PTMensajesState extends State<PTMensajes> with SingleTickerProviderStateMixin{
-  
-  TabController _tabController;  
+class _PTMensajesState extends State<PTMensajes>
+    with SingleTickerProviderStateMixin {
+  TabController _tabController;
   List<Mensajes> _mensaje = new List();
 
   @override
@@ -45,41 +42,44 @@ class _PTMensajesState extends State<PTMensajes> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-   return new Scaffold(
-     appBar: new AppBar(
-       title: Text("Mensajes", textAlign: TextAlign.center),
-       bottom: new TabBar(
-         controller: _tabController,
-         tabs: <Widget>[
-           new Tab(text: "CHATS"),
-           new Tab(text: "PROXIMAMENTE"),
-           new Tab(text: "PROXIMAMENTE",)
-         ],
-       ),
-     ),
-     drawer: _menu.getDrawer(context),
-     body: new TabBarView(
-      controller: _tabController,
-       children: <Widget>[
-         new PTChatList(),
-         new PTProxima(),
-         new PTProxima(),
-       ],
-     ),
-     floatingActionButton: new FloatingActionButton(
-       backgroundColor: Theme.of(context).accentColor,
-       child: new Icon(
-         Icons.message,
-         color: Colors.white,
-       ),
-       onPressed: () {
-         var route = new MaterialPageRoute(
-           builder: (BuildContext context) => new PTContactos());
-           Navigator.of(context).push(route);
-         
-       },
-     ),
-   );
+    return new Scaffold(
+      appBar: new AppBar(
+        title: Text("Mensajes", textAlign: TextAlign.center),
+        bottom: new TabBar(
+          controller: _tabController,
+          tabs: <Widget>[
+            new Tab(text: "CHATS"),
+            new Tab(text: "PROXIMAMENTE"),
+            new Tab(
+              text: "PROXIMAMENTE",
+            )
+          ],
+        ),
+      ),
+      drawer: _menu.getDrawer(context),
+      body: new TabBarView(
+        controller: _tabController,
+        children: <Widget>[
+          new PTChatList(),
+          new PTChatList(),
+          new PTChatList(),
+          /* new PTProxima(),
+         new PTProxima(), */
+        ],
+      ),
+      floatingActionButton: new FloatingActionButton(
+        backgroundColor: Theme.of(context).accentColor,
+        child: new Icon(
+          Icons.message,
+          color: Colors.white,
+        ),
+        onPressed: () {
+          var route = new MaterialPageRoute(
+              builder: (BuildContext context) => new PTContactos());
+          Navigator.of(context).push(route);
+        },
+      ),
+    );
   }
 
   /* @override
