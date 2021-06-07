@@ -17,7 +17,7 @@ class MensajesListItem extends StatelessWidget {
               title: Text(mensajes.titulo),
               content: Text(mensajes.mensaje + "\n" + mensajes.fecha.substring(0,16)),
               actions: <Widget>[
-                new FlatButton(
+                new TextButton(
                   child: Text("Cerrar"),
                   onPressed: (){
                     Navigator.of(context).pop();
