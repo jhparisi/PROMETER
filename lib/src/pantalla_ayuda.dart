@@ -49,27 +49,16 @@ class _PTAyudaState extends State<PTAyuda> {
     //***************************AlertDialog*************************************************//
     showAlertDialog(BuildContext context, String pregunta, String datos,
         Color color, int btnAceptar) {
-
       List<Widget> accion = [];
 
       // set up the buttons
       Widget botonCancelar = TextButton(
-=======
-      List<Widget> accion = new List<Widget>();
-
-      // set up the buttons
-      Widget botonCancelar = FlatButton(
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
         child: Text("No"),
         onPressed: () {
           Navigator.pop(context);
         },
       );
-
       Widget botonAceptar = TextButton(
-=======
-      Widget botonAceptar = FlatButton(
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
         child: Text("Sí"),
         onPressed: () {
           _deleteData();

@@ -54,27 +54,16 @@ class _PTControlHorasState extends State<PTControlHoras> {
   //***************************AlertDialog*************************************************//
   showAlertDialog(BuildContext context, String pregunta, String datos,
       Color color, int btnAceptar) {
-
     List<Widget> accion = [];
     var fecha = datos.split(" ");
     // set up the buttons
     Widget botonCancelar = TextButton(
-=======
-    List<Widget> accion = new List<Widget>();
-    var fecha = datos.split(" ");
-    // set up the buttons
-    Widget botonCancelar = FlatButton(
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
       child: Text("Cancelar"),
       onPressed: () {
         Navigator.pop(context);
       },
     );
-
     Widget botonAceptar = TextButton(
-=======
-    Widget botonAceptar = FlatButton(
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
       child: Text("Aceptar"),
       onPressed: () {
         final data =
@@ -300,25 +289,18 @@ class _PTControlHorasState extends State<PTControlHoras> {
   }
 
   Future<List<ControlHourAllClass>> getControlHorasAll(String idUsuario) async {
-
     List<ControlHourAllClass> retunn = [];
-=======
-    List<ControlHourAllClass> retunn = new List<ControlHourAllClass>();
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
     try {
       List<ControlHourAllClass> list =
           await HttpHandler().fetchControlHorasTodas(idUsuario);
       setState(() {
         if (list != null) {
           for (var i = 0; i < list.length; i++) {
-
             DateTime fechaD = DateTime.parse(list[i].fecha);
             fechaD = fechaD.add(Duration(hours: 6));
             /* if(DateTime.parse(list[i].fechaHora) == fechaD){
 
             } */
-=======
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
             if (list[i].modificadoManual == true) {
               colorEvento = Colors.red;
             } else {

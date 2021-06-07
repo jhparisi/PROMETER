@@ -7,9 +7,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="PRO METER"
-
         android:usesCleartextTraffic="true"
-
         tools:replace="android:label"
         android:icon="@mipmap/ic_launcher">
         <activity

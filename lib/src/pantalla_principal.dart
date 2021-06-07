@@ -209,11 +209,7 @@ class _PTPrincipalState extends State<PTPrincipal> {
   }
 
   Future<List<WorkingDay>> getWDLocal() async {
-
     List<WorkingDay> retunn = [];
-=======
-    List<WorkingDay> retunn = new List<WorkingDay>();
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
     try {
       List<WorkingDay> list = await _dbprovider.getWorkingDay();
       setState(() {
@@ -232,11 +228,7 @@ class _PTPrincipalState extends State<PTPrincipal> {
   }
 
   Future<List<PlayPauseTracking>> getPlayPause() async {
-
     List<PlayPauseTracking> retunn = [];
-=======
-    List<PlayPauseTracking> retunn = new List<PlayPauseTracking>();
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
     try {
       List<PlayPauseTracking> list = await _dbprovider.getPlayAndPause();
       if (list != null) {

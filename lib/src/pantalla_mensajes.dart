@@ -23,11 +23,7 @@ class PTMensajes extends StatefulWidget {
 class _PTMensajesState extends State<PTMensajes>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
-
   List<Mensajes> _mensaje = new List.empty();
-=======
-  List<Mensajes> _mensaje = new List();
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
 
   @override
   void initState() {

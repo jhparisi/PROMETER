@@ -58,27 +58,16 @@ class _PTFinalizarRutaState extends State<PTFinalizarRuta> {
     //***************************AlertDialog*************************************************//
     showAlertDialog(BuildContext context, String pregunta, String datos,
         Color color, int btnAceptar) {
-
       List<Widget> accion = [];
 
       // set up the buttons
       Widget botonCancelar = TextButton(
-=======
-      List<Widget> accion = new List<Widget>();
-
-      // set up the buttons
-      Widget botonCancelar = FlatButton(
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
         child: Text("Cancelar"),
         onPressed: () {
           Navigator.pop(context);
         },
       );
-
       Widget botonAceptar = TextButton(
-=======
-      Widget botonAceptar = FlatButton(
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
         child: Text("Aceptar"),
         onPressed: () {
           Navigator.pop(context);
@@ -232,11 +221,7 @@ class _PTFinalizarRutaState extends State<PTFinalizarRuta> {
                         var kmfin = int.parse(kmsTheEndController.text);
                         showAlertDialog(
                             context,
-
                             "Advertencia!",
-=======
-                            "Error!",
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
                             "Los Km indicados ($kmfin) no pueden ser inferiores \na los valores del último Kilometraje ($kmInic).\n¿Estas seguro de querer guardar estos valores?",
                             Colors.red,
                             1);
@@ -246,11 +231,7 @@ class _PTFinalizarRutaState extends State<PTFinalizarRuta> {
                     },
                   ),
                   Padding(padding: EdgeInsets.only(top: 20.0)),
-
                   ElevatedButton(
-=======
-                  RaisedButton(
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
                         getSendLocalDataToAPI();
@@ -294,17 +275,12 @@ class _PTFinalizarRutaState extends State<PTFinalizarRuta> {
                       }
                     },
                     child: Text('Terminar'),
-
                     style: ElevatedButton.styleFrom(
                       primary: Colors.blue, // background
                       onPrimary: Colors.white, // foreground
                     )
                     /* color: Colors.blue,
                     textColor: Colors.white, */
-=======
-                    color: Colors.blue,
-                    textColor: Colors.white,
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
                   )
                 ],
               ),
@@ -312,11 +288,7 @@ class _PTFinalizarRutaState extends State<PTFinalizarRuta> {
   }
 
   Future<List<WorkingDay>> getWDLocal() async {
-
     List<WorkingDay> retunn = [];
-=======
-    List<WorkingDay> retunn = new List<WorkingDay>();
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
     try {
       List<WorkingDay> list = await _dbprovider.getWorkingDay();
       setState(() {

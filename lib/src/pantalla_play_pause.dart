@@ -63,10 +63,7 @@ bool _first = true;
 double _fontSize = 18;
 Color _color = Colors.blue;
 bool gpsActivo = true;
-
 String textoTrabajandoPausado = "Trabajando";
-=======
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
 
 JsonEncoder encoder = new JsonEncoder.withIndent("     ");
 
@@ -242,11 +239,7 @@ class _PTCerrarRutaState extends State<PTCerrarRuta>
                       color: _color,
                       fontWeight: FontWeight.bold,
                     ),
-
                     child: Text(textoTrabajandoPausado),
-=======
-                    child: Text('Trabajando'),
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
                   ),
                   Row(
                     children: <Widget>[
@@ -259,17 +252,11 @@ class _PTCerrarRutaState extends State<PTCerrarRuta>
                                   if (estaPausado == false) {
                                     estaPausado = true;
                                     addPlayPause(2); //PAUSE
-
                                     textoTrabajandoPausado = "Pausado";
                                   } else {
                                     estaPausado = false;
                                     addPlayPause(1); //PLAY
                                     textoTrabajandoPausado = "Trabajando";
-=======
-                                  } else {
-                                    estaPausado = false;
-                                    addPlayPause(1); //PLAY
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
                                   }
                                 });
                               },

@@ -35,21 +35,14 @@ List<String> _locations = [
   'Diésel Normal',
   'Diésel Plus',
   'Diésel 1D, 2D,4D',
-
   'Gas Natural',
   'Eléctrico (Kw)',
   'AdBlue'
-=======
-  'Gas Natural'
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
 ]; // Option 2
 String _selectedLocation; // Option 2
 int lastKM = 0;
 String _dateBeginning = "";
-
 String unidadMedida = "Litros";
-=======
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
 
 class PTRepostar extends StatefulWidget {
   static const String routeName = "/pantalla_repostar";
@@ -89,11 +82,7 @@ class _PTRepostarState extends State<PTRepostar> {
     //***************************AlertDialog*************************************************//
     showAlertDialog(BuildContext context, String pregunta, String datos,
         Color color, int btnAceptar) {
-
       List<Widget> accion = new List<Widget>.empty();
-=======
-      List<Widget> accion = new List<Widget>();
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
 
       // set up the buttons
       Widget botonCancelar = TextButton(
@@ -197,7 +186,6 @@ class _PTRepostarState extends State<PTRepostar> {
                         _selectedLocation = newValue;
                         if (newValue == "Gasolina 98") {
                           _combustible = "1";
-
                           unidadMedida = "Litros";
                         } else if (newValue == "Gasolina 95") {
                           _combustible = "2";
@@ -223,20 +211,6 @@ class _PTRepostarState extends State<PTRepostar> {
                         } else if (newValue == "AdBlue") {
                           _combustible = "9";
                           unidadMedida = "Litros";
-=======
-                        } else if (newValue == "Gasolina 95") {
-                          _combustible = "2";
-                        } else if (newValue == "Bioetanol") {
-                          _combustible = "3";
-                        } else if (newValue == "Diésel Normal") {
-                          _combustible = "4";
-                        } else if (newValue == "Diésel Plus") {
-                          _combustible = "5";
-                        } else if (newValue == "Diésel 1D, 2D,4D") {
-                          _combustible = "6";
-                        } else if (newValue == "Gas Natural") {
-                          _combustible = "7";
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
                         }
                       });
                       print(_combustible);
@@ -306,12 +280,8 @@ class _PTRepostarState extends State<PTRepostar> {
                   ),
                   TextFormField(
                     controller: priceController,
-
                     decoration:
                         InputDecoration(labelText: 'Importe total respostado:'),
-=======
-                    decoration: InputDecoration(labelText: 'Importe:'),
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value.isEmpty) {
@@ -325,33 +295,20 @@ class _PTRepostarState extends State<PTRepostar> {
                   TextFormField(
                     controller: litreController,
                     decoration: InputDecoration(
-
                       labelText: '$unidadMedida:',
-=======
-                      labelText: 'Litros:',
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
                     ),
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value.isEmpty) {
                         showAlertDialog(context, "Error!",
-
                             "Debes indicar los $unidadMedida", Colors.red, 0);
                         return 'Debes indicar los $unidadMedida';
-=======
-                            "Debes indicar los Litros", Colors.red, 0);
-                        return 'Debes indicar los Litros';
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
                       }
                       return null;
                     },
                   ),
                   Padding(padding: EdgeInsets.only(top: 20.0)),
-
                   ElevatedButton(
-=======
-                  RaisedButton(
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
                         loadRefuel(
@@ -380,15 +337,10 @@ class _PTRepostarState extends State<PTRepostar> {
                       }
                     },
                     child: Text('Repostar'),
-
                     style: ElevatedButton.styleFrom(
                       primary: Colors.blue, // background
                       onPrimary: Colors.white, // foreground
                     )
-=======
-                    color: Colors.blue,
-                    textColor: Colors.white,
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
                   )
                 ],
               ),
@@ -396,11 +348,7 @@ class _PTRepostarState extends State<PTRepostar> {
   }
 
   Future<List<PlayPauseTracking>> getPlayPause() async {
-
     List<PlayPauseTracking> retunn = new List<PlayPauseTracking>.empty();
-=======
-    List<PlayPauseTracking> retunn = new List<PlayPauseTracking>();
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
     try {
       List<PlayPauseTracking> list = await _dbprovider.getPlayAndPause();
       if (list != null) {
@@ -438,11 +386,7 @@ class _PTRepostarState extends State<PTRepostar> {
 
   Future<List<Refuel>> getLastRefuel() async {
     String _nameRefuel = "";
-
     List<Refuel> retunn = new List<Refuel>.empty();
-=======
-    List<Refuel> retunn = new List<Refuel>();
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
     List<Refuel> list = await _dbprovider.getVerifyRefuel();
     try {
       setState(() {
@@ -479,15 +423,12 @@ class _PTRepostarState extends State<PTRepostar> {
                 break;
               case "7":
                 _nameRefuel = "Gas Natural";
-
                 break;
               case "8":
                 _nameRefuel = "Eléctrico (Kw)";
                 break;
               case "9":
                 _nameRefuel = "AdBlue";
-=======
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
                 break;
             }
             _selectedLocation = _nameRefuel;
@@ -500,11 +441,7 @@ class _PTRepostarState extends State<PTRepostar> {
   }
 
   Future<List<WorkingDay>> getWDLocal() async {
-
     List<WorkingDay> retunn = new List<WorkingDay>.empty();
-=======
-    List<WorkingDay> retunn = new List<WorkingDay>();
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
     try {
       List<WorkingDay> list = await _dbprovider.getWorkingDay();
       setState(() {

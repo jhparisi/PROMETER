@@ -20,11 +20,8 @@ String matricula = "";
 String nombreUsuario = "";
 String numTelefono = "";
 ProgressDialog pr;
-
 var zona = DateTime.now().timeZoneName;
 var nombreZona = "";
-=======
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
 
 class PTAcerca extends StatefulWidget {
   static const String routeName = "/pantalla_acerca";
@@ -37,16 +34,12 @@ class _PTAcercaState extends State<PTAcerca> {
   @override
   void initState() {
     super.initState();
-
     if(zona=="WEST"){
       nombreZona = "Islas Canarias";
     }
     else if(zona=="CEST"){
       nombreZona = "Madrid";
     }
-=======
-
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
     Future.delayed(const Duration(seconds: 3), () {
       obtenerVersiones();
       getVerifyDataLocal();
@@ -124,19 +117,11 @@ class _PTAcercaState extends State<PTAcerca> {
                 leading: Icon(
                   Icons.storage,
                   color: Colors.blue,
-
                 ),
                 title: Text(
                   "Versión de la BDD",
                   style: TextStyle(fontSize: 14.0),
                 ),
-=======
-                ),
-                title: Text(
-                  "Versión de la BDD",
-                  style: TextStyle(fontSize: 14.0),
-                ),
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
                 subtitle: Text('$versionDB' + ".0.0"),
               ),
               ListTile(
@@ -147,7 +132,6 @@ class _PTAcercaState extends State<PTAcerca> {
                 title: Text(
                   "Versión del OS",
                   style: TextStyle(fontSize: 14.0),
-
                 ),
                 subtitle: Text('$versionOS'),
               ),
@@ -228,88 +212,13 @@ class _PTAcercaState extends State<PTAcerca> {
                 ),
                 subtitle: Text('$nombreZona'),
               ),
-=======
-                ),
-                subtitle: Text('$versionOS'),
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.apps,
-                  color: Colors.blue,
-                ),
-                title: Text(
-                  "Nombre real de la aplicación",
-                  style: TextStyle(fontSize: 14.0),
-                ),
-                subtitle: Text('$appName'),
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.http,
-                  color: Colors.blue,
-                ),
-                title: Text(
-                  "Dominio",
-                  style: TextStyle(fontSize: 14.0),
-                ),
-                subtitle: Text('EZSA'),
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.adb,
-                  color: Colors.blue,
-                ),
-                title: Text(
-                  "ID de la aplicación",
-                  style: TextStyle(fontSize: 14.0),
-                ),
-                subtitle: Text('$packageName'),
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.person,
-                  color: Colors.blue,
-                ),
-                title: Text(
-                  "Usuario",
-                  style: TextStyle(fontSize: 14.0),
-                ),
-                subtitle: Text('$nombreUsuario'),
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.phone,
-                  color: Colors.blue,
-                ),
-                title: Text(
-                  "Número de Teléfono",
-                  style: TextStyle(fontSize: 14.0),
-                ),
-                subtitle: Text('$numTelefono'),
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.directions_car,
-                  color: Colors.blue,
-                ),
-                title: Text(
-                  "Matrícula",
-                  style: TextStyle(fontSize: 14.0),
-                ),
-                subtitle: Text('$matricula'),
-              ),
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
             ],
           ),
         ));
   }
 
   Future<List<DataLocal>> getVerifyDataLocal() async {
-
     List<DataLocal> retunn = new List<DataLocal>.empty();
-=======
-    List<DataLocal> retunn = new List<DataLocal>();
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
     try {
       List<DataLocal> list = await _dbprovider.getVerifyPantallaInicial();
       setState(() {

@@ -5,9 +5,7 @@ class ControlHourDateClass {
   String evento;
   String comentario;
   String fechaHora;
-
   String tiempoTotal;
-
 
   factory ControlHourDateClass(
       Map jsonMap, MediaTypeControlHorasDate mediaType) {
@@ -25,10 +23,8 @@ class ControlHourDateClass {
         modificadoManual = json["modificadoManual"],
         evento = json["evento"],
         comentario = json["comentario"],
-
         fechaHora = json["fechaHora"],
         tiempoTotal = json["tiempoTotal"];
-
 }
 
 enum MediaTypeControlHorasDate { content, show }

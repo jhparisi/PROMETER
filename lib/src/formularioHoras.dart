@@ -118,12 +118,8 @@ class _FormularioHoraState extends State<FormularioHora> {
                 visible: mostrarErrorHora,
               ),
               Padding(padding: const EdgeInsets.only(bottom: 10.0)),
-
               
               ],
-=======
-            ],
->>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
           ),
         ),
       ),
