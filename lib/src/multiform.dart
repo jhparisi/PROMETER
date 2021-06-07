@@ -23,7 +23,10 @@ var horaI = 0;
 var horaFReplace = "";
 var horaF = 0;
 var horass = HorariosInicioFin();
+
 final comentarioController = TextEditingController();
+=======
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
 
 // ignore: must_be_immutable
 class MultiForm extends StatefulWidget {
@@ -67,16 +70,26 @@ class _MultiFormState extends State<MultiForm>
         appBar: AppBar(
           title: Text('Día: ' + fechaFormateadaES),
           actions: [
+
             TextButton(
                 onPressed: guardarHoras,                
                 //textColor: Colors.white,
                 style: TextButton.styleFrom(primary: Colors.white),
+=======
+            FlatButton(
+                onPressed: guardarHoras,
+                textColor: Colors.white,
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
                 child: Column(
                   // Replace with a Row for horizontal icon + text
                   children: <Widget>[
                     Icon(
                       Icons.backup,
+
                       size: 20.0,
+=======
+                      size: 30.0,
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
                     ),
                     Text("Guardar")
                   ],
@@ -87,6 +100,7 @@ class _MultiFormState extends State<MultiForm>
             ? Center(
                 child: Text('Agregar bloque de horas presionando el botón (+)'),
               )
+
             : SingleChildScrollView(
               physics: ScrollPhysics(),
               child: Column(
@@ -122,6 +136,18 @@ class _MultiFormState extends State<MultiForm>
                 itemCount: formularios.length,
                 itemBuilder: (_, i) => formularios[i],
               ), */
+=======
+            : ListView.builder(
+                addAutomaticKeepAlives: true,
+                itemCount: formularios.length,
+                itemBuilder: (_, i) => formularios[i],
+              ),
+        /* floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: agregarFormulario,
+      ), */
+        //floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
         floatingActionButton: FloatingActionBubble(
             // Menu items
             items: <Bubble>[
@@ -247,10 +273,13 @@ class _MultiFormState extends State<MultiForm>
     horaFV.clear();
     validaF.add(1);
     horaFV.add(0);
+
     var comentario = "Registro manual";
     if(comentarioController.text !=""){
       comentario = comentarioController.text;
     }
+=======
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
     if (formularios.length > 0) {
       print("ENTRA");
       var todoValidado = true;
@@ -291,9 +320,15 @@ class _MultiFormState extends State<MultiForm>
             var fechaHoraFin = widget.fecha + " " + item.horaFin;
             Timer(Duration(milliseconds: 500), () {
               postControlHour(widget.idUsuario, widget.fecha, "1", "Inicio",
+
                   comentario, fechaHoraInicio);
               postControlHour(widget.idUsuario, widget.fecha, "1", "Fin",
                   comentario, fechaHoraFin);
+=======
+                  "Registro manual", fechaHoraInicio);
+              postControlHour(widget.idUsuario, widget.fecha, "1", "Fin",
+                  "Registro manual", fechaHoraFin);
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
             });
           }
           mostrarMensaje("Guardando las horas indicadas.");
@@ -321,10 +356,13 @@ class _MultiFormState extends State<MultiForm>
   }
 
   void reordenarFormularios() {
+
     var comentario = "Registro manual";
     if(comentarioController.text !=""){
       comentario = comentarioController.text;
     }
+=======
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
     if (formularios.length > 0) {
       var todoValidado = true;
       formularios
@@ -337,9 +375,15 @@ class _MultiFormState extends State<MultiForm>
           var fechaHoraFin = widget.fecha + " " + item.horaFin;
           Timer(Duration(milliseconds: 500), () {
             postControlHour(widget.idUsuario, widget.fecha, "1", "Inicio",
+
                 comentario, fechaHoraInicio);
             postControlHour(widget.idUsuario, widget.fecha, "1", "Fin",
                 comentario, fechaHoraFin);
+=======
+                "Registro manual", fechaHoraInicio);
+            postControlHour(widget.idUsuario, widget.fecha, "1", "Fin",
+                "Registro manual", fechaHoraFin);
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
           });
         }
         //print(formularios.length);

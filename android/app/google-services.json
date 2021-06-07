@@ -6,74 +6,29 @@
         "storage_bucket": "notificacionespush-b53b3.appspot.com"
     },
     "client": [{
-            "client_info": {
-                "mobilesdk_app_id": "1:200451953916:android:d355b5f0cd8a1cf8cff379",
-                "android_client_info": {
-                    "package_name": "com.example.eszaworker"
-                }
-            },
-            "oauth_client": [{
-                "client_id": "200451953916-rterkn14kkon1us1f7aa5c6hg19dflb8.apps.googleusercontent.com",
-                "client_type": 3
-            }],
-            "api_key": [{
-                "current_key": "AIzaSyCt68dBoPdP_kUlUiH1xV5RbRFV3J6jpDY"
-            }],
-            "services": {
-                "appinvite_service": {
-                    "other_platform_oauth_client": [{
-                        "client_id": "200451953916-rterkn14kkon1us1f7aa5c6hg19dflb8.apps.googleusercontent.com",
-                        "client_type": 3
-                    }]
-                }
+
+        "client_info": {
+            "mobilesdk_app_id": "1:200451953916:android:eff148b328cfb507cff379",
+            "android_client_info": {
+                "package_name": "com.ezsa.prometer"
             }
         },
-        {
-            "client_info": {
-                "mobilesdk_app_id": "1:200451953916:android:6714851e16433aefcff379",
-                "android_client_info": {
-                    "package_name": "com.example.notificaciones_push"
-                }
-            },
-            "oauth_client": [{
-                "client_id": "200451953916-rterkn14kkon1us1f7aa5c6hg19dflb8.apps.googleusercontent.com",
-                "client_type": 3
-            }],
-            "api_key": [{
-                "current_key": "AIzaSyCt68dBoPdP_kUlUiH1xV5RbRFV3J6jpDY"
-            }],
-            "services": {
-                "appinvite_service": {
-                    "other_platform_oauth_client": [{
-                        "client_id": "200451953916-rterkn14kkon1us1f7aa5c6hg19dflb8.apps.googleusercontent.com",
-                        "client_type": 3
-                    }]
-                }
-            }
-        },
-        {
-            "client_info": {
-                "mobilesdk_app_id": "1:200451953916:android:eff148b328cfb507cff379",
-                "android_client_info": {
-                    "package_name": "com.ezsa.prometer"
-                }
-            },
-            "oauth_client": [{
-                "client_id": "200451953916-rterkn14kkon1us1f7aa5c6hg19dflb8.apps.googleusercontent.com",
-                "client_type": 3
-            }],
-            "api_key": [{
-                "current_key": "AIzaSyCt68dBoPdP_kUlUiH1xV5RbRFV3J6jpDY"
-            }],
-            "services": {
-                "appinvite_service": {
-                    "other_platform_oauth_client": [{
-                        "client_id": "200451953916-rterkn14kkon1us1f7aa5c6hg19dflb8.apps.googleusercontent.com",
-                        "client_type": 3
-                    }]
-                }
+        "oauth_client": [{
+            "client_id": "200451953916-rterkn14kkon1us1f7aa5c6hg19dflb8.apps.googleusercontent.com",
+            "client_type": 3
+        }],
+        "api_key": [{
+            "current_key": "AIzaSyCt68dBoPdP_kUlUiH1xV5RbRFV3J6jpDY"
+        }],
+        "services": {
+            "appinvite_service": {
+                "other_platform_oauth_client": [{
+                    "client_id": "200451953916-rterkn14kkon1us1f7aa5c6hg19dflb8.apps.googleusercontent.com",
+                    "client_type": 3
+                }]
             }
         }
-    ],
+    }],
+
     "configuration_version": "1"
 }

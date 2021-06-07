@@ -54,7 +54,10 @@ String _matriculaUsuario;
 String _selectedMatricula;
 bool matriculaSeleccionada = false;
 bool usuarioValidado = false;
+
 bool versionValidada = false;
+=======
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
 String versionApp = "";
 
 Flushbar fbarPDA = new Flushbar(
@@ -77,6 +80,7 @@ Flushbar fbarPass = new Flushbar(
   backgroundColor: Colors.red,
   message:
       "La contraseña ingresada no es correcta. Por favor coloque la contraseña que usa en la PDA",
+
   duration: Duration(seconds: 5),
 );
 Flushbar fbarVersion = new Flushbar(
@@ -84,6 +88,8 @@ Flushbar fbarVersion = new Flushbar(
   backgroundColor: Colors.red,
   message:
       "La versión de la APP que estas usando es antigüa.\nPor favor, comunicate con el administrador para que\nte proporcione la nueva versión.",
+=======
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
   duration: Duration(seconds: 5),
 );
 
@@ -101,7 +107,11 @@ class PTInicial extends StatefulWidget {
 }
 
 class _PTInicialState extends State<PTInicial> {
+
   List<UserByPhoneAPIClass> _user = [];
+=======
+  List<UserByPhoneAPIClass> _user = new List();
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
 
   /// ********************************** INICIO NOTIFICACIONES DE FIREBASE ************************************** */
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
@@ -306,7 +316,11 @@ class _PTInicialState extends State<PTInicial> {
                           labelText: "Número de teléfono",
                         ),
                         maxLength: 9,
+
                         maxLengthEnforcement: MaxLengthEnforcement.enforced,
+=======
+                        maxLengthEnforced: true,
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Debes indicar tu número de teléfono';
@@ -399,7 +413,11 @@ class _PTInicialState extends State<PTInicial> {
                         decoration: InputDecoration(
                           labelText: "Contraseña de PDA",
                         ),
+
                         maxLengthEnforcement: MaxLengthEnforcement.enforced,
+=======
+                        maxLengthEnforced: true,
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Debes indicar tu Contraseña';
@@ -418,12 +436,19 @@ class _PTInicialState extends State<PTInicial> {
                         onPressed: () {
                           var pass = _login + passController.text;
                           validarUsuario(numPhoneController.text, pass);
+
                           validarVersion(_idUser.toString(), versionApp);
                           pr.show();
                           Future.delayed(Duration(seconds: 3)).then((value) {
                             if (_formKeyNum.currentState.validate() &&
                                 usuarioValidado == true &&
                                 versionValidada == true) {
+=======
+                          pr.show();
+                          Future.delayed(Duration(seconds: 3)).then((value) {
+                            if (_formKeyNum.currentState.validate() &&
+                                usuarioValidado == true) {
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
                               print("VALOR DE IDUSER: $_idUser");
                               if (_idUser == 0) {
                                 fbar.show(context);
@@ -458,6 +483,7 @@ class _PTInicialState extends State<PTInicial> {
                               }
                             } else {
                               pr.hide();
+
                               if (versionValidada == false) {
                                 fbarVersion.show(context);
                                 pr.hide();
@@ -466,6 +492,9 @@ class _PTInicialState extends State<PTInicial> {
                                 fbarPass.show(context);
                                 pr.hide();
                               }
+=======
+                              fbarPass.show(context);
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
                             }
                           });
                         }),
@@ -495,7 +524,11 @@ class _PTInicialState extends State<PTInicial> {
   }
 
   Future<List<DataLocal>> getVerifyDataLocal() async {
+
     List<DataLocal> retunn = new List<DataLocal>.empty();
+=======
+    List<DataLocal> retunn = new List<DataLocal>();
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
     try {
       List<DataLocal> list = await _dbprovider.getVerifyPantallaInicial();
       setState(() {
@@ -548,7 +581,11 @@ class _PTInicialState extends State<PTInicial> {
   }
 
   Future<List<PlayPauseTracking>> getPlayPause() async {
+
     List<PlayPauseTracking> retunn = new List<PlayPauseTracking>.empty();
+=======
+    List<PlayPauseTracking> retunn = new List<PlayPauseTracking>();
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
     try {
       List<PlayPauseTracking> list = await _dbprovider.getPlayAndPause();
       setState(() {
@@ -605,6 +642,7 @@ class _PTInicialState extends State<PTInicial> {
     return resultado;
   }
 
+
   Future<bool> validarVersion(idUsuario, numVersion) async {
     var resultado =
         await HttpHandler().fetchValidarVersion(idUsuario, numVersion);
@@ -615,11 +653,17 @@ class _PTInicialState extends State<PTInicial> {
     return resultado;
   }
 
+=======
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
   Future<List<WorkingDay>> getWDLocal() async {
     versionDB = await _dbprovider.db.getVersion();
     versionApp = await GetVersion.projectVersion;
     print("VERSION BD: " + versionDB.toString());
+
     List<WorkingDay> retunn = new List<WorkingDay>.empty();
+=======
+    List<WorkingDay> retunn = new List<WorkingDay>();
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
     try {
       List<WorkingDay> list = await _dbprovider.getWorkingDay();
       setState(() {

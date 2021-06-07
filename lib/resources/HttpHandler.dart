@@ -22,7 +22,8 @@ class HttpHandler {
   final String _urlControlHorasTodas = "/api/Prometer/GetControlHorasTodas";
   final String _urlControlHorasFecha = "/api/Prometer/GetControlHorasFecha";
   final String _urlValidarUsuario = "api/Prometer/ValidarUsuario";
-  final String _urlValidarVersion = "api/Prometer/ValidarVersion";
+
+
   final String _urlNotificacionGPS = "api/Prometer/NotificacionGPSInactivo";
   final String semilla = "415065080244";
   final String dominio = "ezsa.erp.avanzadi.com";
@@ -71,6 +72,7 @@ class HttpHandler {
       "semilla": semilla,
       "userId": "0"
     });
+
     //print(uri);
     return postJson(uri, body);
   }
@@ -85,6 +87,21 @@ class HttpHandler {
       "semilla": semilla,
       "userId": "0"
     });
+    //print(uri);
+    return postJson(uri, body);
+  }
+
+  //SE CONECTA CON LA API PARA ENVIAR NOTIFICACION DE GPS INACTIVO
+  Future postNotificacionGPSInactivo(idUsuario) {
+    var uri = new Uri.http(_baseUrl, _urlNotificacionGPS);
+    var body = jsonEncode(<String, String>{
+      "dominio": dominio,
+      "semilla": semilla,
+      "userId": idUsuario.toString()
+    });
+    //print(uri);
+    return postJson(uri, body);
+
     //print(uri);
     return postJson(uri, body);
   }
@@ -236,7 +253,11 @@ class HttpHandler {
   Future<List<ControlHourDateClass>> fetchControlHorasFecha(idUsuario, fecha) {
     var uri = new Uri.http(_baseUrl, _urlControlHorasFecha);
     var body = jsonEncode(<String, String>{
+
       "idUsuario": idUsuario.toString(),//"9399",//idUsuario.toString()
+=======
+      "idUsuario": idUsuario.toString(),
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
       "fecha": fecha,
       "dominio": dominio,
       "semilla": semilla,

@@ -12,12 +12,19 @@ import 'package:timeline_tile/timeline_tile.dart';
 import 'menu.dart';
 
 Menu _menu = new Menu();
+
 List<ControlHourDateClass> _dataLT = [];
+=======
+List<ControlHourDateClass> _dataLT = new List<ControlHourDateClass>();
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
 var colorIcono = Colors.blue;
 bool mostrarBoton = false;
 String tiempoTotal = "00:00:00";
 String textoBoton = "Editar";
+
 var zona = DateTime.now().timeZoneName;
+=======
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
 
 class PTResumenLT extends StatefulWidget {
   final ControlHour data;
@@ -29,7 +36,10 @@ class PTResumenLT extends StatefulWidget {
 class _PTResumenLTState extends State<PTResumenLT> {
   @override
   void initState() {
+
     print("ZONA HORARIA");
+=======
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
     getControlHorasDate(
         widget.data.idUsuario, widget.data.fecha, widget.data.comentario);
     super.initState();
@@ -46,16 +56,27 @@ class _PTResumenLTState extends State<PTResumenLT> {
 //***************************AlertDialog*************************************************//
   showAlertDialog(BuildContext context, String pregunta, String datos,
       Color color, int btnAceptar) {
+
     List<Widget> accion = [];
 
     // set up the buttons
     Widget botonCancelar = TextButton(
+=======
+    List<Widget> accion = new List<Widget>();
+
+    // set up the buttons
+    Widget botonCancelar = FlatButton(
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
       child: Text("Cancelar"),
       onPressed: () {
         Navigator.pop(context);
       },
     );
+
     Widget botonAceptar = TextButton(
+=======
+    Widget botonAceptar = FlatButton(
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
       child: Text("Aceptar"),
       onPressed: () {
         final data = ControlHour(
@@ -118,17 +139,26 @@ class _PTResumenLTState extends State<PTResumenLT> {
             ),
             Visibility(
                 visible: mostrarBoton,
+
                 child: ElevatedButton(
+=======
+                child: RaisedButton(
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
                   onPressed: () {
                     Future.delayed(Duration(seconds: 3)).then((value) {
                       exit(0);
                     });
                   },
                   child: Text('Terminar'),
+
                   style: ElevatedButton.styleFrom(
                       primary: Colors.blue, // background
                       onPrimary: Colors.white, // foreground
                     )
+=======
+                  color: Colors.blue,
+                  textColor: Colors.white,
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
                 )),
             Padding(padding: EdgeInsets.only(top: 20.0)),
             Text(
@@ -157,6 +187,7 @@ class _PTResumenLTState extends State<PTResumenLT> {
 
   SingleChildScrollView getLineaTiempo() {
     Column lineaTiempo(Icon icono, String evento, String fecha) {
+
       if(fecha !=null){
         return Column(
           children: <Widget>[
@@ -197,6 +228,43 @@ class _PTResumenLTState extends State<PTResumenLT> {
       else{
         return Column();
       }
+=======
+      return Column(
+        children: <Widget>[
+          TimelineTile(
+            alignment: TimelineAlign.manual,
+            lineXY: 0.3,
+            endChild: Container(
+              constraints: const BoxConstraints(
+                minHeight: 60,
+              ),
+              color: Colors.transparent,
+              child: Container(
+                child: ListTile(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                  leading: icono,
+                  title: Text(
+                    evento,
+                    style: TextStyle(color: colorIcono),
+                  ),
+                ),
+              ),
+            ),
+            startChild: Container(
+              color: Colors.transparent,
+              child: Container(
+                child: ListTile(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                  trailing: Text(fecha),
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
     }
 
     Column llenarLinea() {
@@ -204,6 +272,7 @@ class _PTResumenLTState extends State<PTResumenLT> {
       var dataList = inReverse.toList();
       return Column(
         children: List.generate(dataList.length, (index) {
+
           var fechaHoraItem = int.parse(dataList[index].fechaHora.toString().split('.')[0].replaceAll('-', '').replaceAll('T', '').replaceAll(':',''));
           var fechaItemStr = dataList[0].fecha.toString().split('T')[0] + "06:00:00";
           var fechaItem = int.parse(fechaItemStr.replaceAll('-', '').replaceAll('T', '').replaceAll(':',''));
@@ -236,6 +305,19 @@ class _PTResumenLTState extends State<PTResumenLT> {
                 "",
                 null);
           }
+=======
+          return lineaTiempo(
+              Icon(
+                Icons.access_alarm,
+                color: colorIcono,
+              ),
+              dataList[index].evento,
+              dataList[index]
+                  .fechaHora
+                  .toString()
+                  .split("T")[1]
+                  .substring(0, 8));
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
         }),
       );
     }
@@ -259,7 +341,11 @@ class _PTResumenLTState extends State<PTResumenLT> {
       if (comentario != null && comentario != "") {
         mostrarBoton = true;
         textoBoton = "Editar";
+
         //existe = 1;
+=======
+        existe = 1;
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
       } else {
         mostrarBoton = false;
         textoBoton = "Editar";
@@ -282,6 +368,7 @@ class _PTResumenLTState extends State<PTResumenLT> {
         var diferenciaHoras = 0; //fecha1.difference(fecha2).inMinutes;
         var fecha1 = DateTime.now();
         var fecha2 = DateTime.now();
+
         
         var hor = 0;
         var min = 0;
@@ -292,6 +379,10 @@ class _PTResumenLTState extends State<PTResumenLT> {
         var fechaItem = int.parse(fechaItemStr.replaceAll('-', '').replaceAll('T', '').replaceAll(':',''));
         for (var item in _dataLT) {
           /* if (item.evento.indexOf("Fin") != -1) {
+=======
+        for (var item in _dataLT) {
+          if (item.evento.indexOf("Fin") != -1) {
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
             var fechaHo = item.fechaHora;
             if (fechaHo.indexOf(".") != -1) {
               var splitH = fechaHo.split(".");
@@ -305,6 +396,7 @@ class _PTResumenLTState extends State<PTResumenLT> {
             //reseteo las fechas
             fecha1 = DateTime.now();
             fecha2 = DateTime.now();
+
           } */
           var YXY = item.fechaHora.split('.')[0];
           var fechaHoraItem = int.parse(YXY.toString().replaceAll('-', '').replaceAll('T', '').replaceAll(':',''));
@@ -341,6 +433,18 @@ class _PTResumenLTState extends State<PTResumenLT> {
             diferenciaHoras - restaMilisegundos);
         String duration = DateFormat('HH:mm:ss').format(durationDate);
         tiempoTotal = duration.toString(); */
+=======
+          }
+        }
+        /* int horas = (diferenciaHoras / 3600).truncate();
+        String minutesStr = (horas % 60).toString().padLeft(2, '0'); */
+        //Cambiar para horario de verano a 7200000 y para horario invierno 3600000
+        int restaMilisegundos = 3600000;
+        DateTime durationDate = DateTime.fromMillisecondsSinceEpoch(
+            diferenciaHoras - restaMilisegundos);
+        String duration = DateFormat('HH:mm:ss').format(durationDate);
+        tiempoTotal = duration.toString();
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
       }
     });
   }

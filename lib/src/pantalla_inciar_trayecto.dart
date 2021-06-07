@@ -48,6 +48,7 @@ class _PTIniciarRutaState extends State<PTIniciarRuta> {
 
   @override
   Widget build(BuildContext context) {
+
     //***************************AlertDialog*************************************************//
     showAlertDialog(BuildContext context, String pregunta, String datos,
         Color color, int btnAceptar) {
@@ -127,6 +128,8 @@ class _PTIniciarRutaState extends State<PTIniciarRuta> {
 
     //***************************FIN AlertDialog*************************************************//
     //
+=======
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
     _menu.getVerifyDataLocal(userId);
     prd = new ProgressDialog(context);
     prd.style(
@@ -213,6 +216,7 @@ class _PTIniciarRutaState extends State<PTIniciarRuta> {
                       }
                       if (kilometrajeInicio > 0) {
                         if (int.parse(value) > kilometrajeInicio + 100) {
+
                           showAlertDialog(
                             context,
                             "Advertencia!",
@@ -259,6 +263,48 @@ class _PTIniciarRutaState extends State<PTIniciarRuta> {
                             fecha,
                             userId.toString());
 
+=======
+                          return 'El kilometraje inicial,\nno puede superar por mas de 100km \nal kilometraje anterior';
+                        }
+                      }
+
+                      return null;
+                    },
+                  ),
+                  Padding(padding: EdgeInsets.only(top: 20.0)),
+                  RaisedButton(
+                    onPressed: () {
+                      if (_formKey.currentState.validate()) {
+                        //ENVIO EL INICIO DE CONTROL DE HORA
+                        String fecha = DateTime.now().toString();
+                        //var fechaSplit = fecha.split(" ");
+                        //var hora = fechaSplit[1].split(":");
+
+                        /* postControlHour(
+                            userId.toString(),
+                            dateBeginningController.text,
+                            "0",
+                            "Inicio",
+                            "Registro Automatico",
+                            dateBeginningController.text); */
+                        //FIN CONTROL DE HORA
+                        _dbprovider.deleteWorkingDay(userId);
+                        insertWorkingDayLocal(
+                            carPlate,
+                            '',
+                            kmsBeginningController.text,
+                            '',
+                            fecha,
+                            userId.toString());
+                        postDataWorkingDay(
+                            carPlate,
+                            '',
+                            kmsBeginningController.text,
+                            '',
+                            fecha,
+                            userId.toString());
+
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
                         prd.show();
                         Future.delayed(Duration(seconds: 3)).then((value) {
                           prd.hide().whenComplete(() {
@@ -279,10 +325,15 @@ class _PTIniciarRutaState extends State<PTIniciarRuta> {
                       }
                     },
                     child: Text('Iniciar'),
+
                     style: ElevatedButton.styleFrom(
                       primary: Colors.blue, // background
                       onPrimary: Colors.white, // foreground
                     )
+=======
+                    color: Colors.blue,
+                    textColor: Colors.white,
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
                   )
                 ],
               ),
@@ -323,7 +374,11 @@ class _PTIniciarRutaState extends State<PTIniciarRuta> {
   }
 
   Future<List<WorkingDay>> getWDLocal() async {
+
     List<WorkingDay> retunn = [];
+=======
+    List<WorkingDay> retunn = new List<WorkingDay>();
+>>>>>>> f7c5ceacc02705727747093c33f5b4ec7b870763
     List<WorkingDay> list = await _dbprovider.getWorkingDay();
     try {
       setState(() {
