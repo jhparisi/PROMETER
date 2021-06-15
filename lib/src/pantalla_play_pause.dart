@@ -104,16 +104,17 @@ class _PTCerrarRutaState extends State<PTCerrarRuta>
     Menu _menu = new Menu();
     estaPausado = false;
     userId = _menu.getuserId().toString();
+    
     if (widget.data.dateBeginning != "") {
-      dateBeginning = widget.data.dateBeginning;
+      dateBeginning = widget.data.dateBeginning;      
     } else {
       getLocalPlayPause();
       print("EL VALOR DE DATEBE ES::::" + dateBeginning.toString());
     }
     if (userId == "0") {
       userId = widget.data.userId.toString();
-    }
-
+    }    
+    
     print("VALOR CARGADO DEL USERID" + userId);
     addPlayPause(1); //PLAY
     WidgetsBinding.instance.addObserver(this);
@@ -124,6 +125,8 @@ class _PTCerrarRutaState extends State<PTCerrarRuta>
       cronometro();
       enviarNotificacionGPS();
     });
+
+    getEventos(userId, dateBeginning);
   }
 
   Future<Null> _initPlatformState() async {
@@ -623,6 +626,14 @@ class _PTCerrarRutaState extends State<PTCerrarRuta>
     return respuesta;
   }
 
+  Future getEventos(idUsuario, fecha) async{
+    var eventos = await HttpHandler().fetchUltimoEvento(idUsuario, fecha.toString().substring(0,10));
+    if(eventos.length>0){  
+      if(eventos[0].evento == "Fin"){
+        postControlHour(idUsuario, fecha.toString().substring(0,10), '0', 'Inicio', 'Registro automatico', DateTime.now().toString());
+      } 
+    }
+  }
   void _onClickEnable(enabled) {
     if (enabled) {
       // Reset odometer.

@@ -10,7 +10,7 @@ import 'package:eszaworker/class/UserByPhoneAPIClass.dart';
 class HttpHandler {
   static final _httpHandler = new HttpHandler();
   final String _baseUrl =
-      "apidatos.erp.avanzadi.com"; //"apidatos.erp.avanzadi.com"
+      "apidatos.pre.erp.avanzadi.com"; //"apidatos.erp.avanzadi.com"
   final String _urlWorkingDay = "/api/Prometer/InsertWorkingDay/";
   final String _urlUsuarioPhone = "/api/Prometer/UserByPhone";
   final String _urlTrackingData = "/api/Prometer/InsertTrackingData/";
@@ -24,6 +24,7 @@ class HttpHandler {
   final String _urlValidarUsuario = "api/Prometer/ValidarUsuario";
   final String _urlValidarVersion = "api/Prometer/ValidarVersion";
   final String _urlNotificacionGPS = "api/Prometer/NotificacionGPSInactivo";
+  final String _urlGetUltimoEvento = "api/Prometer/GetUltimoEvento";
   final String semilla = "415065080244";
   final String dominio = "ezsa.erp.avanzadi.com";
   static HttpHandler get() {
@@ -235,6 +236,23 @@ class HttpHandler {
   //SE CONECTA CON LA API Y TRAE LOS VALORES DEL CONTRO DE HORAS DE UN USUARIO Y FECHA
   Future<List<ControlHourDateClass>> fetchControlHorasFecha(idUsuario, fecha) {
     var uri = new Uri.http(_baseUrl, _urlControlHorasFecha);
+    var body = jsonEncode(<String, String>{
+      "idUsuario": idUsuario.toString(),//"9399",//idUsuario.toString()
+      "fecha": fecha,
+      "dominio": dominio,
+      "semilla": semilla,
+      "userId": "0"
+    });
+    print(uri);
+    return postJson(uri, body).then(((data) => data
+        .map<ControlHourDateClass>((item) =>
+            new ControlHourDateClass(item, MediaTypeControlHorasDate.content))
+        .toList()));
+  }
+
+  //SE CONECTA CON LA API Y TRAE LOS VALORES DEL CONTRO DE HORAS DE UN USUARIO Y FECHA
+  Future<List<ControlHourDateClass>> fetchUltimoEvento(idUsuario, fecha) {
+    var uri = new Uri.http(_baseUrl, _urlGetUltimoEvento);
     var body = jsonEncode(<String, String>{
       "idUsuario": idUsuario.toString(),//"9399",//idUsuario.toString()
       "fecha": fecha,

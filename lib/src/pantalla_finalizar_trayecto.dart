@@ -47,6 +47,14 @@ class _PTFinalizarRutaState extends State<PTFinalizarRuta> {
   final startingDateController = TextEditingController();
   Flushbar fbar;
 
+  Flushbar fbar2 = new Flushbar(
+    flushbarPosition: FlushbarPosition.TOP,
+    backgroundColor: Colors.red,
+    message:
+        "En esta pantalla no se puede ir atrás! \nDebes indicar los Km de finalización.",
+    duration: Duration(seconds: 5),
+  );
+
   @override
   void initState() {
     super.initState();
@@ -146,8 +154,9 @@ class _PTFinalizarRutaState extends State<PTFinalizarRuta> {
         appBar: AppBar(
           centerTitle: true,
           title: Text("PRO-METER APP", textAlign: TextAlign.center),
+          automaticallyImplyLeading: false,
         ),
-        drawer: _menu.getDrawer(context),
+        //drawer: _menu.getDrawer(context),
         body: new Form(
             key: _formKey,
             //child: Container(
@@ -156,6 +165,13 @@ class _PTFinalizarRutaState extends State<PTFinalizarRuta> {
               padding: EdgeInsets.only(left: 50.0, right: 50.0, top: 0.0),
               child: Column(
                 children: <Widget>[
+                  WillPopScope(
+                  child: Container(),
+                  onWillPop: () {
+                    fbar2.show(context);
+                    return new Future(() => false);
+                  },
+                ),
                   TextFormField(
                     controller: startingDateController,
                     decoration:

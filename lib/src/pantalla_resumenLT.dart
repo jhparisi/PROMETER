@@ -6,7 +6,6 @@ import 'package:eszaworker/resources/HttpHandler.dart';
 import 'package:eszaworker/src/pantalla_editarhoras.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 import 'menu.dart';
@@ -279,9 +278,9 @@ class _PTResumenLTState extends State<PTResumenLT> {
             textoBoton = "Crear Nuevo";
           }
         }
-        var diferenciaHoras = 0; //fecha1.difference(fecha2).inMinutes;
+        /* var diferenciaHoras = 0; //fecha1.difference(fecha2).inMinutes;
         var fecha1 = DateTime.now();
-        var fecha2 = DateTime.now();
+        var fecha2 = DateTime.now(); */
         
         var hor = 0;
         var min = 0;
@@ -306,8 +305,8 @@ class _PTResumenLTState extends State<PTResumenLT> {
             fecha1 = DateTime.now();
             fecha2 = DateTime.now();
           } */
-          var YXY = item.fechaHora.split('.')[0];
-          var fechaHoraItem = int.parse(YXY.toString().replaceAll('-', '').replaceAll('T', '').replaceAll(':',''));
+          var xYx = item.fechaHora.split('.')[0];
+          var fechaHoraItem = int.parse(xYx.toString().replaceAll('-', '').replaceAll('T', '').replaceAll(':',''));
           if(fechaHoraItem>fechaItem){
             if(item.evento.indexOf("Total") != -1){
               var fech = item.tiempoTotal.split(":");
@@ -324,7 +323,7 @@ class _PTResumenLTState extends State<PTResumenLT> {
         String minutosString = (min % 60).toString().padLeft(2, '0');
         int minutoResi = min ~/ 60;
         hor += minutoResi;
-        String horaString = hor.toString().padLeft(2,'0');
+        //String horaString = hor.toString().padLeft(2,'0');
 
         tiempoTotal = hor.toString() + ":" + minutosString + ":" + segundosString;
         /* /* int horas = (diferenciaHoras / 3600).truncate();
