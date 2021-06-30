@@ -154,28 +154,8 @@ class _PTIniciarRutaState extends State<PTIniciarRuta> {
                 child: Padding(
               padding: EdgeInsets.only(left: 50.0, right: 50.0, top: 0.0),
               child: Column(
-                children: <Widget>[
-                  /* TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Fecha de comienzo:'
-                        ),
-                        readOnly: true,
-                        enabled: false,
-                        style: TextStyle(color: Colors.grey),
-                        initialValue: "$fechaInicio",
-                        /* onTap: () async{
-                      DateTime date = DateTime(1900);
-                      FocusScope.of(context).requestFocus(new FocusNode());
-
-                      date = await showDatePicker(
-                                    context: context, 
-                                    initialDate:DateTime.now(),
-                                    firstDate:DateTime(1900),
-                                    lastDate: DateTime(2100));
-
-                      dateCtl.text = date.toIso8601String();} */
-                      ), */
-                  DateTimePickerFormField(
+                children: <Widget>[                  
+                  /* DateTimePickerFormField(
                     controller: dateBeginningController,
                     focusNode: NoKeyboardEditableTextFocusNode(),
                     inputType: InputType.both,
@@ -194,6 +174,43 @@ class _PTIniciarRutaState extends State<PTIniciarRuta> {
                         return 'Debes indicar la fecha de inicio';
                       }
                       return null;
+                    },
+                  ), */
+                  DateTimeField(
+                    format: DateFormat("yyyy-MM-dd H:mm:ss"),
+                    controller: dateBeginningController,
+                    style: TextStyle(color: Colors.grey),
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      enabled: true, 
+                      labelText: 'Fecha de comienzo:'
+                    ),
+                    onShowPicker: (context, currentValue) async {
+                      final date = await showDatePicker(
+                        context: context,
+                        firstDate: DateTime(1900),
+                        initialDate: DateTime.now(),
+                        lastDate: DateTime(2100),
+                        builder: (context, child) => Localizations.override(
+                          context: context,
+                          locale: Locale('es'),
+                          child: child,
+                        ),
+                      );
+                      if (date != null) {
+                        final time = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                          builder: (context, child) => Localizations.override(
+                            context: context,
+                            locale: Locale('es'),
+                            child: child,
+                          ),
+                        );
+                        return DateTimeField.combine(date, time);
+                      } else {
+                        return currentValue;
+                      }
                     },
                   ),
                   TextFormField(

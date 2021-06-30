@@ -203,7 +203,7 @@ class _PTFinalizarRutaState extends State<PTFinalizarRuta> {
                         enabled: false,
                         style: TextStyle(color: Colors.grey),
                       ), */
-                  DateTimePickerFormField(
+                  /* DateTimePickerFormField(
                     controller: endingDateController,
                     focusNode: NoKeyboardEditableTextFocusNodeFin(),
                     inputType: InputType.both,
@@ -221,6 +221,43 @@ class _PTFinalizarRutaState extends State<PTFinalizarRuta> {
                         return 'Debes indicar la fecha de fin del trabajo';
                       }
                       return null;
+                    },
+                  ), */
+                  DateTimeField(
+                    format: DateFormat("yyyy-MM-dd H:mm:ss"),
+                    controller: endingDateController,
+                    style: TextStyle(color: Colors.grey),
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      enabled: true, 
+                      labelText: 'Fecha fin:'
+                    ),
+                    onShowPicker: (context, currentValue) async {
+                      final date = await showDatePicker(
+                        context: context,
+                        firstDate: DateTime(1900),
+                        initialDate: DateTime.now(),
+                        lastDate: DateTime(2100),
+                        builder: (context, child) => Localizations.override(
+                          context: context,
+                          locale: Locale('es'),
+                          child: child,
+                        ),
+                      );
+                      if (date != null) {
+                        final time = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                          builder: (context, child) => Localizations.override(
+                            context: context,
+                            locale: Locale('es'),
+                            child: child,
+                          ),
+                        );
+                        return DateTimeField.combine(date, time);
+                      } else {
+                        return currentValue;
+                      }
                     },
                   ),
                   TextFormField(

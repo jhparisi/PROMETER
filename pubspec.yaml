@@ -26,7 +26,7 @@ dependencies:
   quiver:
   sqflite: any
   path_provider: ^0.4.1
-  intl: ^0.15.7
+  intl: ^0.17.0
   http: ^0.12.0
   stream_channel: ^2.0.0
   flushbar: ^1.10.4
@@ -34,7 +34,7 @@ dependencies:
   progress_dialog: ^1.2.0
   geolocator: ^5.2.0
   #background_fetch: ^0.2.0
-  datetime_picker_formfield: ^0.1.8
+  datetime_picker_formfield: ^2.0.0
   get_it: ^4.0.1
   firebase_core: ^0.4.4+3
   firebase_analytics: ^5.0.10
@@ -58,6 +58,9 @@ dependencies:
   mask_text_input_formatter: ^1.2.1
   floating_action_bubble: ^1.0.9
   google_api_availability: ^2.0.4
+  date_range_picker: ^1.0.7
+  flutter_localizations: 
+    sdk: flutter
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -113,3 +116,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family: HeeboSemiBold
+      fonts:
+        - asset: assets/fonts/Heebo-SemiBold.ttf
+          weight: 700

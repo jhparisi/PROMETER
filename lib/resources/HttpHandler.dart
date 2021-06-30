@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:eszaworker/class/AcompananteAPIClass.dart';
 import 'package:eszaworker/class/ControlHourAllClass.dart';
 import 'package:eszaworker/class/ControlHourDateClass.dart';
+import 'package:eszaworker/class/HojaControlHorasAppClass.dart';
 import 'package:eszaworker/class/MatriculasApiClass.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -9,8 +10,8 @@ import 'package:eszaworker/class/UserByPhoneAPIClass.dart';
 
 class HttpHandler {
   static final _httpHandler = new HttpHandler();
-  final String _baseUrl =
-      "apidatos.pre.erp.avanzadi.com"; //"apidatos.erp.avanzadi.com"
+  final String _baseUrl ="apidatos.pre.erp.avanzadi.com"; //"apidatos.erp.avanzadi.com"
+  
   final String _urlWorkingDay = "/api/Prometer/InsertWorkingDay/";
   final String _urlUsuarioPhone = "/api/Prometer/UserByPhone";
   final String _urlTrackingData = "/api/Prometer/InsertTrackingData/";
@@ -25,6 +26,7 @@ class HttpHandler {
   final String _urlValidarVersion = "api/Prometer/ValidarVersion";
   final String _urlNotificacionGPS = "api/Prometer/NotificacionGPSInactivo";
   final String _urlGetUltimoEvento = "api/Prometer/GetUltimoEvento";
+  final String _urlGetModificacionesAdmin = "api/Prometer/GetModificacionesAdmin";
   final String semilla = "415065080244";
   final String dominio = "ezsa.erp.avanzadi.com";
   static HttpHandler get() {
@@ -264,6 +266,24 @@ class HttpHandler {
     return postJson(uri, body).then(((data) => data
         .map<ControlHourDateClass>((item) =>
             new ControlHourDateClass(item, MediaTypeControlHorasDate.content))
+        .toList()));
+  }
+
+  //SE CONECTA CON LA API Y TRAE EL LISTADO DE MODIFICACIONES HECHAS POR EL ADMINISTRADOR
+  Future<List<HojaControlHorasAppClass>> fetchModificacionesAdmin(idUsuario, fechaDesde,fechaHasta) {
+    var uri = new Uri.http(_baseUrl, _urlGetModificacionesAdmin);
+    var body = jsonEncode(<String, String>{
+      "idUsuario": idUsuario.toString(),//"9399",//idUsuario.toString()
+      "fechaDesde": fechaDesde,
+      "fechaHasta": fechaHasta,
+      "dominio": dominio,
+      "semilla": semilla,
+      "userId": "0"
+    });
+    print(uri);
+    return postJson(uri, body).then(((data) => data
+        .map<HojaControlHorasAppClass>((item) =>
+            new HojaControlHorasAppClass(item, MediaTypeHojaControlHorasDate.content))
         .toList()));
   }
 }

@@ -204,7 +204,7 @@ class _PTResumenLTState extends State<PTResumenLT> {
       return Column(
         children: List.generate(dataList.length, (index) {
           var fechaHoraItem = int.parse(dataList[index].fechaHora.toString().split('.')[0].replaceAll('-', '').replaceAll('T', '').replaceAll(':',''));
-          var fechaItemStr = dataList[0].fecha.toString().split('T')[0] + "06:00:00";
+          var fechaItemStr = dataList[0].fecha.toString().split('T')[0] + "03:59:59";
           var fechaItem = int.parse(fechaItemStr.replaceAll('-', '').replaceAll('T', '').replaceAll(':',''));
           if(fechaHoraItem > fechaItem){
             if(dataList[index].evento == "TotalTramo"){
@@ -287,7 +287,7 @@ class _PTResumenLTState extends State<PTResumenLT> {
         var seg = 0;
         
         var numDataList = dataList.length-1;
-        var fechaItemStr = dataList[numDataList].fecha.toString().split('T')[0] + "06:00:00";
+        var fechaItemStr = dataList[numDataList].fecha.toString().split('T')[0] + "03:59:59";
         var fechaItem = int.parse(fechaItemStr.replaceAll('-', '').replaceAll('T', '').replaceAll(':',''));
         for (var item in _dataLT) {
           /* if (item.evento.indexOf("Fin") != -1) {

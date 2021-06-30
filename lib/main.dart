@@ -11,10 +11,18 @@ import 'package:flutter/material.dart';
 import 'package:eszaworker/src/pantalla_inicial.dart';
 import 'package:eszaworker/src/pantalla_mensajes.dart';
 //import 'package:stream_channel/stream_channel.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   setupLocator();
-  runApp(MaterialApp(home: PTInicial(), routes: <String, WidgetBuilder>{
+  runApp(MaterialApp(
+    localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate
+      ],
+      supportedLocales: [
+        const Locale('es')
+      ],
+    home: PTInicial(), routes: <String, WidgetBuilder>{
     PTRepostar.routeName: (BuildContext context) => PTRepostar(),
     PTInicial.routeName: (BuildContext context) => PTInicial(),
     PTPrincipal.routeName: (BuildContext context) => PTPrincipal(),

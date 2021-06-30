@@ -3,6 +3,7 @@ import 'package:eszaworker/class/ControlHourAllClass.dart';
 import 'package:eszaworker/class/ControlHourClass.dart';
 import 'package:eszaworker/resources/HttpHandler.dart';
 import 'package:eszaworker/src/menu.dart';
+import 'package:eszaworker/src/pantalla_TabObservaciones.dart';
 import 'package:eszaworker/src/pantalla_editarhoras.dart';
 import 'package:eszaworker/src/pantalla_inicial.dart';
 import 'package:eszaworker/src/pantalla_resumenLT.dart';
@@ -10,11 +11,11 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 //import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
-import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
-    show CalendarCarousel;
+import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart' show CalendarCarousel;
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:intl/intl.dart' show DateFormat;
+import 'package:date_range_picker/date_range_picker.dart' as DateRangePicker;
 
 ProgressDialog prd;
 Menu _menu = new Menu();
@@ -42,11 +43,18 @@ var ano = int.parse(fecha[0]);
 var mes = int.parse(fecha[1]);
 var dia = int.parse(fecha[2]);
 var colorEvento = Colors.green[600];
+final now30 = now.subtract(new Duration(days: 30));
+var fechaAnterior =now30.toString().split(" ")[0].split("-");
+var fechaDesde = fechaAnterior[0] + "-" + fechaAnterior[1] + "-" +fechaAnterior[2];
+var fechaHasta = ano.toString() + "-" + mes.toString() + "-" + dia.toString();
+var fechaRango = fechaDesde + "*" + fechaHasta;
 Flushbar fbar;
+PTTabObservaciones ptObsWidget = new PTTabObservaciones(userId, fechaRango);
 
 class PTControlHoras extends StatefulWidget {
   static const String routeName = "/pantalla_controlhoras";
   PTControlHoras({Key key}) : super(key: key);
+  @override
   _PTControlHorasState createState() => _PTControlHorasState();
 }
 
@@ -125,6 +133,7 @@ class _PTControlHorasState extends State<PTControlHoras> {
   void initState() {
     getControlHorasAll(_idUser.toString());
     super.initState();
+    cargarPTObsWidget(userId,fechaRango);
   }
 
   @override
@@ -231,12 +240,23 @@ class _PTControlHorasState extends State<PTControlHoras> {
       },
     );
 
-    return new Scaffold(
-        appBar: new AppBar(
-          title: new Text("Control de horas de trabajo"),
-        ),
-        drawer: _menu.getDrawer(context),
-        body: SingleChildScrollView(
+    return new Scaffold(        
+        body: 
+          DefaultTabController(
+            length: 2,
+            child:  Scaffold(
+              appBar: new AppBar(
+                title: new Text("Control de horas de trabajo"),
+                bottom: TabBar(
+                  tabs: [
+                    Tab(icon: Icon(Icons.calendar_today_outlined), text: "Horas de trabajo",),
+                    Tab(icon: Icon(Icons.list), text: "Observaciones del Admin",)
+                  ],
+                ),
+              ),
+              drawer: _menu.getDrawer(context),
+              body: TabBarView(children: [
+                SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -273,8 +293,7 @@ class _PTControlHorasState extends State<PTControlHoras> {
                               height: 15.0,
                               width: 15.0,
                             ),
-                            Text(
-                                " Horas registradas por el usuario (Horario modificado).")
+                            Text(" Horas registradas por el usuario (Horario modificado).")
                           ],
                         )
                       ],
@@ -285,7 +304,46 @@ class _PTControlHorasState extends State<PTControlHoras> {
               //
             ],
           ),
-        ));
+        ),
+        
+        Column(
+          children: [
+            Padding(padding: EdgeInsets.all(5)),
+            Container(
+              child: new MaterialButton(
+                  color: Colors.lightBlue,
+                  onPressed: () async {
+                    final List<DateTime> picked = await DateRangePicker.showDatePicker(
+                        context: context,
+                        locale: Locale("es"),
+                        initialFirstDate: (new DateTime.now()).subtract(new Duration(days: 30)),
+                        initialLastDate: new DateTime.now(),
+                        firstDate: new DateTime(2019),
+                        lastDate: new DateTime(DateTime.now().year + 2)
+                    );
+                    if (picked != null && picked.length == 2) {
+                      print(picked);
+                      var fecDes = picked.toString().split(",")[0].split(" ")[0];
+                      var fecHas = picked.toString().split(",")[1].split(" ")[1];
+                      var fecRan = fecDes +"*" +fecHas;
+                      cargarPTObsWidget(userId,fecRan.substring(1,fecRan.length));
+                    }
+                  },
+                  child: new Text("Filtrar por rango de fecha", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold,fontFamily: 'HeeboSemiBold'),)
+              )
+            ),
+            Padding(padding: EdgeInsets.all(5)),
+            //AQUI TIENE QUE IR EL LISTADO
+            //ListaObsAdmin("28-06-2021","8.5","10.0","1.5","0","ESTO ES UNA PRUEBA DE CONTENIDO")
+            //PTTabObservaciones(userId,fechaRango)
+            ptObsWidget
+          ]
+        )
+        
+      ],),
+      ),
+      )
+    );
   }
 
   Future<List<ControlHourAllClass>> getControlHorasAll(String idUsuario) async {
@@ -351,5 +409,13 @@ class _PTControlHorasState extends State<PTControlHoras> {
       respuesta = true;
     }
     return respuesta;
+  }
+
+  cargarPTObsWidget(String idUsuario, String fechas){
+    print(fechas);    
+    setState(() {      
+      ptObsWidget = PTTabObservaciones(idUsuario, fechas);
+    });
+    return ptObsWidget;
   }
 }
