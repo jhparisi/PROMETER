@@ -64,6 +64,7 @@ double _fontSize = 18;
 Color _color = Colors.blue;
 bool gpsActivo = true;
 String textoTrabajandoPausado = "Trabajando";
+bool sigueTrabajando = false;
 
 JsonEncoder encoder = new JsonEncoder.withIndent("     ");
 
@@ -343,6 +344,44 @@ class _PTCerrarRutaState extends State<PTCerrarRuta>
             Padding(
               padding: EdgeInsets.only(top: 20.0),
             ),
+            Visibility(
+              visible: sigueTrabajando,
+              child: 
+                ClipRRect(                  
+                  child: Stack(
+                    children: <Widget>[
+                      Positioned.fill(
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: <Color>[
+                                Color(0xFF42A5F5),
+                                Color(0xFF42A5F5),
+                                Color(0xFF42A5F5),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.all(10),
+                          primary: Colors.white,
+                          textStyle: const TextStyle(fontSize: 18),
+                        ),
+                        onPressed: () {
+                          //AQUI ACTUALIZAR EL WORKING DAY
+                        },
+                        child:
+                          Column(children: [
+                            Icon(Icons.more_time),
+                             const Text('Sigo trabajando', style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'HeeboSemiBold'))
+                          ],),
+                      )
+                    ],
+                  ),
+                ),
+            ),
             Container(
                 height: 40.0,
                 width: 300.0,
@@ -592,6 +631,12 @@ class _PTCerrarRutaState extends State<PTCerrarRuta>
           tiempocronometro = _hour + ":" + _min + ":" + _sec;
           lastPosition++;
           timeSendData++;
+          if(int.parse(_hour)>=10){
+            sigueTrabajando = true;
+          }
+          else if(int.parse(_hour)<10){
+            sigueTrabajando = false;
+          }
           if (estaPausado == false) {
             //SI HAN PASADO 20 SEGUNDOS TOMO LA POSICION
             if (lastPosition >= 20) {
