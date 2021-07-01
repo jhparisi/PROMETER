@@ -15,7 +15,6 @@ import 'package:eszaworker/src/pantalla_play_pause.dart';
 
 ProgressDialog prd;
 Menu _menu = new Menu();
-
 String _combustible = "";
 int _idUser = _menu.getuserId();
 String _carPlateRepostar = _menu.getCarPlate();

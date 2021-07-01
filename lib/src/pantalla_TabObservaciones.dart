@@ -1,7 +1,8 @@
+import 'dart:async';
+
 import 'package:eszaworker/class/HojaControlHorasAppClass.dart';
 import 'package:eszaworker/resources/HttpHandler.dart';
 import 'package:flutter/material.dart';
-import 'package:quiver/async.dart';
 
 import 'lista_observacionesAdmin.dart';
 
@@ -10,9 +11,10 @@ class PTTabObservaciones extends StatefulWidget{
   final String isUsuario;
   final String fechas;
   PTTabObservaciones(this.isUsuario,this.fechas);
-  
+
   @override 
   _PTTabObservacionesState createState() => new _PTTabObservacionesState();
+  
 }
 
 class _PTTabObservacionesState extends State<PTTabObservaciones>{
@@ -42,11 +44,9 @@ class _PTTabObservacionesState extends State<PTTabObservaciones>{
           print(tramo.toString());
           _listaObs.add(dat);
         });          
-      }
-      
+      }      
     }      
   }
-
 
   Future<String> leerTramos(String idUsu, String fecha) async{
     var tramo ="";
@@ -66,6 +66,7 @@ class _PTTabObservacionesState extends State<PTTabObservaciones>{
 
   @override 
   Widget build(BuildContext context) {
+    
     return Expanded(
       child: ListView.builder(
         itemCount: _listaObs.length,
@@ -75,4 +76,7 @@ class _PTTabObservacionesState extends State<PTTabObservaciones>{
       ),
     );
   }
+
+  
 }
+

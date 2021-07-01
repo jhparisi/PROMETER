@@ -257,88 +257,88 @@ class _PTControlHorasState extends State<PTControlHoras> {
               drawer: _menu.getDrawer(context),
               body: TabBarView(children: [
                 SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 16.0),
-                child: _calendarCarouselNoHeader,
-              ),
-              Column(
-                children: [
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 20.0, horizontal: 20),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.symmetric(horizontal: 1.0),
-                              color: Colors.green[600],
-                              height: 15.0,
-                              width: 15.0,
-                            ),
-                            Text(
-                                " Horas registradas automáticamente por la App.")
-                          ],
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 16.0),
+                          child: _calendarCarouselNoHeader,
                         ),
-                        Padding(padding: EdgeInsets.only(top: 10.0)),
-                        Row(
+                        Column(
                           children: [
-                            Container(
-                              margin: EdgeInsets.symmetric(horizontal: 1.0),
-                              color: Colors.red,
-                              height: 15.0,
-                              width: 15.0,
+                            Padding(padding:EdgeInsets.symmetric(vertical: 20.0, horizontal: 20),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.symmetric(horizontal: 1.0),
+                                        color: Colors.green[600],
+                                        height: 15.0,
+                                        width: 15.0,
+                                      ),
+                                      Text(
+                                          " Horas registradas automáticamente por la App.")
+                                    ],
+                                  ),
+                                  Padding(padding: EdgeInsets.only(top: 10.0)),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.symmetric(horizontal: 1.0),
+                                        color: Colors.red,
+                                        height: 15.0,
+                                        width: 15.0,
+                                      ),
+                                      Text(" Horas registradas por el usuario (Horario modificado).")
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
-                            Text(" Horas registradas por el usuario (Horario modificado).")
                           ],
                         )
-                      ],
-                    ),
-                  ),
-                ],
-              )
               //
             ],
           ),
         ),
         
-        Column(
-          children: [
-            Padding(padding: EdgeInsets.all(5)),
-            Container(
-              child: new MaterialButton(
-                  color: Colors.lightBlue,
-                  onPressed: () async {
-                    final List<DateTime> picked = await DateRangePicker.showDatePicker(
-                        context: context,
-                        locale: Locale("es"),
-                        initialFirstDate: (new DateTime.now()).subtract(new Duration(days: 30)),
-                        initialLastDate: new DateTime.now(),
-                        firstDate: new DateTime(2019),
-                        lastDate: new DateTime(DateTime.now().year + 2)
-                    );
-                    if (picked != null && picked.length == 2) {
-                      print(picked);
-                      var fecDes = picked.toString().split(",")[0].split(" ")[0];
-                      var fecHas = picked.toString().split(",")[1].split(" ")[1];
-                      var fecRan = fecDes +"*" +fecHas;
-                      cargarPTObsWidget(userId,fecRan.substring(1,fecRan.length));
-                    }
-                  },
-                  child: new Text("Filtrar por rango de fecha", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold,fontFamily: 'HeeboSemiBold'),)
-              )
-            ),
-            Padding(padding: EdgeInsets.all(5)),
-            //AQUI TIENE QUE IR EL LISTADO
-            //ListaObsAdmin("28-06-2021","8.5","10.0","1.5","0","ESTO ES UNA PRUEBA DE CONTENIDO")
-            //PTTabObservaciones(userId,fechaRango)
-            ptObsWidget
-          ]
-        )
+                Column(
+                  children: [
+                    Padding(padding: EdgeInsets.all(10)),
+                    Text("Listado de observaciones desde: $fechaDesde al $fechaHasta", style: TextStyle(color:Colors.lightBlue[900], fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'HeeboSemiBold')),
+                    /* Container(
+                      child: new MaterialButton(
+                          color: Colors.lightBlue,
+                          onPressed: () async {
+                            final List<DateTime> picked = await DateRangePicker.showDatePicker(
+                                context: context,
+                                locale: Locale("es"),
+                                initialFirstDate: (new DateTime.now()).subtract(new Duration(days: 30)),
+                                initialLastDate: new DateTime.now(),
+                                firstDate: new DateTime(2019),
+                                lastDate: new DateTime(DateTime.now().year + 2)
+                            );
+                            if (picked != null && picked.length == 2) {
+                              //print(picked);
+                              var fecDes = picked.toString().split(",")[0].split(" ")[0];
+                              var fecHas = picked.toString().split(",")[1].split(" ")[1];
+                              var fecRan = fecDes +"*" +fecHas;
+                              cargarPTObsWidget(userId,fecRan.substring(1,fecRan.length));
+                              
+                            }
+                          },
+                          child: new Text("Filtrar por rango de fecha", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold,fontFamily: 'HeeboSemiBold'),)
+                      )
+                    ), */
+                    Padding(padding: EdgeInsets.only(top:8)),
+                    //AQUI TIENE QUE IR EL LISTADO
+                    //ListaObsAdmin("28-06-2021","8.5","10.0","1.5","0","ESTO ES UNA PRUEBA DE CONTENIDO")
+                    //PTTabObservaciones(userId,fechaRango)
+                    ptObsWidget
+                  ]
+                )
         
       ],),
       ),
@@ -411,6 +411,7 @@ class _PTControlHorasState extends State<PTControlHoras> {
     return respuesta;
   }
 
+  
   cargarPTObsWidget(String idUsuario, String fechas){
     print(fechas);    
     setState(() {      
