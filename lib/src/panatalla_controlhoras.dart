@@ -15,7 +15,7 @@ import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart' show C
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:intl/intl.dart' show DateFormat;
-import 'package:date_range_picker/date_range_picker.dart' as DateRangePicker;
+//import 'package:date_range_picker/date_range_picker.dart' as DateRangePicker;
 
 ProgressDialog prd;
 Menu _menu = new Menu();
