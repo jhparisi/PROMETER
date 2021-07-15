@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:eszaworker/class/AcompananteAPIClass.dart';
+import 'package:eszaworker/class/ConfiguracionClass.dart';
 import 'package:eszaworker/class/ControlHourAllClass.dart';
 import 'package:eszaworker/class/ControlHourDateClass.dart';
 import 'package:eszaworker/class/HojaControlHorasAppClass.dart';
@@ -10,7 +11,7 @@ import 'package:eszaworker/class/UserByPhoneAPIClass.dart';
 
 class HttpHandler {
   static final _httpHandler = new HttpHandler();
-  final String _baseUrl ="apidatos.erp.avanzadi.com"; //"apidatos.erp.avanzadi.com"
+  final String _baseUrl ="apidatos.pre.erp.avanzadi.com"; //"apidatos.erp.avanzadi.com"
   
   final String _urlWorkingDay = "/api/Prometer/InsertWorkingDay/";
   final String _urlUsuarioPhone = "/api/Prometer/UserByPhone";
@@ -27,6 +28,8 @@ class HttpHandler {
   final String _urlNotificacionGPS = "api/Prometer/NotificacionGPSInactivo";
   final String _urlGetUltimoEvento = "api/Prometer/GetUltimoEvento";
   final String _urlGetModificacionesAdmin = "api/Prometer/GetModificacionesAdmin";
+  final String _urlGetConfiguracion = "api/Prometer/getConfiguracion";
+  
   final String semilla = "415065080244";
   final String dominio = "ezsa.erp.avanzadi.com";
   static HttpHandler get() {
@@ -284,6 +287,19 @@ class HttpHandler {
     return postJson(uri, body).then(((data) => data
         .map<HojaControlHorasAppClass>((item) =>
             new HojaControlHorasAppClass(item, MediaTypeHojaControlHorasDate.content))
+        .toList()));
+  }
+
+  //SE CONECTA CON LA API Y TRAE DOMINIO Y SEMILLA
+  Future<List<ConfiguracionAPI>> fetchConfiguracionAPI(empresa) {
+    var uri = new Uri.http(_baseUrl, _urlGetConfiguracion);
+    var body = jsonEncode(<String, String>{
+      "empresa": empresa
+    });
+    print(uri);
+    return postJson(uri, body).then(((data) => data
+        .map<ConfiguracionAPI>((item) =>
+            new ConfiguracionAPI(item, MediaTypeConfiguracionAPI.content))
         .toList()));
   }
 }

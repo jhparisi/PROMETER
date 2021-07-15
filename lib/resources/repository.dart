@@ -1,8 +1,10 @@
+import 'package:eszaworker/class/ConfiguracionClass.dart';
 import 'package:eszaworker/class/DataLocalClass.dart';
 import 'package:eszaworker/class/HistoricoClass.dart';
 import 'package:eszaworker/class/PlayPauseTrackingClass.dart';
 import 'package:eszaworker/class/RefuelClass.dart';
 import 'package:eszaworker/resources/db_provider.dart';
+//import 'package:flutter_background_geolocation/flutter_background_geolocation.dart';
 //import 'package:eszaworker/src/menu.dart';
 
 class Repository{
@@ -11,6 +13,7 @@ class Repository{
   DataLocal _dataLocal = new DataLocal();
   Refuel _refuelLocal = new Refuel();
   Historico _historico = new Historico();
+  Configuracion _configuracion = new Configuracion();
   PlayPauseTracking _trackingPlay = new PlayPauseTracking();
   //WorkingDay _dataWorkin = new WorkingDay();
   static Repository get(){
@@ -115,6 +118,18 @@ class Repository{
     
     _dbProvider.addHistorico(_historico);
     List<Historico> list = await _dbProvider.getHistorico();
+
+    return list;
+  }
+
+  Future<List<Configuracion>> fetchConfiguracion(String empresa, String dominio, String semilla) async{
+
+    _configuracion.empresa = empresa;
+    _configuracion.dominio = dominio;
+    _configuracion.semilla = semilla;
+    
+    _dbProvider.addConfiguracion(_configuracion);
+    List<Configuracion> list = await _dbProvider.getConfiguracion();
 
     return list;
   }

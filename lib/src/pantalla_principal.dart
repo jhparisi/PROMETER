@@ -102,9 +102,9 @@ class _PTPrincipalState extends State<PTPrincipal> {
                   padding: EdgeInsets.only(top: 20.0),
                 ),
                 Image.asset(
-                  'logoezsa.png',
-                  width: 180,
-                  height: 70,
+                  'logoPrometer.png',
+                  width: 150,
+                  height: 150,
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 10.0),

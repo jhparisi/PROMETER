@@ -1,3 +1,4 @@
+import 'package:eszaworker/class/ConfiguracionClass.dart';
 import 'package:eszaworker/class/HistoricoClass.dart';
 import 'package:eszaworker/class/MensajesClass.dart';
 import 'package:eszaworker/class/TrackingDataClass.dart';
@@ -26,7 +27,7 @@ class DBProvider {
   void init() async {
     Directory documentDirectory = await getApplicationDocumentsDirectory();
     final path = join(documentDirectory.path, "EszaWorker.db");
-    db = await openDatabase(path, version: 6,
+    db = await openDatabase(path, version: 7,
         onCreate: (Database newDb, int version) {
       newDb.execute("""
             CREATE TABLE WorkingDay(
@@ -91,6 +92,13 @@ class DBProvider {
             fechaUltimoLogin TEXT,
             usuario TEXT,
             matricula TEXT
+          );""");
+      newDb.execute("""
+          CREATE TABLE Configuracion(
+            id ROWID,
+            empresa TEXT,
+            dominio TEXT,
+            semilla TEXT
           );""");
     });
   }
@@ -322,5 +330,23 @@ class DBProvider {
     print("ACTUALIZO en la BD local - $data");
     db.update("DataLocal", data.toMap(),
         where: 'userId = ?', whereArgs: [data.userId]);
+  }
+
+  //Buscar dentro de la tabla Configuracion todos los datos
+  Future<List<Configuracion>> getConfiguracion() async {
+    var maps = await db.query("Configuracion");
+    if (maps.length > 0) {
+      print(maps.map<Configuracion>((item) => new Configuracion.fromDb(item)).toList());
+      return maps.map<Configuracion>((item) => new Configuracion.fromDb(item)).toList();
+    } else {
+      return null;
+    }
+  }
+
+//Metodo para agregar los datos a Configuracion
+  void addConfiguracion(Configuracion data) {
+    //print("Insertar en la BD local - $data");
+    db.insert("Configuracion", data.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.fail);
   }
 }

@@ -94,6 +94,7 @@ Flushbar fbarMatriculaSeleccionada = new Flushbar(
   duration: Duration(seconds: 5),
 );
 
+
 class PTInicial extends StatefulWidget {
   static const String routeName = "/pantalla_inicial";
   PTInicial({Key key}) : super(key: key);
@@ -268,84 +269,149 @@ class _PTInicialState extends State<PTInicial> {
             color: Colors.black, fontSize: 12.0, fontWeight: FontWeight.w400));
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("PRO-METER APP", textAlign: TextAlign.center),
-      ),
-      body: SingleChildScrollView(
+        body: Container(
+      height: double.infinity,
+      width: double.infinity,
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+            Color(0xFF73AEF5),
+            Color(0xFF61A4F1),
+            Color(0xFF478DE0),
+            Color(0xFF398AE5)
+          ],
+              stops: [
+            0.1,
+            0.4,
+            0.7,
+            0.9
+          ])),
+      child: SafeArea(
+          child: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(left: 50.0, right: 50.0, top: 50.0),
+          padding: EdgeInsets.only(left: 50.0, right: 50.0, top: 0.0),
           child: Column(
             children: <Widget>[
-              /* Text("Por favor indica tu número de teléfono", textAlign: TextAlign.left,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                ), */
+              Padding(
+                padding: EdgeInsets.only(top: 60.0),
+              ),
               Image.asset(
-                'logoezsa.png',
+                'logoPrometer2.png',
                 width: 180,
-                height: 70,
+                height: 180,
               ),
               Padding(
                 padding: EdgeInsets.only(top: 10.0),
               ),
-              Form(
-                key: _formKeyNum,
-                child: Column(
-                  children: <Widget>[
-                    TextFormField(
-                        onChanged: (text) {
-                          if (text.length == 9) {
-                            loadUser();
-                          }
-                        },
-                        controller: numPhoneController,
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.left,
-                        decoration: InputDecoration(
-                          labelText: "Número de teléfono",
-                        ),
-                        maxLength: 9,
-                        maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Debes indicar tu número de teléfono';
-                          }
-                          if (value.length < 9) {
-                            return 'Tu número de teléfono está incompleto!';
-                          }
-                          return null;
-                        }),
-                    Visibility(
-                        visible: _acompanante,
-                        child: CheckboxListTile(
-                          title: Text("Voy a acompañar",
-                              style: TextStyle(fontSize: 12.0)),
-                          value: checkedValue,
-                          onChanged: (newValue) {
-                            setState(() {
-                              checkedValue = newValue;
-                              _matriculaVisible = false;
-                              if (checkedValue) {
-                                _acompananteInt = 1;
-                              } else {
-                                _acompananteInt = 0;
-                              }
-                            });
-                          },
-                          controlAffinity: ListTileControlAffinity
-                              .leading, //  <-- leading Checkbox
-                        )),
-                    Visibility(
-                        visible: checkedValue,
-                        child: Text("Voy a acompañar a: " + _usuarioPrincipal,
-                            style:
-                                TextStyle(fontSize: 10.0, color: Colors.grey))),
-                    Visibility(
+              Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: SizedBox(
+                  width: 350,
+                  height: 450,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        top: 50.0, left: 25.0, right: 25.0, bottom: 25.0),
+                    child: Column(
+                      children: [
+                        /* Padding(
+                padding: EdgeInsets.only(top: 20.0),
+              ), */
+                        Form(
+                          key: _formKeyNum,
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                "Iniciar Sesión",
+                                style: TextStyle(
+                                    fontSize: 20.0,
+                                    color: Colors.blue[400],
+                                    fontFamily: 'HeeboSemiBold'),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 10.0),
+                              ),
+                              TextFormField(
+                                  onChanged: (text) {
+                                    if (text.length == 9) {
+                                      loadUser();
+                                    }
+                                  },
+                                  controller: numPhoneController,
+                                  keyboardType: TextInputType.number,
+                                  textAlign: TextAlign.left,
+                                  decoration: InputDecoration(
+                                    labelText: "Número de teléfono",
+                                    contentPadding: const EdgeInsets.all(15.0),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(70.0)),
+                                        borderSide: BorderSide(
+                                          color: Colors.transparent,
+                                        )),
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(70.0)),
+                                        borderSide: BorderSide.none),
+                                    prefixIcon: Icon(
+                                      Icons.phone,
+                                      color: Colors.blue,
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.blue[100],
+                                  ),
+                                  maxLength: 9,
+                                  maxLengthEnforcement:
+                                      MaxLengthEnforcement.enforced,
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      return 'Debes indicar tu número de teléfono';
+                                    }
+                                    if (value.length < 9) {
+                                      return 'Tu número de teléfono está incompleto!';
+                                    }
+                                    return null;
+                                  }),
+                              Visibility(
+                                  visible: _acompanante,
+                                  child: CheckboxListTile(
+                                    title: Text("Voy a acompañar",
+                                        style: TextStyle(fontSize: 12.0)),
+                                    value: checkedValue,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        checkedValue = newValue;
+                                        _matriculaVisible = false;
+                                        if (checkedValue) {
+                                          _acompananteInt = 1;
+                                        } else {
+                                          _acompananteInt = 0;
+                                        }
+                                      });
+                                    },
+                                    controlAffinity: ListTileControlAffinity
+                                        .leading, //  <-- leading Checkbox
+                                  )),
+                              Visibility(
+                                  visible: checkedValue,
+                                  child: Text(
+                                      "Voy a acompañar a: " + _usuarioPrincipal,
+                                      style: TextStyle(
+                                          fontSize: 10.0, color: Colors.grey))),
+                              Padding(
+                                padding: EdgeInsets.only(top: 3.0),
+                              ),
+                              /* Visibility(
                       visible: false,
                       child: TextFormField(
                         controller: carPlateController,
-                        decoration: InputDecoration(labelText: 'Matrícula:'),
+                        decoration: InputDecoration(
+                          labelText: 'Matrícula',
+                          icon: Icon(Icons.car_repair)
+                        ),
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Debes indicar la Matrícula';
@@ -353,145 +419,228 @@ class _PTInicialState extends State<PTInicial> {
                           return null;
                         },
                       ),
-                    ),
-                    Visibility(
-                      visible: _matriculaVisible,
-                      child: DropdownButtonFormField(
-                        decoration: InputDecoration(labelText: 'Matrícula:'),
-                        isExpanded: true,
-                        value: _selectedMatricula,
-                        validator: (value) {
-                          if (matriculaSeleccionada == false &&
-                              _matriculaVisible == true) {
-                            //fbarMatriculaSeleccionada.show(context);
-                            return 'Debes indicar una matrícula para iniciar';
-                          }
-                          return null;
-                        },
-                        onChanged: (newValue) {
-                          setState(() {
-                            _selectedMatricula = newValue;
-                            carPlateController.text = newValue;
-                            matriculaSeleccionada = true;
-                          });
-                        },
-                        items: _listMatriculas.map((matricula) {
-                          return DropdownMenuItem(
-                            child: new Text(matricula),
-                            value: matricula,
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10.0),
-                    ),
-                    TextFormField(
-                        /* onChanged: (text) {
+                    ), */
+                              Visibility(
+                                visible: _matriculaVisible,
+                                child: DropdownButtonFormField(
+                                  decoration: InputDecoration(
+                                    labelText: 'Matrícula',
+                                    contentPadding: const EdgeInsets.all(15.0),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(50.0)),
+                                        borderSide: BorderSide(
+                                          color: Colors.transparent,
+                                        )),
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(50.0)),
+                                        borderSide: BorderSide.none),
+                                    prefixIcon: Icon(
+                                      Icons.car_repair,
+                                      color: Colors.blue,
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.blue[100],
+                                  ),
+                                  isExpanded: true,
+                                  value: _selectedMatricula,
+                                  validator: (value) {
+                                    if (matriculaSeleccionada == false &&
+                                        _matriculaVisible == true) {
+                                      //fbarMatriculaSeleccionada.show(context);
+                                      return 'Debes indicar una matrícula para iniciar';
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      _selectedMatricula = newValue;
+                                      carPlateController.text = newValue;
+                                      matriculaSeleccionada = true;
+                                    });
+                                  },
+                                  items: _listMatriculas.map((matricula) {
+                                    return DropdownMenuItem(
+                                      child: new Text(matricula),
+                                      value: matricula,
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 20.0),
+                              ),
+                              TextFormField(
+                                  /* onChanged: (text) {
                           if (text.length == 9) {
                             loadUser();
                           }
                         }, */
-                        obscureText: true,
-                        controller: passController,
-                        keyboardType: TextInputType.visiblePassword,
-                        textAlign: TextAlign.left,
-                        decoration: InputDecoration(
-                          labelText: "Contraseña de PDA",
-                        ),
-                        maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Debes indicar tu Contraseña';
-                          }
+                                  obscureText: true,
+                                  controller: passController,
+                                  keyboardType: TextInputType.visiblePassword,
+                                  textAlign: TextAlign.left,
+                                  decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.all(15.0),
+                                    labelText: "Contraseña",
+                                    focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(70.0)),
+                                        borderSide: BorderSide(
+                                          color: Colors.transparent,
+                                        )),
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(70.0)),
+                                        borderSide: BorderSide.none),
+                                    prefixIcon: Icon(
+                                      Icons.pending_sharp,
+                                      color: Colors.blue,
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.blue[100],
+                                  ),
+                                  maxLengthEnforcement:
+                                      MaxLengthEnforcement.enforced,
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      return 'Debes indicar tu Contraseña';
+                                    }
 
-                          return null;
-                        }),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10.0),
+                                    return null;
+                                  }),
+                              Padding(
+                                padding: EdgeInsets.only(top: 20.0),
+                              ),
+                              ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Color(0xFF2eac6b),
+                                    shape: new RoundedRectangleBorder(
+                                      borderRadius:
+                                          new BorderRadius.circular(30.0),
+                                    ),
+                                  ),
+                                  child: Container(
+                                    padding: EdgeInsets.only(left: 50.0, right: 50.0, top:10, bottom: 10.0),
+                                    child: Text(
+                                      "Entrar",
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'HeeboSemiBold'),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    var pass = _login + passController.text;
+                                    validarUsuario(
+                                        numPhoneController.text, pass);
+                                    validarVersion(
+                                        _idUser.toString(), versionApp);
+                                    pr.show();
+                                    Future.delayed(Duration(seconds: 3))
+                                        .then((value) {
+                                      if (_formKeyNum.currentState.validate() &&
+                                          usuarioValidado == true &&
+                                          versionValidada == true) {
+                                        print("VALOR DE IDUSER: $_idUser");
+                                        if (_idUser == 0) {
+                                          fbar.show(context);
+                                        } else {
+                                          _repository.fetchLocalData(
+                                              '${numPhoneController.text}',
+                                              '${carPlateController.text}',
+                                              _idUser,
+                                              _nombreCompleto,
+                                              _login,
+                                              _dni,
+                                              _acompananteInt);
+                                          _repository.fetchHistorico(
+                                              DateTime.now().toString(),
+                                              _nombreCompleto,
+                                              '${carPlateController.text}');
+                                          print("AQUI MANDA EL VALOR DE: " +
+                                              _idUser.toString());
+                                          _menu.getVerifyDataLocal(_idUser);
+                                          //pr.show();
+                                          Future.delayed(Duration(seconds: 3))
+                                              .then((value) {
+                                            pr.hide().whenComplete(() {
+                                              //Navigator.of(context).push(MaterialPagaRoute( builder: (BuildContext context)=>PTPrincipal()));
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          PTPrincipal()));
+                                            });
+                                          });
+                                        }
+                                      } else {
+                                        pr.hide();
+                                        if (versionValidada == false) {
+                                          fbarVersion.show(context);
+                                          pr.hide();
+                                        }
+                                        if (usuarioValidado == false) {
+                                          fbarPass.show(context);
+                                          pr.hide();
+                                        }
+                                      }
+                                    });
+                                  }),
+                              Padding(
+                                padding: EdgeInsets.only(top: 30.0),
+                              ),
+                              /* Text(
+                                "Versión BDD: " + versionDB.toString() + ".0.0",
+                                style: TextStyle(fontSize: 10.0, color: Color(0xFF2eac6b),  fontFamily: 'HeeboSemiBold'),
+                              ),
+                              Text(
+                                "Versión APP: " + versionApp.toString(),
+                                style: TextStyle(fontSize: 10.0, color: Color(0xFF2eac6b),  fontFamily: 'HeeboSemiBold'),
+                              ),
+                              Text(
+                                "Dominio: EZSA ",
+                                style: TextStyle(fontSize: 10.0, color: Color(0xFF2eac6b),  fontFamily: 'HeeboSemiBold'),
+                              ) */
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    MaterialButton(
-                        child: Text('INICIAR'),
-                        padding: EdgeInsets.symmetric(vertical: 10.0),
-                        color: Colors.blueAccent,
-                        textColor: Colors.white,
-                        onPressed: () {
-                          var pass = _login + passController.text;
-                          validarUsuario(numPhoneController.text, pass);
-                          validarVersion(_idUser.toString(), versionApp);
-                          pr.show();
-                          Future.delayed(Duration(seconds: 3)).then((value) {
-                            if (_formKeyNum.currentState.validate() &&
-                                usuarioValidado == true &&
-                                versionValidada == true) {
-                              print("VALOR DE IDUSER: $_idUser");
-                              if (_idUser == 0) {
-                                fbar.show(context);
-                              } else {
-                                _repository.fetchLocalData(
-                                    '${numPhoneController.text}',
-                                    '${carPlateController.text}',
-                                    _idUser,
-                                    _nombreCompleto,
-                                    _login,
-                                    _dni,
-                                    _acompananteInt);
-                                _repository.fetchHistorico(
-                                    DateTime.now().toString(),
-                                    _nombreCompleto,
-                                    '${carPlateController.text}');
-                                print("AQUI MANDA EL VALOR DE: " +
-                                    _idUser.toString());
-                                _menu.getVerifyDataLocal(_idUser);
-                                //pr.show();
-                                Future.delayed(Duration(seconds: 3))
-                                    .then((value) {
-                                  pr.hide().whenComplete(() {
-                                    //Navigator.of(context).push(MaterialPagaRoute( builder: (BuildContext context)=>PTPrincipal()));
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                PTPrincipal()));
-                                  });
-                                });
-                              }
-                            } else {
-                              pr.hide();
-                              if (versionValidada == false) {
-                                fbarVersion.show(context);
-                                pr.hide();
-                              }
-                              if (usuarioValidado == false) {
-                                fbarPass.show(context);
-                                pr.hide();
-                              }
-                            }
-                          });
-                        }),
-                    Padding(
-                      padding: EdgeInsets.only(top: 30.0),
-                    ),
-                    Text(
-                      "Versión BDD: " + versionDB.toString() + ".0.0",
-                      style: TextStyle(fontSize: 8),
-                    ),
-                    Text(
-                      "Versión APP: " + versionApp.toString(),
-                      style: TextStyle(fontSize: 8),
-                    ),
-                    Text(
-                      "Dominio: EZSA ",
-                      style: TextStyle(fontSize: 8),
-                    )
-                  ],
+                  ),
                 ),
               ),
+              Padding(padding: EdgeInsets.only(top: 10)),
+              Text(
+                "Desarrollado por EZSA Sanidad Ambiental",
+                style: TextStyle(
+                    fontSize: 12.0,
+                    color: Colors.white,
+                    fontFamily: 'HeeboSemiBold'),
+              ),
+              Text(
+                "Versión: B" +
+                    versionDB.toString() +
+                    ".0.0 - A" +
+                    versionApp.toString(),
+                style: TextStyle(
+                    fontSize: 10.0,
+                    color: Colors.white,
+                    fontFamily: 'HeeboSemiBold'),
+              ),
+              Text(
+                "Dominio: EZSA ",
+                style: TextStyle(
+                    fontSize: 8.0,
+                    color: Colors.white,
+                    fontFamily: 'HeeboSemiBold'),
+              )
             ],
           ),
         ),
-      ),
-    );
+      )),
+    ));
   }
 
   Future<List<DataLocal>> getVerifyDataLocal() async {
