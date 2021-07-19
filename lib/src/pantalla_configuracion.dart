@@ -1,11 +1,12 @@
 import 'package:eszaworker/class/ConfiguracionClass.dart';
+import 'package:eszaworker/class/EmpresasAPIClass.dart';
 import 'package:eszaworker/resources/HttpHandler.dart';
 import 'package:eszaworker/resources/repository.dart';
 import 'package:eszaworker/src/pantalla_inicial.dart';
 import 'package:flutter/material.dart';
 
 String _selectedEmpresa;
-List<String> _listEmpresas = ["ezsa.erp.avanzadi.com","GoGroup","alexpress"];
+List<String> _listEmpresas = [];
 Repository _repository = Repository.get();
 
 class PTConfiguracion extends StatefulWidget {
@@ -15,7 +16,11 @@ class PTConfiguracion extends StatefulWidget {
 }
 
 class _PTConfiguracionState extends State<PTConfiguracion> {
-  
+  @override
+  void initState() {
+      getEmpresas();
+      super.initState();
+    }
    @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,7 +97,7 @@ class _PTConfiguracionState extends State<PTConfiguracion> {
                                           Radius.circular(50.0)),
                                       borderSide: BorderSide.none),
                                   prefixIcon: Icon(
-                                    Icons.car_repair,
+                                    Icons.home,
                                     color: Colors.blue,
                                   ),
                                   filled: true,
@@ -177,5 +182,19 @@ class _PTConfiguracionState extends State<PTConfiguracion> {
       print(Ex);
     }
     
+  }
+
+  Future<List<EmpresaAPI>> getEmpresas() async{
+    var empresas = await HttpHandler.get().fetchEmpresaAPI();
+    if(empresas.length>0){   
+      _listEmpresas.clear();   
+      for(var i=0; i<empresas.length; i++){
+        setState(() {
+          
+          _listEmpresas.add(empresas[i].nombre);   
+        });
+        
+      }
+    }
   }
 }

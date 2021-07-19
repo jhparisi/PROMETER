@@ -104,7 +104,7 @@ class _PTResumenLTState extends State<PTResumenLT> {
       appBar: AppBar(
         centerTitle: true,
         title: Text("Resumen jornada " + fechaFormateadaES,
-            textAlign: TextAlign.center),
+            textAlign: TextAlign.center, style: TextStyle(fontFamily: 'HeeboSemiBold'),),
       ),
       drawer: _menu.getDrawer(context),
       body: SingleChildScrollView(
@@ -121,6 +121,7 @@ class _PTResumenLTState extends State<PTResumenLT> {
                 },
               ),
             ),
+            Padding(padding: EdgeInsets.only(top: 25.0)),
             Visibility(
                 visible: mostrarBoton,
                 child: ElevatedButton(
@@ -129,16 +130,32 @@ class _PTResumenLTState extends State<PTResumenLT> {
                       exit(0);
                     });
                   },
-                  child: Text('Terminar'),
                   style: ElevatedButton.styleFrom(
-                      primary: Colors.blue, // background
-                      onPrimary: Colors.white, // foreground
+                      primary: Color(0xFF2eac6b),
+                      shape: new RoundedRectangleBorder(
+                        borderRadius:
+                            new BorderRadius.circular(30.0),
+                      ),
+                    ),
+                    child: Container(
+                      padding: EdgeInsets.only(
+                          left: 50.0,
+                          right: 50.0,
+                          top: 10,
+                          bottom: 10.0),
+                      child: Text(
+                        "Terminar",
+                        style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'HeeboSemiBold'),
+                      ),
                     )
                 )),
             Padding(padding: EdgeInsets.only(top: 20.0)),
             Text(
               "Tiempo total: $tiempoTotal",
-              style: TextStyle(fontSize: 20.0, color: Colors.blue),
+              style: TextStyle(fontSize: 20.0, color: Colors.blue,fontFamily: 'HeeboSemiBold'),
             ),
             Padding(padding: EdgeInsets.only(top: 70.0)),
           ],
@@ -180,7 +197,7 @@ class _PTResumenLTState extends State<PTResumenLT> {
                     leading: icono,
                     title: Text(
                       evento,
-                      style: TextStyle(color: colorIcono),
+                      style: TextStyle(color: colorIcono,fontFamily: 'HeeboSemiBold'),
                     ),
                   ),
                 ),
@@ -191,7 +208,7 @@ class _PTResumenLTState extends State<PTResumenLT> {
                   child: ListTile(
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                    trailing: Text(fecha),
+                    trailing: Text(fecha, style: TextStyle(fontFamily: 'HeeboSemiBold'),),
                   ),
                 ),
               ),

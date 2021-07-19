@@ -14,7 +14,6 @@ import 'package:eszaworker/resources/repository.dart';
 import 'package:eszaworker/resources/db_provider.dart';
 import 'package:eszaworker/src/pantalla_play_pause.dart';
 
-
 ProgressDialog prd;
 Menu _menu = new Menu();
 String _combustible = "";
@@ -56,8 +55,8 @@ class PTRepostar extends StatefulWidget {
 class _PTRepostarState extends State<PTRepostar> {
   void loadRefuel(
       idTipoCombustible, kms, plate, price, litre, refuelDate, userId) async {
-    var fuel = await HttpHandler().postRefuel(
-        idTipoCombustible, kms, plate, price, litre, refuelDate, userId, _dominio, _semilla);
+    var fuel = await HttpHandler().postRefuel(idTipoCombustible, kms, plate,
+        price, litre, refuelDate, userId, _dominio, _semilla);
     setState(() {
       //_response.addAll(fuel);
       if (fuel == "OK") {
@@ -155,7 +154,7 @@ class _PTRepostarState extends State<PTRepostar> {
 
     prd = new ProgressDialog(context);
     prd.style(
-        message: 'Procesando la información...',
+        message: 'Guardando datos del repostaje',
         borderRadius: 0.0,
         backgroundColor: Colors.white,
         progressWidget: CircularProgressIndicator(),
@@ -173,99 +172,182 @@ class _PTRepostarState extends State<PTRepostar> {
           title: Text("PRO-METER APP", textAlign: TextAlign.center),
         ),
         drawer: _menu.getDrawer(context),
-        body: new Form(
-            key: _formKey,
-            //child: Container(
-            child: SingleChildScrollView(
-                child: Padding(
-              padding: EdgeInsets.only(left: 50.0, right: 50.0, top: 0.0),
-              child: Column(
-                children: <Widget>[
-                  DropdownButtonFormField(
-                    decoration: InputDecoration(labelText: 'Combustible:'),
-                    isExpanded: true,
-                    value: _selectedLocation,
-                    onChanged: (newValue) {
-                      setState(() {
-                        _selectedLocation = newValue;
-                        if (newValue == "Gasolina 98") {
-                          _combustible = "1";
-                          unidadMedida = "Litros";
-                        } else if (newValue == "Gasolina 95") {
-                          _combustible = "2";
-                          unidadMedida = "Litros";
-                        } else if (newValue == "Bioetanol") {
-                          _combustible = "3";
-                          unidadMedida = "Litros";
-                        } else if (newValue == "Diésel Normal") {
-                          _combustible = "4";
-                          unidadMedida = "Litros";
-                        } else if (newValue == "Diésel Plus") {
-                          _combustible = "5";
-                          unidadMedida = "Litros";
-                        } else if (newValue == "Diésel 1D, 2D,4D") {
-                          _combustible = "6";
-                          unidadMedida = "Litros";
-                        } else if (newValue == "Gas Natural") {
-                          _combustible = "7";
-                          unidadMedida = "Litros";
-                        } else if (newValue == "Eléctrico (Kw)") {
-                          _combustible = "8";
-                          unidadMedida = "Kw";
-                        } else if (newValue == "AdBlue") {
-                          _combustible = "9";
-                          unidadMedida = "Litros";
-                        }
-                      });
-                      print(_combustible);
-                    },
-                    items: _locations.map((location) {
-                      return DropdownMenuItem(
-                        child: new Text(location),
-                        value: location,
-                      );
-                    }).toList(),
-                  ),
-                  TextFormField(
-                    //controller: carPlateController,
-                    decoration: InputDecoration(labelText: 'Matrícula:'),
-                    readOnly: true,
-                    enabled: false,
-                    style: TextStyle(color: Colors.grey),
-                    initialValue: _carPlateRepostar,
-                  ),
-                  TextFormField(
-                    controller: kmsController,
-                    decoration:
-                        InputDecoration(labelText: 'Kilometros al repostar:'),
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        showAlertDialog(context, "Error!",
-                            "Debes indicar los kilometros", Colors.red, 0);
-                        return "Debes indicar los kilometros";
-                      } else if (int.parse(kmsController.text) < lastKM &&
-                          lastCarPlate == _carPlateRepostar) {
-                        var indicados = kmsController.text;
-                        showAlertDialog(
-                            context,
-                            "Error!",
-                            "Los Km indicados ($indicados) no pueden ser inferiores \na los valores del último repostaje ($lastKM).\n¿Estas seguro de querer guardar estos valores?",
-                            Colors.red,
-                            1);
-                        return 'Los Km indicados no pueden ser inferiores \na los valores del último repostaje';
-                      } else if (int.parse(kmsController.text) >
-                              (lastKM + 1500) &&
-                          lastKM != 0) {
-                        showAlertDialog(
-                            context,
-                            "Error!",
-                            'El Kilómetraje, no puede ser superior a los \n1.500km adicionales al último repostaje (' +
-                                lastKM.toString() +
-                                ' Km).\n¿Estas seguro de querer guardar estos valores?',
-                            Colors.red,
-                            1);
-                        /* fbar = new Flushbar(
+        body: Container(
+          height: double.infinity,
+          width: double.infinity,
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color(0xFFFFFFFF), Color(0xFFFFFFFF)],
+                  stops: [0.1, 0.9])),
+          child: SafeArea(
+              child: SingleChildScrollView(
+                  child: Padding(
+                      padding:
+                          EdgeInsets.only(right: 50.0, left: 50.0, top: 50.0),
+                      child: new Form(
+                          key: _formKey,
+                          //child: Container(
+                          child: SingleChildScrollView(
+                              child: Padding(
+                            padding: EdgeInsets.only(
+                                left: 50.0, right: 50.0, top: 0.0),
+                            child: Column(
+                              children: <Widget>[
+                                DropdownButtonFormField(
+                                  //decoration: InputDecoration(labelText: 'Combustible:'),
+                                  decoration: InputDecoration(
+                                    labelText: "Combustible",
+                                    contentPadding: const EdgeInsets.all(15.0),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(70.0)),
+                                        borderSide: BorderSide(
+                                          color: Colors.transparent,
+                                        )),
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(70.0)),
+                                        borderSide: BorderSide.none),
+                                    prefixIcon: Icon(
+                                      Icons.local_gas_station,
+                                      color: Colors.blue,
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.blue[100],
+                                  ),
+                                  style: TextStyle(fontFamily: 'HeeboSemiBold', color: Colors.black),
+                                  isExpanded: true,
+                                  value: _selectedLocation,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      _selectedLocation = newValue;
+                                      if (newValue == "Gasolina 98") {
+                                        _combustible = "1";
+                                        unidadMedida = "Litros";
+                                      } else if (newValue == "Gasolina 95") {
+                                        _combustible = "2";
+                                        unidadMedida = "Litros";
+                                      } else if (newValue == "Bioetanol") {
+                                        _combustible = "3";
+                                        unidadMedida = "Litros";
+                                      } else if (newValue == "Diésel Normal") {
+                                        _combustible = "4";
+                                        unidadMedida = "Litros";
+                                      } else if (newValue == "Diésel Plus") {
+                                        _combustible = "5";
+                                        unidadMedida = "Litros";
+                                      } else if (newValue ==
+                                          "Diésel 1D, 2D,4D") {
+                                        _combustible = "6";
+                                        unidadMedida = "Litros";
+                                      } else if (newValue == "Gas Natural") {
+                                        _combustible = "7";
+                                        unidadMedida = "Litros";
+                                      } else if (newValue == "Eléctrico (Kw)") {
+                                        _combustible = "8";
+                                        unidadMedida = "Kw";
+                                      } else if (newValue == "AdBlue") {
+                                        _combustible = "9";
+                                        unidadMedida = "Litros";
+                                      }
+                                    });
+                                    print(_combustible);
+                                  },
+                                  items: _locations.map((location) {
+                                    return DropdownMenuItem(
+                                      child: new Text(location),
+                                      value: location,
+                                    );
+                                  }).toList(),
+                                ),
+                                Padding(padding: EdgeInsets.only(top: 25.0)),
+                                TextFormField(
+                                  //controller: carPlateController,
+                                  //decoration:InputDecoration(labelText: 'Matrícula:'),
+                                  decoration: InputDecoration(
+                                    labelText: "Matrícula",
+                                    contentPadding: const EdgeInsets.all(15.0),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(70.0)),
+                                        borderSide: BorderSide(
+                                          color: Colors.transparent,
+                                        )),
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(70.0)),
+                                        borderSide: BorderSide.none),
+                                    prefixIcon: Icon(
+                                      Icons.car_repair,
+                                      color: Colors.blue,
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.blue[100],
+                                  ),
+                                  readOnly: true,
+                                  enabled: false,
+                                  style: TextStyle(color: Colors.grey, fontFamily: 'HeeboSemiBold'),
+                                  initialValue: _carPlateRepostar,
+                                ),
+                                Padding(padding: EdgeInsets.only(top:25.0)),
+                                TextFormField(
+                                  controller: kmsController,
+                                  style: TextStyle(color: Colors.black, fontFamily: 'HeeboSemiBold'),
+                                  decoration: InputDecoration(
+                                    labelText: "Kilometros al repostar",
+                                    contentPadding: const EdgeInsets.all(15.0),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(70.0)),
+                                        borderSide: BorderSide(
+                                          color: Colors.transparent,
+                                        )),
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(70.0)),
+                                        borderSide: BorderSide.none),
+                                    prefixIcon: Icon(
+                                      Icons.money_sharp,
+                                      color: Colors.blue,
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.blue[100],
+                                  ),
+                                  keyboardType: TextInputType.number,
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      showAlertDialog(
+                                          context,
+                                          "Error!",
+                                          "Debes indicar los kilometros",
+                                          Colors.red,
+                                          0);
+                                      return "Debes indicar los kilometros";
+                                    } else if (int.parse(kmsController.text) <
+                                            lastKM &&
+                                        lastCarPlate == _carPlateRepostar) {
+                                      var indicados = kmsController.text;
+                                      showAlertDialog(
+                                          context,
+                                          "Error!",
+                                          "Los Km indicados ($indicados) no pueden ser inferiores \na los valores del último repostaje ($lastKM).\n¿Estas seguro de querer guardar estos valores?",
+                                          Colors.red,
+                                          1);
+                                      return 'Los Km indicados no pueden ser inferiores \na los valores del último repostaje';
+                                    } else if (int.parse(kmsController.text) >
+                                            (lastKM + 1500) &&
+                                        lastKM != 0) {
+                                      showAlertDialog(
+                                          context,
+                                          "Error!",
+                                          'El Kilómetraje, no puede ser superior a los \n1.500km adicionales al último repostaje (' +
+                                              lastKM.toString() +
+                                              ' Km).\n¿Estas seguro de querer guardar estos valores?',
+                                          Colors.red,
+                                          1);
+                                      /* fbar = new Flushbar(
                               flushbarPosition: FlushbarPosition.TOP,
                               message: 'El Kilómetraje, no puede ser superior a los \n1.500km adicionales al último repostaje (' + lastKM.toString() + ' Km)',
                               duration: Duration(seconds: 5),
@@ -275,80 +357,147 @@ class _PTRepostarState extends State<PTRepostar> {
                               return null;
                             }); */
 
-                        return 'El Kilómetraje, no puede ser superior a los \n1.500km adicionales al último repostaje (' +
-                            lastKM.toString() +
-                            ' Km)';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    controller: priceController,
-                    decoration:
-                        InputDecoration(labelText: 'Importe total respostado:'),
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        showAlertDialog(context, "Error!",
-                            "Debes indicar el importe", Colors.red, 0);
-                        return 'Debes indicar el importe';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    controller: litreController,
-                    decoration: InputDecoration(
-                      labelText: '$unidadMedida:',
-                    ),
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        showAlertDialog(context, "Error!",
-                            "Debes indicar los $unidadMedida", Colors.red, 0);
-                        return 'Debes indicar los $unidadMedida';
-                      }
-                      return null;
-                    },
-                  ),
-                  Padding(padding: EdgeInsets.only(top: 20.0)),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState.validate()) {
-                        loadRefuel(
-                            _combustible,
-                            kmsController.text,
-                            _carPlateRepostar,
-                            priceController.text,
-                            litreController.text,
-                            DateTime.now().toString(),
-                            _idUser.toString());
-                        prd.show();
-                        Future.delayed(Duration(seconds: 3)).then((value) {
-                          prd.hide().whenComplete(() {
-                            _dbprovider.deleteRefuelLocal(_idUser.toString());
-                            _repository.fetchRefuelLocal(
-                                _combustible,
-                                kmsController.text,
-                                litreController.text,
-                                _carPlateRepostar,
-                                priceController.text,
-                                DateTime.now().toString(),
-                                _idUser.toString());
-                            getPlayPause();
-                          });
-                        });
-                      }
-                    },
-                    child: Text('Repostar'),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.blue, // background
-                      onPrimary: Colors.white, // foreground
-                    )
-                  )
-                ],
-              ),
-            ))));
+                                      return 'El Kilómetraje, no puede ser superior a los \n1.500km adicionales al último repostaje (' +
+                                          lastKM.toString() +
+                                          ' Km)';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                Padding(padding: EdgeInsets.only(top: 25.0)),
+                                TextFormField(
+                                  controller: priceController,
+                                  //decoration: InputDecoration(labelText: 'Importe total respostado:'),
+                                  style: TextStyle(color: Colors.black, fontFamily: 'HeeboSemiBold'),
+                                  decoration: InputDecoration(
+                                    labelText: "Importe total repostado",
+                                    contentPadding: const EdgeInsets.all(15.0),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(70.0)),
+                                        borderSide: BorderSide(
+                                          color: Colors.transparent,
+                                        )),
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(70.0)),
+                                        borderSide: BorderSide.none),
+                                    prefixIcon: Icon(
+                                      Icons.euro,
+                                      color: Colors.blue,
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.blue[100],
+                                  ),
+                                  keyboardType: TextInputType.number,
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      showAlertDialog(
+                                          context,
+                                          "Error!",
+                                          "Debes indicar el importe",
+                                          Colors.red,
+                                          0);
+                                      return 'Debes indicar el importe';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                Padding(padding: EdgeInsets.only(top: 25.0)),
+                                TextFormField(
+                                  controller: litreController,
+                                  //decoration: InputDecoration(labelText: '$unidadMedida:',),
+                                  style: TextStyle(color: Colors.black, fontFamily: 'HeeboSemiBold'),
+                                  decoration: InputDecoration(
+                                    labelText: "$unidadMedida",
+                                    contentPadding: const EdgeInsets.all(15.0),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(70.0)),
+                                        borderSide: BorderSide(
+                                          color: Colors.transparent,
+                                        )),
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(70.0)),
+                                        borderSide: BorderSide.none),
+                                    prefixIcon: Icon(
+                                      Icons.local_drink,
+                                      color: Colors.blue,
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.blue[100],
+                                  ),
+                                  keyboardType: TextInputType.number,
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      showAlertDialog(
+                                          context,
+                                          "Error!",
+                                          "Debes indicar los $unidadMedida",
+                                          Colors.red,
+                                          0);
+                                      return 'Debes indicar los $unidadMedida';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                Padding(padding: EdgeInsets.only(top: 25.0)),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      if (_formKey.currentState.validate()) {
+                                        loadRefuel(
+                                            _combustible,
+                                            kmsController.text,
+                                            _carPlateRepostar,
+                                            priceController.text,
+                                            litreController.text,
+                                            DateTime.now().toString(),
+                                            _idUser.toString());
+                                        prd.show();
+                                        Future.delayed(Duration(seconds: 3))
+                                            .then((value) {
+                                          prd.hide().whenComplete(() {
+                                            _dbprovider.deleteRefuelLocal(
+                                                _idUser.toString());
+                                            _repository.fetchRefuelLocal(
+                                                _combustible,
+                                                kmsController.text,
+                                                litreController.text,
+                                                _carPlateRepostar,
+                                                priceController.text,
+                                                DateTime.now().toString(),
+                                                _idUser.toString());
+                                            getPlayPause();
+                                          });
+                                        });
+                                      }
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                    primary: Color(0xFF2eac6b),
+                                    shape: new RoundedRectangleBorder(
+                                      borderRadius:
+                                          new BorderRadius.circular(30.0),
+                                    ),
+                                  ),
+                                  child: Container(
+                                    padding: EdgeInsets.only(
+                                        left: 50.0,
+                                        right: 50.0,
+                                        top: 10,
+                                        bottom: 10.0),
+                                    child: Text(
+                                      "Repostar",
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'HeeboSemiBold'),
+                                    ),
+                                  ),)
+                              ],
+                            ),
+                          )))))),
+        ));
   }
 
   Future<List<PlayPauseTracking>> getPlayPause() async {
@@ -463,24 +612,22 @@ class _PTRepostarState extends State<PTRepostar> {
     return retunn;
   }
 
-
-  getConfiguracion() async {     
+  getConfiguracion() async {
     try {
       List<Configuracion> configuracion = await _dbprovider.getConfiguracion();
       //print(configuracion[0].dominio);
-      if(configuracion.length>0){
-          setState(() {
+      if (configuracion.length > 0) {
+        setState(() {
           _dominio = configuracion[0].dominio;
-          _semilla = configuracion[0].semilla;      
+          _semilla = configuracion[0].semilla;
         });
-      }
-      else{
+      } else {
         _dominio = null;
         _semilla = null;
       }
     } catch (Ex) {
       _dominio = null;
-        _semilla = null;
+      _semilla = null;
     }
   }
 }

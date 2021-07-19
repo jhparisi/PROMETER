@@ -39,7 +39,7 @@ class _DatosDelUsuario extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Expanded(
-          flex: 1,
+          flex: 3,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -48,14 +48,14 @@ class _DatosDelUsuario extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
-                    fontWeight: FontWeight.bold, color: Colors.white),
+                    fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'HeeboSemiBold'),
               ),
               const Padding(padding: EdgeInsets.only(bottom: 2.0)),
               Row(
                 children: <Widget>[
                   Icon(
                     Icons.phone,
-                    size: 14,
+                    size: 12,
                     color: Colors.white,
                   ),
                   Text(
@@ -64,7 +64,7 @@ class _DatosDelUsuario extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       fontSize: 12.0,
-                      color: Colors.white,
+                      color: Colors.white,fontFamily: 'HeeboSemiBold'
                     ),
                   ),
                 ],
@@ -73,7 +73,7 @@ class _DatosDelUsuario extends StatelessWidget {
                 children: <Widget>[
                   Icon(
                     Icons.directions_car,
-                    size: 14,
+                    size: 12,
                     color: Colors.white,
                   ),
                   Text(
@@ -82,7 +82,7 @@ class _DatosDelUsuario extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       fontSize: 12.0,
-                      color: Colors.white,
+                      color: Colors.white,fontFamily: 'HeeboSemiBold'
                     ),
                   ),
                 ],
@@ -91,7 +91,7 @@ class _DatosDelUsuario extends StatelessWidget {
           ),
         ),
         Expanded(
-          flex: 1,
+          flex: 2,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,
@@ -99,8 +99,8 @@ class _DatosDelUsuario extends StatelessWidget {
               Row(
                 children: <Widget>[
                   Icon(
-                    Icons.phonelink_ring,
-                    size: 14,
+                    Icons.date_range,
+                    size: 12,
                     color: Colors.white,
                   ),
                   Text(
@@ -108,6 +108,7 @@ class _DatosDelUsuario extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 12.0,
                       color: Colors.white,
+                      fontFamily: 'HeeboSemiBold'
                     ),
                   ),
                 ],
@@ -124,6 +125,7 @@ class _DatosDelUsuario extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 10.0,
                       color: Colors.white,
+                      fontFamily: 'HeeboSemiBold'
                     ),
                   ),
                 ],
@@ -202,7 +204,7 @@ class Menu extends StatelessWidget {
       }
       return ListTile(
         leading: icon,
-        title: Text(name),
+        title: Text(name, style: TextStyle(fontFamily: 'HeeboSemiBold'),),
         enabled: mostrarMenu,
         onTap: () {
           if (route != "") {
@@ -231,16 +233,16 @@ class Menu extends StatelessWidget {
                 fechaConexion: '$ultimoLogin'),
           ),
           getItem(
-              Icon(Icons.local_gas_station), "Repostar", "/pantalla_repostar"),
-          getItem(Icon(Icons.message), "Mensajes", "/pantalla_mensajes"),
-          getItem(Icon(Icons.settings), "Actividad", "/pantalla_principal"),
-          getItem(Icon(Icons.security), "Seguridad y privacidad",
+              Icon(Icons.local_gas_station, color: Colors.blue,), "Repostar", "/pantalla_repostar"),
+          getItem(Icon(Icons.message, color: Colors.blue), "Mensajes", "/pantalla_mensajes"),
+          getItem(Icon(Icons.swap_calls, color: Colors.blue), "Actividad", "/pantalla_principal"),
+          getItem(Icon(Icons.security, color: Colors.blue), "Seguridad y privacidad",
               "/pantalla_seguridad"),
-          getItem(Icon(Icons.help), "Ayuda y FQAs", "/pantalla_ayuda"),
-          getItem(Icon(Icons.info), "Acerca de", "/pantalla_acerca"),
-          getItem(Icon(Icons.lock_clock), "Propuesta horas trabajadas",
+          getItem(Icon(Icons.help, color: Colors.blue), "Ayuda y FQAs", "/pantalla_ayuda"),
+          getItem(Icon(Icons.info, color: Colors.blue), "Acerca de", "/pantalla_acerca"),
+          getItem(Icon(Icons.lock_clock, color: Colors.blue), "Propuesta horas trabajadas",
               "/pantalla_controlhoras"),
-          getItem(Icon(Icons.exit_to_app), "Cerrar Sesión", ""),
+          getItem(Icon(Icons.exit_to_app, color: Colors.blue), "Cerrar Sesión", ""),
         ],
       );
     }

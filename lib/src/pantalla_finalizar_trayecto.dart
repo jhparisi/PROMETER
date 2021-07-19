@@ -142,7 +142,7 @@ class _PTFinalizarRutaState extends State<PTFinalizarRuta> {
     //getWDLocal();
     prd = new ProgressDialog(context);
     prd.style(
-        message: 'Procesando la información...',
+        message: 'Guardando los datos de fin de jornada',
         borderRadius: 0.0,
         backgroundColor: Colors.white,
         progressWidget: CircularProgressIndicator(),
@@ -161,7 +161,28 @@ class _PTFinalizarRutaState extends State<PTFinalizarRuta> {
           automaticallyImplyLeading: false,
         ),
         //drawer: _menu.getDrawer(context),
-        body: new Form(
+        body: Container(
+            height: double.infinity,
+      width: double.infinity,
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+            Color(0xFFFFFFFF),
+            Color(0xFFFFFFFF)
+          ],
+              stops: [
+            0.1,
+            0.9
+          ])),
+            child: 
+              SafeArea(
+            child: 
+              SingleChildScrollView(
+                child: 
+                  Padding(padding: EdgeInsets.only(right: 50.0, left: 50.0, top: 25.0),
+                  child: new Form(
             key: _formKey,
             //child: Container(
             child: SingleChildScrollView(
@@ -176,27 +197,89 @@ class _PTFinalizarRutaState extends State<PTFinalizarRuta> {
                     return new Future(() => false);
                   },
                 ),
+                Padding(padding: EdgeInsets.only(top:25.0)),
                   TextFormField(
                     controller: startingDateController,
-                    decoration:
-                        InputDecoration(labelText: 'Fecha de comienzo:'),
+                    //decoration:InputDecoration(labelText: 'Fecha de comienzo:'),
+                    decoration: InputDecoration(
+                      labelText: "Fecha de inicio",
+                      contentPadding: const EdgeInsets.all(15.0),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(70.0)),
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                          )),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(70.0)),
+                          borderSide: BorderSide.none),
+                      prefixIcon: Icon(
+                        Icons.date_range,
+                        color: Colors.blue,
+                      ),
+                      filled: true,
+                      fillColor: Colors.blue[100],
+                    ),
                     readOnly: true,
                     enabled: false,
-                    style: TextStyle(color: Colors.grey),
+                    style: TextStyle(color: Colors.grey, fontFamily: 'HeeboSemiBold'),
                   ),
+                  Padding(padding: EdgeInsets.only(top:25.0)),
                   TextFormField(
                     controller: carPlateController,
-                    decoration: InputDecoration(labelText: 'Matrícula:'),
+                    //decoration: InputDecoration(labelText: 'Matrícula:'),
+                    decoration: InputDecoration(
+                      labelText: "Matrícula",
+                      contentPadding: const EdgeInsets.all(15.0),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(70.0)),
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                          )),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(70.0)),
+                          borderSide: BorderSide.none),
+                      prefixIcon: Icon(
+                        Icons.money_sharp,
+                        color: Colors.blue,
+                      ),
+                      filled: true,
+                      fillColor: Colors.blue[100],
+                    ),
                     readOnly: true,
                     enabled: false,
-                    style: TextStyle(color: Colors.grey),
+                    style: TextStyle(color: Colors.grey, fontFamily: 'HeeboSemiBold'),
                   ),
+                  Padding(padding: EdgeInsets.only(top: 25.0)),
                   TextFormField(
                     controller: kmsBeginningController,
-                    decoration: InputDecoration(labelText: 'Kms al empezar:'),
+                    //decoration: InputDecoration(labelText: 'Kms al empezar:'),
+                    decoration: InputDecoration(
+                      labelText: "Kms al empezar",
+                      contentPadding: const EdgeInsets.all(15.0),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(70.0)),
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                          )),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(70.0)),
+                          borderSide: BorderSide.none),
+                      prefixIcon: Icon(
+                        Icons.local_parking,
+                        color: Colors.blue,
+                      ),
+                      filled: true,
+                      fillColor: Colors.blue[100],
+                    ),
                     readOnly: true,
                     enabled: false,
-                    style: TextStyle(color: Colors.grey),
+                    style: TextStyle(color: Colors.grey, fontFamily: 'HeeboSemiBold'),
                   ),
                   /* TextFormField(
                         controller: endingDateController,
@@ -227,15 +310,37 @@ class _PTFinalizarRutaState extends State<PTFinalizarRuta> {
                       return null;
                     },
                   ), */
+                  Padding(padding: EdgeInsets.only(top: 25.0)),
                   DateTimeField(
                     format: DateFormat("yyyy-MM-dd H:mm:ss"),
                     controller: endingDateController,
-                    style: TextStyle(color: Colors.grey),
+                    style: TextStyle(color: Colors.grey, fontFamily: 'HeeboSemiBold'),
                     readOnly: true,
-                    decoration: InputDecoration(
+                    /* decoration: InputDecoration(
                       enabled: true, 
                       labelText: 'Fecha fin:'
+                    ), */
+                    decoration: InputDecoration(
+                      labelText: "Fecha fin",
+                      contentPadding: const EdgeInsets.all(15.0),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(70.0)),
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                          )),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(70.0)),
+                          borderSide: BorderSide.none),
+                      prefixIcon: Icon(
+                        Icons.date_range_outlined,
+                        color: Colors.blue,
+                      ),
+                      filled: true,
+                      fillColor: Colors.blue[100],
                     ),
+                    
                     onShowPicker: (context, currentValue) async {
                       final date = await showDatePicker(
                         context: context,
@@ -264,10 +369,32 @@ class _PTFinalizarRutaState extends State<PTFinalizarRuta> {
                       }
                     },
                   ),
+                  Padding(padding: EdgeInsets.only(top:25.0)),
                   TextFormField(
                     controller: kmsTheEndController,
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: 'Kms al terminar:'),
+                    autofocus: true,
+                    //decoration: InputDecoration(labelText: 'Kms al terminar:'),
+                    decoration: InputDecoration(
+                      labelText: "Kms al terminar",
+                      contentPadding: const EdgeInsets.all(15.0),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(70.0)),
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                          )),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(70.0)),
+                          borderSide: BorderSide.none),
+                      prefixIcon: Icon(
+                        Icons.local_parking_rounded,
+                        color: Colors.blue,
+                      ),
+                      filled: true,
+                      fillColor: Colors.blue[100],
+                    ),
                     validator: (value) {
                       if (value.isEmpty) {
                         return 'Debes indicar los Km al terminar';
@@ -331,17 +458,36 @@ class _PTFinalizarRutaState extends State<PTFinalizarRuta> {
                         }); */
                       }
                     },
-                    child: Text('Terminar'),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.blue, // background
-                      onPrimary: Colors.white, // foreground
-                    )
+                      primary: Color(0xFF2eac6b),
+                      shape: new RoundedRectangleBorder(
+                        borderRadius:
+                            new BorderRadius.circular(30.0),
+                      ),
+                    ),
+                    child: Container(
+                      padding: EdgeInsets.only(
+                          left: 50.0,
+                          right: 50.0,
+                          top: 10,
+                          bottom: 10.0),
+                      child: Text(
+                        "Finalizar",
+                        style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'HeeboSemiBold'),
+                      ),
+                    ),
                     /* color: Colors.blue,
                     textColor: Colors.white, */
                   )
                 ],
               ),
-            ))));
+            )))))
+              ),
+          )
+              );
   }
 
   Future<List<WorkingDay>> getWDLocal() async {

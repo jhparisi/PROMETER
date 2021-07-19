@@ -9,15 +9,12 @@ import 'package:eszaworker/src/pantalla_TabObservaciones.dart';
 import 'package:eszaworker/src/pantalla_editarhoras.dart';
 import 'package:eszaworker/src/pantalla_inicial.dart';
 import 'package:eszaworker/src/pantalla_resumenLT.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-//import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart' show CalendarCarousel;
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:intl/intl.dart' show DateFormat;
-//import 'package:date_range_picker/date_range_picker.dart' as DateRangePicker;
 
 DBProvider _dbprovider = DBProvider.get();
 ProgressDialog prd;
@@ -54,7 +51,6 @@ var fechaRango = fechaDesde + "*" + fechaHasta;
 String _dominio;
 String _semilla;
 
-Flushbar fbar;
 PTTabObservaciones ptObsWidget = new PTTabObservaciones(userId, fechaRango);
 
 class PTControlHoras extends StatefulWidget {
@@ -82,13 +78,6 @@ class _PTControlHorasState extends State<PTControlHoras> {
       onPressed: () {
         final data =
             ControlHour(idUsuario: _idUser.toString(), fecha: fecha[9]);
-        /*var fechaRegistro = fecha[9].split("-");
-         var freg =
-            fechaRegistro[2] + "-" + fechaRegistro[1] + "-" + fechaRegistro[0];
-        postControlHour(_idUser.toString(), freg, "1", "Inicio",
-            "Registro Manual", freg + " 08:00");
-        postControlHour(_idUser.toString(), freg, "1", "Fin", "Registro Manual",
-            freg + " 17:30"); */
         Timer(Duration(milliseconds: 500), () {
           Navigator.push(
               context,

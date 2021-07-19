@@ -78,7 +78,7 @@ class _PTPrincipalState extends State<PTPrincipal> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("PRO-METER APP", textAlign: TextAlign.center),
+        title: Text("PRO-METER APP", textAlign: TextAlign.center, style: TextStyle(fontFamily: 'HeeboSemiBold'),),
       ),
       drawer: _menu.getDrawer(context),
       body: new Container(
@@ -109,11 +109,9 @@ class _PTPrincipalState extends State<PTPrincipal> {
                   padding: EdgeInsets.only(top: 10.0),
                 ),
                 Text(
-                  'Tu posición actual es:',
-                  style: TextStyle(fontSize: 10.0),
+                  'Tu posición actual es: Lat: $lat; Lng:$long',
+                  style: TextStyle(fontSize: 10.0, fontFamily: 'HeeboSemiBold'),
                 ),
-                Text('Longitud: $long', style: TextStyle(fontSize: 10.0)),
-                Text('Latitud: $lat', style: TextStyle(fontSize: 10.0)),
                 Padding(
                   padding: EdgeInsets.only(top: 20.0),
                 ),
@@ -140,7 +138,7 @@ class _PTPrincipalState extends State<PTPrincipal> {
                                 Icon(Icons.local_gas_station,
                                     size: 100.0, color: getColor("green")),
                                 Text("Repostar",
-                                    style: TextStyle(color: getColor("black")))
+                                    style: TextStyle(color: getColor("black"), fontFamily: 'HeeboSemiBold'))
                               ],
                             ))
                       ],
@@ -177,11 +175,11 @@ class _PTPrincipalState extends State<PTPrincipal> {
                               children: <Widget>[
                                 Icon(Icons.swap_calls,
                                     size: 100.0, color: Colors.blueAccent),
-                                Text("Iniciar Ruta")
+                                Text("Iniciar Ruta",style: TextStyle(fontFamily: 'HeeboSemiBold'))
                               ],
                             ))
                       ],
-                    ))
+                    )),
                   ],
                 ),
               ],

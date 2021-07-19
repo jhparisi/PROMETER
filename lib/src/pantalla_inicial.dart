@@ -533,7 +533,7 @@ class _PTInicialState extends State<PTInicial> {
                     fontFamily: 'HeeboSemiBold'),
               ),
               Text(
-                "Dominio: EZSA ",
+                "Dominio: $_dominio ",
                 style: TextStyle(
                     fontSize: 8.0,
                     color: Colors.white,

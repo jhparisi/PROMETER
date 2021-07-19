@@ -1,9 +1,9 @@
+import 'package:eszaworker/class/ConfiguracionClass.dart';
 import 'package:eszaworker/class/DataLocalClass.dart';
 import 'package:eszaworker/resources/db_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_version/get_version.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 
 import 'menu.dart';
 
@@ -19,9 +19,10 @@ String versionOS = "";
 String matricula = "";
 String nombreUsuario = "";
 String numTelefono = "";
-ProgressDialog pr;
 var zona = DateTime.now().timeZoneName;
 var nombreZona = "";
+String _dominio;
+String _semilla;
 
 class PTAcerca extends StatefulWidget {
   static const String routeName = "/pantalla_acerca";
@@ -33,6 +34,7 @@ class PTAcerca extends StatefulWidget {
 class _PTAcercaState extends State<PTAcerca> {
   @override
   void initState() {
+    getConfiguracion();
     super.initState();
     if(zona=="WEST"){
       nombreZona = "Islas Canarias";
@@ -79,24 +81,10 @@ class _PTAcercaState extends State<PTAcerca> {
 
   @override
   Widget build(BuildContext context) {
-    pr = new ProgressDialog(context, isDismissible: true);
-    pr.style(
-        message: 'Procesando la información...',
-        borderRadius: 0.0,
-        backgroundColor: Colors.white,
-        progressWidget: CircularProgressIndicator(),
-        elevation: 10.0,
-        progress: 0.0,
-        maxProgress: 30.0,
-        progressTextStyle: TextStyle(
-            color: Colors.black, fontSize: 10.0, fontWeight: FontWeight.w400),
-        messageTextStyle: TextStyle(
-            color: Colors.black, fontSize: 12.0, fontWeight: FontWeight.w400));
-    //pr.show();
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text("Acerca de", textAlign: TextAlign.center),
+          title: Text("Acerca de", textAlign: TextAlign.center, style: TextStyle(fontFamily: 'HeeboSemiBold'),),
         ),
         drawer: _menu.getDrawer(context),
         body: new Container(
@@ -109,7 +97,7 @@ class _PTAcercaState extends State<PTAcerca> {
                 ),
                 title: Text(
                   "Versión de la Aplicación",
-                  style: TextStyle(fontSize: 14.0),
+                  style: TextStyle(fontSize: 14.0,fontFamily: 'HeeboSemiBold'),
                 ),
                 subtitle: Text('$versionApp'),
               ),
@@ -120,7 +108,7 @@ class _PTAcercaState extends State<PTAcerca> {
                 ),
                 title: Text(
                   "Versión de la BDD",
-                  style: TextStyle(fontSize: 14.0),
+                  style: TextStyle(fontSize: 14.0,fontFamily: 'HeeboSemiBold'),
                 ),
                 subtitle: Text('$versionDB' + ".0.0"),
               ),
@@ -131,7 +119,7 @@ class _PTAcercaState extends State<PTAcerca> {
                 ),
                 title: Text(
                   "Versión del OS",
-                  style: TextStyle(fontSize: 14.0),
+                  style: TextStyle(fontSize: 14.0,fontFamily: 'HeeboSemiBold'),
                 ),
                 subtitle: Text('$versionOS'),
               ),
@@ -142,7 +130,7 @@ class _PTAcercaState extends State<PTAcerca> {
                 ),
                 title: Text(
                   "Nombre real de la aplicación",
-                  style: TextStyle(fontSize: 14.0),
+                  style: TextStyle(fontSize: 14.0,fontFamily: 'HeeboSemiBold'),
                 ),
                 subtitle: Text('$appName'),
               ),
@@ -153,9 +141,9 @@ class _PTAcercaState extends State<PTAcerca> {
                 ),
                 title: Text(
                   "Dominio",
-                  style: TextStyle(fontSize: 14.0),
+                  style: TextStyle(fontSize: 14.0,fontFamily: 'HeeboSemiBold'),
                 ),
-                subtitle: Text('EZSA'),
+                subtitle: Text('$_dominio'),
               ),
               ListTile(
                 leading: Icon(
@@ -164,7 +152,7 @@ class _PTAcercaState extends State<PTAcerca> {
                 ),
                 title: Text(
                   "ID de la aplicación",
-                  style: TextStyle(fontSize: 14.0),
+                  style: TextStyle(fontSize: 14.0,fontFamily: 'HeeboSemiBold'),
                 ),
                 subtitle: Text('$packageName'),
               ),
@@ -175,7 +163,7 @@ class _PTAcercaState extends State<PTAcerca> {
                 ),
                 title: Text(
                   "Usuario",
-                  style: TextStyle(fontSize: 14.0),
+                  style: TextStyle(fontSize: 14.0,fontFamily: 'HeeboSemiBold'),
                 ),
                 subtitle: Text('$nombreUsuario'),
               ),
@@ -186,7 +174,7 @@ class _PTAcercaState extends State<PTAcerca> {
                 ),
                 title: Text(
                   "Número de Teléfono",
-                  style: TextStyle(fontSize: 14.0),
+                  style: TextStyle(fontSize: 14.0,fontFamily: 'HeeboSemiBold'),
                 ),
                 subtitle: Text('$numTelefono'),
               ),
@@ -197,7 +185,7 @@ class _PTAcercaState extends State<PTAcerca> {
                 ),
                 title: Text(
                   "Matrícula",
-                  style: TextStyle(fontSize: 14.0),
+                  style: TextStyle(fontSize: 14.0,fontFamily: 'HeeboSemiBold'),
                 ),
                 subtitle: Text('$matricula'),
               ),
@@ -208,7 +196,7 @@ class _PTAcercaState extends State<PTAcerca> {
                 ),
                 title: Text(
                   "Zona Horaria",
-                  style: TextStyle(fontSize: 14.0),
+                  style: TextStyle(fontSize: 14.0,fontFamily: 'HeeboSemiBold'),
                 ),
                 subtitle: Text('$nombreZona'),
               ),
@@ -234,5 +222,26 @@ class _PTAcercaState extends State<PTAcerca> {
       });
     } catch (Ex) {}
     return retunn;
+  }
+
+  getConfiguracion() async {     
+    try {
+      await _dbprovider.init();
+      List<Configuracion> configuracion = await _dbprovider.getConfiguracion();
+      //print(configuracion[0].dominio);
+      if(configuracion.length>0){
+          setState(() {
+          _dominio = configuracion[0].dominio;
+          _semilla = configuracion[0].semilla;      
+        });
+      }
+      else{
+        _dominio = null;
+        _semilla = null;
+      }
+    } catch (Ex) {
+      _dominio = null;
+        _semilla = null;
+    }
   }
 }

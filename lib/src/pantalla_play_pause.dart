@@ -232,13 +232,13 @@ class _PTCerrarRutaState extends State<PTCerrarRuta>
                   Padding(
                     padding: EdgeInsets.only(top: 30.0),
                   ),
-                  Text('Tiempo de trabajo', style: TextStyle(fontSize: 12.0)),
+                  Text('Tiempo de trabajo', style: TextStyle(fontSize: 12.0,fontFamily: 'HeeboSemiBold')),
                   Padding(
                     padding: EdgeInsets.only(top: 10.0),
                   ),
                   Text(
                     "$tiempocronometro",
-                    style: TextStyle(fontSize: 20.0),
+                    style: TextStyle(fontSize: 20.0,fontFamily: 'HeeboSemiBold'),
                   ),
                   AnimatedDefaultTextStyle(
                     duration: const Duration(milliseconds: 300),
@@ -247,7 +247,7 @@ class _PTCerrarRutaState extends State<PTCerrarRuta>
                       color: _color,
                       fontWeight: FontWeight.bold,
                     ),
-                    child: Text(textoTrabajandoPausado),
+                    child: Text(textoTrabajandoPausado, style: TextStyle(fontFamily: 'HeeboSemiBold'),),
                   ),
                   Row(
                     children: <Widget>[
@@ -275,7 +275,7 @@ class _PTCerrarRutaState extends State<PTCerrarRuta>
                               child: Column(
                                 children: <Widget>[
                                   _pausado(),
-                                  Text("$textoPausado")
+                                  Text("$textoPausado", style: TextStyle(fontFamily: 'HeeboSemiBold'),)
                                 ],
                               ))
                         ],
@@ -328,7 +328,7 @@ class _PTCerrarRutaState extends State<PTCerrarRuta>
                                     children: <Widget>[
                                       Icon(Icons.stop,
                                           size: 100.0, color: Colors.red),
-                                      Text("Terminar!"),
+                                      Text("Terminar!", style: TextStyle(fontFamily: 'HeeboSemiBold'),),
                                     ],
                                   ))
                               /* child: Column(
@@ -666,6 +666,7 @@ class _PTCerrarRutaState extends State<PTCerrarRuta>
 
   Future postControlHour(
       idUsuario, fecha, modificadoManual, evento, comentario, fechaHora) async {
+    await _dbprovider.init();
     var respuesta = "";
     var control = await HttpHandler().postControlHour(
         idUsuario, fecha, modificadoManual, evento, comentario, fechaHora, _dominio, _semilla);

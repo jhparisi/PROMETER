@@ -33,9 +33,12 @@ class _PTMensajesState extends State<PTMensajes>
   }
 
   void loadMensajes() async {
+    await _dbprovider.init();
     var mensajes = await _dbprovider.fethMensajesAll();
     setState(() {
-      _mensaje.addAll(mensajes.reversed);
+      if(mensajes!= null){
+         _mensaje.addAll(mensajes.reversed);
+      }     
     });
     _mensaChat.obtenerMensaje(_mensaje);
   }

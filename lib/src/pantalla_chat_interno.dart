@@ -18,11 +18,15 @@ class _PTChatInternoState extends State<PTChatInterno>
   bool _isTyped = false;
 
   void _listadoMensaje() async {
+    await _dbprovider.init();
     var mensajes = await _dbprovider.fethMensajesAll();
-    mensajes.reversed.forEach((element) {
-      _handledSubmit(element.mensaje.replaceAll("\n", " "),
-          element.fecha.substring(5, 16));
-    });
+    if(mensajes!=null){
+      mensajes.reversed.forEach((element) {
+        _handledSubmit(element.mensaje.replaceAll("\n", " "),
+            element.fecha.substring(5, 16));
+      });
+    }
+    
   }
 
   void _handledSubmit(String text, String tiempo) {

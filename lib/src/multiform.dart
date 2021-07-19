@@ -72,7 +72,7 @@ class _MultiFormState extends State<MultiForm>
     return Scaffold(
         drawer: _menu.getDrawer(context),
         appBar: AppBar(
-          title: Text('Día: ' + fechaFormateadaES),
+          title: Text('Día: ' + fechaFormateadaES, style: TextStyle(fontFamily: 'HeeboSemiBold'),),
           actions: [
             TextButton(
                 onPressed: guardarHoras,                
@@ -113,12 +113,33 @@ class _MultiFormState extends State<MultiForm>
                       maxLines: 3,
                       keyboardType: TextInputType.multiline,
                       maxLength: 500,
-                      decoration: new InputDecoration(
+                      /* decoration: new InputDecoration(
                         border: new OutlineInputBorder(
                           borderSide: new BorderSide(color: Colors.teal)
                         ),
                         labelText: 'Comentario',
-                      ),                      
+                      ),  */ 
+                      style: TextStyle(color: Colors.black, fontFamily: 'HeebooSemiBold'),
+                      decoration: InputDecoration(
+                        labelText: 'Comentario',
+                        contentPadding: const EdgeInsets.all(15.0),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(50.0)),
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                            )),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(50.0)),
+                            borderSide: BorderSide.none),
+                        prefixIcon: Icon(
+                          Icons.message,
+                          color: Colors.blue,
+                        ),
+                        filled: true,
+                        fillColor: Colors.blue[100]
+                      )                    
                     )                
                   ),
                 ]
@@ -214,6 +235,8 @@ class _MultiFormState extends State<MultiForm>
     formularios.clear();
     var horaIni = [];
     var horaFin = [];
+    await _dbprovider.init();
+    print("DOMINIO: $_dominio");
     var data = await HttpHandler().fetchControlHorasFecha(idUsuario, fecha, _dominio, _semilla);
     if (data != null) {
       for (var item in data) {
@@ -401,7 +424,7 @@ class _MultiFormState extends State<MultiForm>
 
   getConfiguracion() async {     
     try {
-      await _dbprovider.init();
+      //await _dbprovider.init();
       List<Configuracion> configuracion = await _dbprovider.getConfiguracion();
       //print(configuracion[0].dominio);
       if(configuracion.length>0){

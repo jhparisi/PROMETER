@@ -3,6 +3,7 @@ import 'package:eszaworker/class/AcompananteAPIClass.dart';
 import 'package:eszaworker/class/ConfiguracionClass.dart';
 import 'package:eszaworker/class/ControlHourAllClass.dart';
 import 'package:eszaworker/class/ControlHourDateClass.dart';
+import 'package:eszaworker/class/EmpresasAPIClass.dart';
 import 'package:eszaworker/class/HojaControlHorasAppClass.dart';
 import 'package:eszaworker/class/MatriculasApiClass.dart';
 import 'package:http/http.dart' as http;
@@ -29,7 +30,8 @@ class HttpHandler {
   final String _urlGetUltimoEvento = "api/Prometer/GetUltimoEvento";
   final String _urlGetModificacionesAdmin = "api/Prometer/GetModificacionesAdmin";
   final String _urlGetConfiguracion = "api/Prometer/getConfiguracion";
-
+  final String _urlGetEmpresas = "api/Prometer/getEmpresasApp";
+  
   static HttpHandler get() {
     return _httpHandler;
   }
@@ -298,6 +300,17 @@ class HttpHandler {
     return postJson(uri, body).then(((data) => data
         .map<ConfiguracionAPI>((item) =>
             new ConfiguracionAPI(item, MediaTypeConfiguracionAPI.content))
+        .toList()));
+  }
+
+  //SE CONECTA CON LA API Y TRAE LAS EMPRESAS
+  Future<List<EmpresaAPI>> fetchEmpresaAPI() {
+    var uri = new Uri.http(_baseUrl, _urlGetEmpresas);
+    var body = "";
+    print(uri);
+    return postJson(uri, body).then(((data) => data
+        .map<EmpresaAPI>((item) =>
+            new EmpresaAPI(item, MediaTypeEmpresaAPI.content))
         .toList()));
   }
 }

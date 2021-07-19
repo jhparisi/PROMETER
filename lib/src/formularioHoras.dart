@@ -56,7 +56,7 @@ class _FormularioHoraState extends State<FormularioHora> {
                 toolbarHeight: 28.0,
                 title: Text(
                   "Bloque de horas ",
-                  style: TextStyle(fontSize: 12.0),
+                  style: TextStyle(fontSize: 14.0, fontFamily: 'HeeboSemiBold'),
                 ),
                 //backgroundColor: Colors.white,
                 centerTitle: true,
@@ -68,6 +68,7 @@ class _FormularioHoraState extends State<FormularioHora> {
                       onPressed: widget.alBorrar),
                 ],
               ),
+              Padding(padding: EdgeInsets.only(top: 15.0)),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -86,8 +87,29 @@ class _FormularioHoraState extends State<FormularioHora> {
                       },
                       onSaved: (val) =>
                           widget.horariosInicioFin.horaInicio = val,
+                      //decoration: InputDecoration(labelText: 'Hora Inicio', hintText: '08:00'),
+                      style: TextStyle(color: Colors.black, fontFamily: 'HeebooSemiBold'),
                       decoration: InputDecoration(
-                          labelText: 'Hora Inicio', hintText: '08:00'),
+                        labelText: 'Hora inicio',
+                        contentPadding: const EdgeInsets.all(15.0),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(50.0)),
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                            )),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(50.0)),
+                            borderSide: BorderSide.none),
+                        prefixIcon: Icon(
+                          Icons.date_range,
+                          color: Colors.blue,
+                        ),
+                        filled: true,
+                        fillColor: Colors.blue[100],
+                        hintText: '08:00'
+                      )
                     ),
                   ),
                   Padding(padding: const EdgeInsets.all(8.0)),
@@ -104,8 +126,29 @@ class _FormularioHoraState extends State<FormularioHora> {
                         }
                       },
                       onSaved: (val) => widget.horariosInicioFin.horaFin = val,
+                      //decoration: InputDecoration(labelText: 'Hora Fin', hintText: '17:30'),
+                      style: TextStyle(color: Colors.black, fontFamily: 'HeebooSemiBold'),
                       decoration: InputDecoration(
-                          labelText: 'Hora Fin', hintText: '17:30'),
+                        labelText: 'Hora fin',
+                        contentPadding: const EdgeInsets.all(15.0),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(50.0)),
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                            )),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(50.0)),
+                            borderSide: BorderSide.none),
+                        prefixIcon: Icon(
+                          Icons.date_range_outlined,
+                          color: Colors.blue,
+                        ),
+                        filled: true,
+                        fillColor: Colors.blue[100],
+                        hintText: '08:00'
+                      )
                     ),
                   ),
                 ],

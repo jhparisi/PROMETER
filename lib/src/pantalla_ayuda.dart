@@ -11,7 +11,7 @@ import 'menu.dart';
 const String telefonoWS = "+34651405480";
 const String mensajeContacto =
     "Hola, necesito ayuda con la aplicación PRO-METER.\n¿Puedes ayudarme?";
-const String telefonoContacto = "900264438";
+const String telefonoContacto = "902430715";
 const String urlPreguntas = "https://www.ezsa.es/";
 Menu _menu = new Menu();
 
@@ -113,7 +113,7 @@ class _PTAyudaState extends State<PTAyuda> {
                 ),
                 title: Text(
                   "Mensaje por Whatsapp",
-                  style: TextStyle(fontSize: 14.0, color: Colors.black),
+                  style: TextStyle(fontSize: 14.0, color: Colors.black,fontFamily: 'HeeboSemiBold'),
                 ),
                 subtitle: Text('$telefonoWS'),
                 onTap: () {
@@ -129,7 +129,7 @@ class _PTAyudaState extends State<PTAyuda> {
                 ),
                 title: Text(
                   "Vía telefónica",
-                  style: TextStyle(fontSize: 14.0, color: Colors.black),
+                  style: TextStyle(fontSize: 14.0, color: Colors.black,fontFamily: 'HeeboSemiBold'),
                 ),
                 subtitle: Text('$telefonoWS'),
                 onTap: () {
@@ -144,7 +144,7 @@ class _PTAyudaState extends State<PTAyuda> {
                 ),
                 title: Text(
                   "Preguntas frecuentes",
-                  style: TextStyle(fontSize: 14.0, color: Colors.black),
+                  style: TextStyle(fontSize: 14.0, color: Colors.black, fontFamily: 'HeeboSemiBold'),
                 ),
                 onTap: () {
                   //launchWhatsApp();
@@ -158,7 +158,7 @@ class _PTAyudaState extends State<PTAyuda> {
                 ),
                 title: Text(
                   "Borrar datos de la aplicación",
-                  style: TextStyle(fontSize: 14.0, color: Colors.black),
+                  style: TextStyle(fontSize: 14.0, color: Colors.black,fontFamily: 'HeeboSemiBold'),
                 ),
                 onTap: () {
                   showAlertDialog(
