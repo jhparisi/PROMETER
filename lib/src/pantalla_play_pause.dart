@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:eszaworker/class/ConfiguracionClass.dart';
 import 'package:eszaworker/resources/HttpHandler.dart';
 //import 'package:eszaworker/src/cronometro.dart';
 import 'package:eszaworker/src/menu.dart';
@@ -65,6 +66,8 @@ Color _color = Colors.blue;
 bool gpsActivo = true;
 String textoTrabajandoPausado = "Trabajando";
 bool sigueTrabajando = false;
+String _semilla;
+String _dominio;
 
 JsonEncoder encoder = new JsonEncoder.withIndent("     ");
 
@@ -95,7 +98,8 @@ class _PTCerrarRutaState extends State<PTCerrarRuta>
 
   @override
   void initState() {
-    super.initState();
+    getConfiguracion();
+    super.initState();    
     content = "    Enable the switch to begin tracking.";
     _isMoving = false;
     enabled = false;
@@ -498,7 +502,7 @@ class _PTCerrarRutaState extends State<PTCerrarRuta>
               list[i].latitude.replaceAll('.', ','),
               list[i].longitude.replaceAll('.', ','),
               list[i].userId,
-              "Posicionamiento");
+              "Posicionamiento", _dominio, _semilla);
           respuesta = tracking.toString();
         }
         if (respuesta == "OK") {
@@ -534,7 +538,7 @@ class _PTCerrarRutaState extends State<PTCerrarRuta>
             lati.replaceAll('.', ','),
             longi.replaceAll('.', ','),
             uId,
-            evento);
+            evento, _dominio, _semilla);
         var respuesta = tracking.toString();
         print("SE HA REGISTRADO EL EVENTO:" + respuesta);
       });
@@ -664,7 +668,7 @@ class _PTCerrarRutaState extends State<PTCerrarRuta>
       idUsuario, fecha, modificadoManual, evento, comentario, fechaHora) async {
     var respuesta = "";
     var control = await HttpHandler().postControlHour(
-        idUsuario, fecha, modificadoManual, evento, comentario, fechaHora);
+        idUsuario, fecha, modificadoManual, evento, comentario, fechaHora, _dominio, _semilla);
     if (control == "OK") {
       respuesta = "OK";
     }
@@ -672,7 +676,8 @@ class _PTCerrarRutaState extends State<PTCerrarRuta>
   }
 
   Future getEventos(idUsuario, fecha) async{
-    var eventos = await HttpHandler().fetchUltimoEvento(idUsuario, fecha.toString().substring(0,10));
+    await _dbprovider.init();
+    var eventos = await HttpHandler().fetchUltimoEvento(idUsuario, fecha.toString().substring(0,10), _dominio, _semilla);
     if(eventos.length>0){  
       if(eventos[0].evento == "Fin"){
         postControlHour(idUsuario, fecha.toString().substring(0,10), '0', 'Inicio', 'Registro automatico', DateTime.now().toString());
@@ -776,9 +781,29 @@ class _PTCerrarRutaState extends State<PTCerrarRuta>
     Timer.periodic(Duration(minutes: 30), (timer) async {
       if (gpsActivo == false) {
         var usuario = userId;
-        await HttpHandler().postNotificacionGPSInactivo(usuario);
+        await HttpHandler().postNotificacionGPSInactivo(usuario, _dominio, _semilla);
         print("ENVIAR NOTIFICACION");
       }
     });
+  }
+
+  getConfiguracion() async {     
+    try {
+      List<Configuracion> configuracion = await _dbprovider.getConfiguracion();
+      //print(configuracion[0].dominio);
+      if(configuracion.length>0){
+          setState(() {
+          _dominio = configuracion[0].dominio;
+          _semilla = configuracion[0].semilla;      
+        });
+      }
+      else{
+        _dominio = null;
+        _semilla = null;
+      }
+    } catch (Ex) {
+      _dominio = null;
+        _semilla = null;
+    }
   }
 }

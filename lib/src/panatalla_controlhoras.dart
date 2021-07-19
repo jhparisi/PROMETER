@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'package:eszaworker/class/ConfiguracionClass.dart';
 import 'package:eszaworker/class/ControlHourAllClass.dart';
 import 'package:eszaworker/class/ControlHourClass.dart';
 import 'package:eszaworker/resources/HttpHandler.dart';
+import 'package:eszaworker/resources/db_provider.dart';
 import 'package:eszaworker/src/menu.dart';
 import 'package:eszaworker/src/pantalla_TabObservaciones.dart';
 import 'package:eszaworker/src/pantalla_editarhoras.dart';
@@ -17,6 +19,7 @@ import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:intl/intl.dart' show DateFormat;
 //import 'package:date_range_picker/date_range_picker.dart' as DateRangePicker;
 
+DBProvider _dbprovider = DBProvider.get();
 ProgressDialog prd;
 Menu _menu = new Menu();
 int _idUser = _menu.getuserId();
@@ -48,6 +51,9 @@ var fechaAnterior =now30.toString().split(" ")[0].split("-");
 var fechaDesde = fechaAnterior[0] + "-" + fechaAnterior[1] + "-" +fechaAnterior[2];
 var fechaHasta = ano.toString() + "-" + mes.toString() + "-" + dia.toString();
 var fechaRango = fechaDesde + "*" + fechaHasta;
+String _dominio;
+String _semilla;
+
 Flushbar fbar;
 PTTabObservaciones ptObsWidget = new PTTabObservaciones(userId, fechaRango);
 
@@ -131,6 +137,7 @@ class _PTControlHorasState extends State<PTControlHoras> {
 
   @override
   void initState() {
+    getConfiguracion();
     getControlHorasAll(_idUser.toString());
     super.initState();
     cargarPTObsWidget(userId,fechaRango);
@@ -349,8 +356,9 @@ class _PTControlHorasState extends State<PTControlHoras> {
   Future<List<ControlHourAllClass>> getControlHorasAll(String idUsuario) async {
     List<ControlHourAllClass> retunn = [];
     try {
+      await _dbprovider.init();
       List<ControlHourAllClass> list =
-          await HttpHandler().fetchControlHorasTodas(idUsuario);
+          await HttpHandler().fetchControlHorasTodas(idUsuario, _dominio, _semilla);
       setState(() {
         if (list != null) {
           for (var i = 0; i < list.length; i++) {
@@ -403,8 +411,9 @@ class _PTControlHorasState extends State<PTControlHoras> {
   Future<bool> postControlHour(
       idUsuario, fecha, modificadoManual, evento, comentario, hora) async {
     var respuesta = false;
+    await _dbprovider.init();
     var control = await HttpHandler().postControlHour(
-        idUsuario, fecha, modificadoManual, evento, comentario, hora);
+        idUsuario, fecha, modificadoManual, evento, comentario, hora, _dominio, _semilla);
     if (control == "OK") {
       respuesta = true;
     }
@@ -418,5 +427,25 @@ class _PTControlHorasState extends State<PTControlHoras> {
       ptObsWidget = PTTabObservaciones(idUsuario, fechas);
     });
     return ptObsWidget;
+  }
+
+  getConfiguracion() async {     
+    try {      
+      List<Configuracion> configuracion = await _dbprovider.getConfiguracion();
+      //print(configuracion[0].dominio);
+      if(configuracion.length>0){
+         setState(() {
+          _dominio = configuracion[0].dominio;
+          _semilla = configuracion[0].semilla;      
+        });
+      }
+      else{
+        _dominio = null;
+        _semilla = null;
+      }
+    } catch (Ex) {
+      _dominio = null;
+        _semilla = null;
+    }
   }
 }

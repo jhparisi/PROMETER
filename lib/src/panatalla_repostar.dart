@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:eszaworker/class/ConfiguracionClass.dart';
 import 'package:eszaworker/class/RefuelClass.dart';
 import 'package:eszaworker/class/WorkingDayClass.dart';
 import 'package:eszaworker/src/menu.dart';
@@ -12,6 +13,7 @@ import 'package:eszaworker/class/PlayPauseTrackingClass.dart';
 import 'package:eszaworker/resources/repository.dart';
 import 'package:eszaworker/resources/db_provider.dart';
 import 'package:eszaworker/src/pantalla_play_pause.dart';
+
 
 ProgressDialog prd;
 Menu _menu = new Menu();
@@ -42,6 +44,8 @@ String _selectedLocation; // Option 2
 int lastKM = 0;
 String _dateBeginning = "";
 String unidadMedida = "Litros";
+String _semilla;
+String _dominio;
 
 class PTRepostar extends StatefulWidget {
   static const String routeName = "/pantalla_repostar";
@@ -53,7 +57,7 @@ class _PTRepostarState extends State<PTRepostar> {
   void loadRefuel(
       idTipoCombustible, kms, plate, price, litre, refuelDate, userId) async {
     var fuel = await HttpHandler().postRefuel(
-        idTipoCombustible, kms, plate, price, litre, refuelDate, userId);
+        idTipoCombustible, kms, plate, price, litre, refuelDate, userId, _dominio, _semilla);
     setState(() {
       //_response.addAll(fuel);
       if (fuel == "OK") {
@@ -72,6 +76,7 @@ class _PTRepostarState extends State<PTRepostar> {
   @override
   initState() {
     super.initState();
+    getConfiguracion();
     getLastRefuel();
     getWDLocal();
   }
@@ -456,5 +461,26 @@ class _PTRepostarState extends State<PTRepostar> {
           context, MaterialPageRoute(builder: (context) => PTPrincipal()));
     }
     return retunn;
+  }
+
+
+  getConfiguracion() async {     
+    try {
+      List<Configuracion> configuracion = await _dbprovider.getConfiguracion();
+      //print(configuracion[0].dominio);
+      if(configuracion.length>0){
+          setState(() {
+          _dominio = configuracion[0].dominio;
+          _semilla = configuracion[0].semilla;      
+        });
+      }
+      else{
+        _dominio = null;
+        _semilla = null;
+      }
+    } catch (Ex) {
+      _dominio = null;
+        _semilla = null;
+    }
   }
 }

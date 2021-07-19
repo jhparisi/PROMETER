@@ -151,17 +151,6 @@ class _PTConfiguracionState extends State<PTConfiguracion> {
                           color: Colors.white,
                           fontFamily: 'HeeboSemiBold'),
                     ),
-              /* Text(
-                "Versión: B" +
-                    versionDB.toString() +
-                    ".0.0 - A" +
-                    versionApp.toString(),
-                style: TextStyle(
-                    fontSize: 10.0,
-                    color: Colors.white,
-                    fontFamily: 'HeeboSemiBold'),
-              ), */
-              
             ],
           ),
         ),

@@ -1,15 +1,17 @@
 import 'dart:io';
 
+import 'package:eszaworker/class/ConfiguracionClass.dart';
 import 'package:eszaworker/class/ControlHourClass.dart';
 import 'package:eszaworker/class/ControlHourDateClass.dart';
 import 'package:eszaworker/resources/HttpHandler.dart';
+import 'package:eszaworker/resources/db_provider.dart';
 import 'package:eszaworker/src/pantalla_editarhoras.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 import 'menu.dart';
-
+DBProvider _dbprovider = DBProvider.get();
 Menu _menu = new Menu();
 List<ControlHourDateClass> _dataLT = [];
 var colorIcono = Colors.blue;
@@ -17,6 +19,8 @@ bool mostrarBoton = false;
 String tiempoTotal = "00:00:00";
 String textoBoton = "Editar";
 var zona = DateTime.now().timeZoneName;
+String _dominio;
+String _semilla;
 
 class PTResumenLT extends StatefulWidget {
   final ControlHour data;
@@ -28,7 +32,9 @@ class PTResumenLT extends StatefulWidget {
 class _PTResumenLTState extends State<PTResumenLT> {
   @override
   void initState() {
+    getConfiguracion();
     print("ZONA HORARIA");
+    getConfiguracion();
     getControlHorasDate(
         widget.data.idUsuario, widget.data.fecha, widget.data.comentario);
     super.initState();
@@ -249,7 +255,8 @@ class _PTResumenLTState extends State<PTResumenLT> {
         fecha = new DateTime.now().toString().substring(0, 19);
       });
     }
-    var data = await HttpHandler().fetchControlHorasFecha(idUsuario, fecha);
+    await _dbprovider.init();
+    var data = await HttpHandler().fetchControlHorasFecha(idUsuario, fecha, _dominio, _semilla);
     Iterable inReverse = data.reversed;
     var dataList = inReverse.toList();
     //data = data.reversed;
@@ -342,5 +349,25 @@ class _PTResumenLTState extends State<PTResumenLT> {
         tiempoTotal = duration.toString(); */
       }
     });
+  }
+
+  getConfiguracion() async {     
+    try {
+      List<Configuracion> configuracion = await _dbprovider.getConfiguracion();
+      //print(configuracion[0].dominio);
+      if(configuracion.length>0){
+         setState(() {
+          _dominio = configuracion[0].dominio;
+          _semilla = configuracion[0].semilla;      
+        });
+      }
+      else{
+        _dominio = null;
+        _semilla = null;
+      }
+    } catch (Ex) {
+      _dominio = null;
+        _semilla = null;
+    }
   }
 }

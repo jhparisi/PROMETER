@@ -29,9 +29,7 @@ class HttpHandler {
   final String _urlGetUltimoEvento = "api/Prometer/GetUltimoEvento";
   final String _urlGetModificacionesAdmin = "api/Prometer/GetModificacionesAdmin";
   final String _urlGetConfiguracion = "api/Prometer/getConfiguracion";
-  
-  final String semilla = "415065080244";
-  final String dominio = "ezsa.erp.avanzadi.com";
+
   static HttpHandler get() {
     return _httpHandler;
   }
@@ -51,7 +49,7 @@ class HttpHandler {
   }
 
   //SE CONECTA CON LA API Y TRAE LOS VALORES DEL USUARIO SEGUN EL NUMERO TELEFONICO
-  Future<List<UserByPhoneAPIClass>> fetchUserByPhone(telefono, token) {
+  Future<List<UserByPhoneAPIClass>> fetchUserByPhone(telefono, token, dominio, semilla) {
     var uri = new Uri.http(_baseUrl, _urlUsuarioPhone);
     var body = jsonEncode(<String, String>{
       "telefono": telefono,
@@ -68,7 +66,7 @@ class HttpHandler {
   }
 
   //SE CONECTA CON LA API PARA VALIDAR EL USUARIO
-  Future fetchValidarUsuario(telefono, pass) {
+  Future fetchValidarUsuario(telefono, pass, dominio, semilla) {
     var uri = new Uri.http(_baseUrl, _urlValidarUsuario);
     var body = jsonEncode(<String, String>{
       "telefono": telefono,
@@ -82,7 +80,7 @@ class HttpHandler {
   }
 
   //SE CONECTA CON LA API PARA VALIDAR LA VERSION
-  Future fetchValidarVersion(idUsuario, numVersion) {
+  Future fetchValidarVersion(idUsuario, numVersion, dominio, semilla) {
     var uri = new Uri.http(_baseUrl, _urlValidarVersion);
     var body = jsonEncode(<String, String>{
       "idUsuario": idUsuario,
@@ -96,7 +94,7 @@ class HttpHandler {
   }
 
   //SE CONECTA CON LA API PARA ENVIAR NOTIFICACION DE GPS INACTIVO
-  Future postNotificacionGPSInactivo(idUsuario) {
+  Future postNotificacionGPSInactivo(idUsuario , dominio, semilla) {
     var uri = new Uri.http(_baseUrl, _urlNotificacionGPS);
     var body = jsonEncode(<String, String>{
       "dominio": dominio,
@@ -109,7 +107,7 @@ class HttpHandler {
 
   //SE CONECTA CON LA API PARA REGISTRAR LOS DATOS DE REFUEL
   Future postRefuel(
-      idTipoCombustible, kms, plate, price, litre, refuelDate, userId) {
+      idTipoCombustible, kms, plate, price, litre, refuelDate, userId, dominio, semilla) {
     var uri = new Uri.http(_baseUrl, _urlRepostear);
     var body = jsonEncode(<String, String>{
       "idTipoCombustible": idTipoCombustible,
@@ -128,7 +126,7 @@ class HttpHandler {
 
   //SE CONECTA CON LA API PARA REGISTRAR LOS DATOS DE WORKINGDAY
   Future postWorkingDay(
-      carPlate, endingDate, kmsBeginning, kmsTheEnd, startingDate, userId) {
+      carPlate, endingDate, kmsBeginning, kmsTheEnd, startingDate, userId, dominio, semilla) {
     var uri = new Uri.http(_baseUrl, _urlWorkingDay);
     var body = jsonEncode(<String, String>{
       "carPlate": carPlate,
@@ -145,7 +143,7 @@ class HttpHandler {
 
   //SE CONECTA CON LA API PARA REGISTRAR LOS DATOS DE CONTROL DE HORAS
   Future postControlHour(
-      idUsuario, fecha, modificadoManual, evento, comentario, fechaHora) {
+      idUsuario, fecha, modificadoManual, evento, comentario, fechaHora, dominio, semilla) {
     var uri = new Uri.http(_baseUrl, _urlControlHour);
     var body = jsonEncode(<String, String>{
       "idUsuario": idUsuario,
@@ -162,7 +160,7 @@ class HttpHandler {
   }
 
   //SE CONECTA CON LA API PARA ELIMINAR LOS DATOS DE CONTROL DE HORAS
-  Future postControlHourEliminar(idUsuario, fecha, modificadoManual) {
+  Future postControlHourEliminar(idUsuario, fecha, modificadoManual, dominio, semilla) {
     var uri = new Uri.http(_baseUrl, _urlControlHourEliminar);
     var body = jsonEncode(<String, String>{
       "idUsuario": idUsuario,
@@ -176,7 +174,7 @@ class HttpHandler {
   }
 
   //SE CONECTA CON LA API PARA REGISTRAR LOS DATOS DE TRACKINGDATA
-  Future postTrackingData(altitude, date, latitude, longitude, userId, evento) {
+  Future postTrackingData(altitude, date, latitude, longitude, userId, evento, dominio, semilla) {
     var uri = new Uri.http(_baseUrl, _urlTrackingData);
     var body = jsonEncode(<String, String>{
       "altitude": altitude,
@@ -193,7 +191,7 @@ class HttpHandler {
   }
 
   //SE CONECTA CON LA API Y TRAE LOS VALORES DE LAS MATRICULAS POR EL DNI DEL USUARIO
-  Future<List<MatriculasApiClass>> fetchMatriculas(dni) {
+  Future<List<MatriculasApiClass>> fetchMatriculas(dni, dominio, semilla) {
     var uri = new Uri.http(_baseUrl, _urlMatriculas);
     var body = jsonEncode(<String, String>{
       "dniUsuario": dni,
@@ -209,7 +207,7 @@ class HttpHandler {
   }
 
   //SE CONECTA CON LA API Y TRAE SI EL USUARIO ES ACOMPAÑANTE O NO
-  Future<List<AcompananteAPIClass>> fetchAcompanante(userId) {
+  Future<List<AcompananteAPIClass>> fetchAcompanante(userId, dominio, semilla) {
     var uri = new Uri.http(_baseUrl, _urlAcompanante);
     var body = jsonEncode(<String, String>{
       "dominio": dominio,
@@ -224,7 +222,7 @@ class HttpHandler {
   }
 
   //SE CONECTA CON LA API Y TRAE LOS VALORES DEL CONTRO DE HORAS DE UN USUARIO
-  Future<List<ControlHourAllClass>> fetchControlHorasTodas(String idUsuario) {
+  Future<List<ControlHourAllClass>> fetchControlHorasTodas(String idUsuario, dominio, semilla) {
     var uri = new Uri.http(_baseUrl, _urlControlHorasTodas);
     var body = jsonEncode(<String, String>{
       "dominio": dominio,
@@ -239,7 +237,7 @@ class HttpHandler {
   }
 
   //SE CONECTA CON LA API Y TRAE LOS VALORES DEL CONTRO DE HORAS DE UN USUARIO Y FECHA
-  Future<List<ControlHourDateClass>> fetchControlHorasFecha(idUsuario, fecha) {
+  Future<List<ControlHourDateClass>> fetchControlHorasFecha(idUsuario, fecha, dominio, semilla) {
     var uri = new Uri.http(_baseUrl, _urlControlHorasFecha);
     var body = jsonEncode(<String, String>{
       "idUsuario": idUsuario.toString(),//"9399",//idUsuario.toString()
@@ -256,7 +254,7 @@ class HttpHandler {
   }
 
   //SE CONECTA CON LA API Y TRAE LOS VALORES DEL CONTRO DE HORAS DE UN USUARIO Y FECHA
-  Future<List<ControlHourDateClass>> fetchUltimoEvento(idUsuario, fecha) {
+  Future<List<ControlHourDateClass>> fetchUltimoEvento(idUsuario, fecha, dominio, semilla) {
     var uri = new Uri.http(_baseUrl, _urlGetUltimoEvento);
     var body = jsonEncode(<String, String>{
       "idUsuario": idUsuario.toString(),//"9399",//idUsuario.toString()
@@ -273,7 +271,7 @@ class HttpHandler {
   }
 
   //SE CONECTA CON LA API Y TRAE EL LISTADO DE MODIFICACIONES HECHAS POR EL ADMINISTRADOR
-  Future<List<HojaControlHorasAppClass>> fetchModificacionesAdmin(idUsuario, fechaDesde,fechaHasta) {
+  Future<List<HojaControlHorasAppClass>> fetchModificacionesAdmin(idUsuario, fechaDesde,fechaHasta, dominio, semilla) {
     var uri = new Uri.http(_baseUrl, _urlGetModificacionesAdmin);
     var body = jsonEncode(<String, String>{
       "idUsuario": idUsuario.toString(),//"9399",//idUsuario.toString()

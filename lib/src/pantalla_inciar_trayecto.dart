@@ -1,3 +1,4 @@
+import 'package:eszaworker/class/ConfiguracionClass.dart';
 import 'package:eszaworker/class/PlayPauseTrackingClass.dart';
 import 'package:eszaworker/class/WorkingDayClass.dart';
 import 'package:eszaworker/resources/HttpHandler.dart';
@@ -21,6 +22,8 @@ Menu _menu = new Menu();
 DateTime date1;
 String evento = "";
 int kilometrajeInicio = 0;
+String _dominio;
+String _semilla;
 
 class PTIniciarRuta extends StatefulWidget {
   static const String routeName = "/pantalla_iniciar_trayecto";
@@ -43,6 +46,7 @@ class _PTIniciarRutaState extends State<PTIniciarRuta> {
   @override
   void initState() {
     super.initState();
+    getConfiguracion();
     getWDLocal();
   }
 
@@ -321,7 +325,7 @@ class _PTIniciarRutaState extends State<PTIniciarRuta> {
       startingDate, userId) async {
     var respuesta = "";
     var working = await HttpHandler().postWorkingDay(
-        carPlate, endingDate, kmsBeginning, ksmTheEnd, startingDate, userId);
+        carPlate, endingDate, kmsBeginning, ksmTheEnd, startingDate, userId,_dominio, _semilla);
     if (working == "OK") {
       respuesta = "OK";
     }
@@ -332,7 +336,7 @@ class _PTIniciarRutaState extends State<PTIniciarRuta> {
       idUsuario, fecha, modificadoManual, evento, comentario, fechaHora) async {
     var respuesta = "";
     var control = await HttpHandler().postControlHour(
-        idUsuario, fecha, modificadoManual, evento, comentario, fechaHora);
+        idUsuario, fecha, modificadoManual, evento, comentario, fechaHora,_dominio, _semilla);
     if (control == "OK") {
       respuesta = "OK";
     }
@@ -381,12 +385,32 @@ class _PTIniciarRutaState extends State<PTIniciarRuta> {
             lati.replaceAll('.', ','),
             longi.replaceAll('.', ','),
             uId,
-            evento);
+            evento,_dominio, _semilla);
         var respuesta = tracking.toString();
         print("SE HA REGISTRADO EL EVENTO:" + respuesta);
       });
     }).catchError((e) {
       print(e);
     });
+  }
+
+  getConfiguracion() async {     
+    try {
+      List<Configuracion> configuracion = await _dbprovider.getConfiguracion();
+      //print(configuracion[0].dominio);
+      if(configuracion.length>0){
+         setState(() {
+          _dominio = configuracion[0].dominio;
+          _semilla = configuracion[0].semilla;      
+        });
+      }
+      else{
+        _dominio = null;
+        _semilla = null;
+      }
+    } catch (Ex) {
+      _dominio = null;
+        _semilla = null;
+    }
   }
 }

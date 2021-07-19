@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:eszaworker/class/PlayPauseTrackingClass.dart';
 import 'package:eszaworker/class/WorkingDayClass.dart';
 import 'package:eszaworker/resources/db_provider.dart';

@@ -1,12 +1,18 @@
 import 'dart:async';
 
+import 'package:eszaworker/class/ConfiguracionClass.dart';
 import 'package:eszaworker/class/HojaControlHorasAppClass.dart';
 import 'package:eszaworker/resources/HttpHandler.dart';
+import 'package:eszaworker/resources/db_provider.dart';
 import 'package:flutter/material.dart';
 
 import 'lista_observacionesAdmin.dart';
 
+DBProvider _dbprovider = DBProvider.get();
 String tramos="";
+String _semilla;
+String _dominio;
+
 class PTTabObservaciones extends StatefulWidget{
   final String isUsuario;
   final String fechas;
@@ -22,7 +28,9 @@ class _PTTabObservacionesState extends State<PTTabObservaciones>{
 
   @override 
   void initState(){
+    getConfiguracion();
     super.initState();
+    
     leerObservaciones();
   }
 
@@ -32,7 +40,8 @@ class _PTTabObservacionesState extends State<PTTabObservaciones>{
     String fechaDesde = fechaSplit[0];
     String fechaHasta = fechaSplit[1];
     print("IdUsuario: "+idUsu+" FechaDesde: "+fechaDesde+" FechaHasta: "+fechaHasta);
-    var data = await HttpHandler().fetchModificacionesAdmin(idUsu,fechaDesde,fechaHasta);
+    await _dbprovider.init();
+    var data = await HttpHandler().fetchModificacionesAdmin(idUsu,fechaDesde,fechaHasta,_dominio, _semilla);
     if(data.length>0){
       for(var i=0; i<data.length; i++) {
         var formatearFecha = data[i].fecha.substring(0,10).split("/");
@@ -50,7 +59,7 @@ class _PTTabObservacionesState extends State<PTTabObservaciones>{
 
   Future<String> leerTramos(String idUsu, String fecha) async{
     var tramo ="";
-    var data = await HttpHandler().fetchControlHorasFecha(idUsu, fecha);
+    var data = await HttpHandler().fetchControlHorasFecha(idUsu, fecha,_dominio, _semilla);
     if(data.length>0){
       data.forEach((element) {
         if(element.evento=="TotalTramo"){
@@ -77,6 +86,25 @@ class _PTTabObservacionesState extends State<PTTabObservaciones>{
     );
   }
 
+  getConfiguracion() async {     
+    try {
+      List<Configuracion> configuracion = await _dbprovider.getConfiguracion();
+      //print(configuracion[0].dominio);
+      if(configuracion.length>0){
+          setState(() {
+          _dominio = configuracion[0].dominio;
+          _semilla = configuracion[0].semilla;      
+        });
+      }
+      else{
+        _dominio = null;
+        _semilla = null;
+      }
+    } catch (Ex) {
+      _dominio = null;
+        _semilla = null;
+    }
+  }
   
 }
 

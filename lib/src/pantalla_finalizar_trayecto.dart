@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:eszaworker/class/ConfiguracionClass.dart';
 import 'package:eszaworker/class/ControlHourClass.dart';
 import 'package:eszaworker/class/TrackingDataClass.dart';
 import 'package:eszaworker/class/WorkingDayClass.dart';
@@ -19,6 +20,8 @@ DBProvider _dbprovider = new DBProvider();
 WorkingDay _wd = new WorkingDay();
 //WorkingDay _wd = new WorkingDay();
 DateTime date2;
+String _dominio;
+String _semilla;
 
 int userId = _menu.getuserId();
 
@@ -58,6 +61,7 @@ class _PTFinalizarRutaState extends State<PTFinalizarRuta> {
   @override
   void initState() {
     super.initState();
+    getConfiguracion();
     getWDLocal();
   }
 
@@ -367,7 +371,7 @@ class _PTFinalizarRutaState extends State<PTFinalizarRuta> {
       idUsuario, fecha, modificadoManual, evento, comentario, fechaHora) async {
     var respuesta = "";
     var control = await HttpHandler().postControlHour(
-        idUsuario, fecha, modificadoManual, evento, comentario, fechaHora);
+        idUsuario, fecha, modificadoManual, evento, comentario, fechaHora, _dominio, _semilla);
     if (control == "OK") {
       respuesta = "OK";
     }
@@ -382,7 +386,7 @@ class _PTFinalizarRutaState extends State<PTFinalizarRuta> {
         kmsBeginningController.text,
         kmsTheEndController.text,
         startingDateController.text,
-        userId);
+        userId, _dominio, _semilla);
     if (working == "OK") {
       respuesta = "OK";
     }
@@ -400,7 +404,7 @@ class _PTFinalizarRutaState extends State<PTFinalizarRuta> {
             list[i].latitude.replaceAll('.', ','),
             list[i].longitude.replaceAll('.', ','),
             list[i].userId,
-            "Posicionamiento");
+            "Posicionamiento", _dominio, _semilla);
         respuesta = tracking.toString();
       }
       if (respuesta == "OK") {
@@ -425,5 +429,25 @@ class _PTFinalizarRutaState extends State<PTFinalizarRuta> {
     _wd.startingDate = startingDate;
     _wd.userId = userId;
     _dbprovider.addWorkingDay(_wd);
+  }
+
+  getConfiguracion() async {     
+    try {
+      List<Configuracion> configuracion = await _dbprovider.getConfiguracion();
+      //print(configuracion[0].dominio);
+      if(configuracion.length>0){
+         setState(() {
+          _dominio = configuracion[0].dominio;
+          _semilla = configuracion[0].semilla;      
+        });
+      }
+      else{
+        _dominio = null;
+        _semilla = null;
+      }
+    } catch (Ex) {
+      _dominio = null;
+        _semilla = null;
+    }
   }
 }

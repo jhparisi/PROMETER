@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:eszaworker/class/ConfiguracionClass.dart';
 import 'package:eszaworker/class/ControlHourClass.dart';
 import 'package:eszaworker/resources/HttpHandler.dart';
+import 'package:eszaworker/resources/db_provider.dart';
 import 'package:eszaworker/src/pantalla_resumenLT.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ import 'package:progress_dialog/progress_dialog.dart';
 //import 'package:quiver/iterables.dart';
 import 'menu.dart';
 
+DBProvider _dbprovider = DBProvider.get();
 Menu _menu = new Menu();
 bool mostrarCargado = false;
 ProgressDialog prd;
@@ -24,6 +27,8 @@ var horaFReplace = "";
 var horaF = 0;
 var horass = HorariosInicioFin();
 final comentarioController = TextEditingController();
+String _dominio;
+String _semilla;
 
 // ignore: must_be_immutable
 class MultiForm extends StatefulWidget {
@@ -44,6 +49,9 @@ class _MultiFormState extends State<MultiForm>
 
   @override
   void initState() {
+    getConfiguracion();
+    
+    super.initState();
     agregarFormularioLectura(widget.idUsuario, widget.fecha);
     _animationController = AnimationController(
       vsync: this,
@@ -53,7 +61,6 @@ class _MultiFormState extends State<MultiForm>
     final curvedAnimation =
         CurvedAnimation(curve: Curves.easeInOut, parent: _animationController);
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
-    super.initState();
   }
 
   @override
@@ -207,7 +214,7 @@ class _MultiFormState extends State<MultiForm>
     formularios.clear();
     var horaIni = [];
     var horaFin = [];
-    var data = await HttpHandler().fetchControlHorasFecha(idUsuario, fecha);
+    var data = await HttpHandler().fetchControlHorasFecha(idUsuario, fecha, _dominio, _semilla);
     if (data != null) {
       for (var item in data) {
         if (item.evento == "Inicio" && item.modificadoManual == true) {
@@ -358,7 +365,7 @@ class _MultiFormState extends State<MultiForm>
       idUsuario, fecha, modificadoManual, evento, comentario, hora) async {
     var respuesta = false;
     var control = await HttpHandler().postControlHour(
-        idUsuario, fecha, modificadoManual, evento, comentario, hora);
+        idUsuario, fecha, modificadoManual, evento, comentario, hora, _dominio, _semilla);
     if (control == "OK") {
       respuesta = true;
     }
@@ -368,7 +375,7 @@ class _MultiFormState extends State<MultiForm>
   Future postControlHourEliminar(idUsuario, fecha, modificadoManual) async {
     var respuesta = "";
     var control = await HttpHandler()
-        .postControlHourEliminar(idUsuario, fecha, modificadoManual);
+        .postControlHourEliminar(idUsuario, fecha, modificadoManual, _dominio, _semilla);
     if (control == "OK") {
       respuesta = "OK";
     }
@@ -390,5 +397,26 @@ class _MultiFormState extends State<MultiForm>
         messageTextStyle: TextStyle(
             color: Colors.black, fontSize: 12.0, fontWeight: FontWeight.w400));
     prd.show();
+  }
+
+  getConfiguracion() async {     
+    try {
+      await _dbprovider.init();
+      List<Configuracion> configuracion = await _dbprovider.getConfiguracion();
+      //print(configuracion[0].dominio);
+      if(configuracion.length>0){
+          setState(() {
+          _dominio = configuracion[0].dominio;
+          _semilla = configuracion[0].semilla;      
+        });
+      }
+      else{
+        _dominio = null;
+        _semilla = null;
+      }
+    } catch (Ex) {
+      _dominio = null;
+        _semilla = null;
+    }
   }
 }

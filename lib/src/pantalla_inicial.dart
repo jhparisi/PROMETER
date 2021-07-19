@@ -1,5 +1,6 @@
 //import 'dart:convert';
 
+import 'package:eszaworker/class/ConfiguracionClass.dart';
 import 'package:eszaworker/class/DataLocalClass.dart';
 import 'package:eszaworker/class/MensajesClass.dart';
 import 'package:eszaworker/class/WorkingDayClass.dart';
@@ -11,23 +12,20 @@ import 'package:eszaworker/src/pantalla_principal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_version/get_version.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 import 'package:eszaworker/resources/repository.dart';
 import 'dart:async';
 import 'package:eszaworker/resources/HttpHandler.dart';
 import 'package:eszaworker/class/UserByPhoneAPIClass.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:eszaworker/class/PlayPauseTrackingClass.dart';
 import 'package:eszaworker/src/menu.dart';
-
 import 'dart:io';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:eszaworker/utilities/funciones_generales.dart' as _funcGeneral;
+
 Menu _menu = new Menu();
-ProgressDialog pr;
-Flushbar fbar;
+
 Repository _repository = Repository.get();
 DBProvider _dbprovider = DBProvider.get();
 Mensajes _mensaje = new Mensajes();
@@ -56,44 +54,8 @@ bool matriculaSeleccionada = false;
 bool usuarioValidado = false;
 bool versionValidada = false;
 String versionApp = "";
-
-Flushbar fbarPDA = new Flushbar(
-  flushbarPosition: FlushbarPosition.TOP,
-  backgroundColor: Colors.red,
-  message:
-      "Tienes trabajos pendientes en la PDA por cerrar o pausar!\nSerás redirigido a la PDA!",
-  duration: Duration(seconds: 5),
-);
-Flushbar fbarMatricula = new Flushbar(
-  flushbarPosition: FlushbarPosition.TOP,
-  backgroundColor: Colors.red,
-  message:
-      "No tienes vehículos asignados, ponte en contacto con un administrador!",
-  duration: Duration(seconds: 5),
-);
-
-Flushbar fbarPass = new Flushbar(
-  flushbarPosition: FlushbarPosition.TOP,
-  backgroundColor: Colors.red,
-  message:
-      "La contraseña ingresada no es correcta. Por favor coloque la contraseña que usa en la PDA",
-  duration: Duration(seconds: 5),
-);
-Flushbar fbarVersion = new Flushbar(
-  flushbarPosition: FlushbarPosition.TOP,
-  backgroundColor: Colors.red,
-  message:
-      "La versión de la APP que estas usando es antigüa.\nPor favor, comunicate con el administrador para que\nte proporcione la nueva versión.",
-  duration: Duration(seconds: 5),
-);
-
-Flushbar fbarMatriculaSeleccionada = new Flushbar(
-  flushbarPosition: FlushbarPosition.TOP,
-  backgroundColor: Colors.red,
-  message: "Debes seleccionar una matrícula para iniciar!",
-  duration: Duration(seconds: 5),
-);
-
+String _semilla ="";
+String _dominio = "";
 
 class PTInicial extends StatefulWidget {
   static const String routeName = "/pantalla_inicial";
@@ -114,7 +76,6 @@ class _PTInicialState extends State<PTInicial> {
     _firebaseMessaging.getToken().then((token) {
       deviceToken = token;
       print("El token es: $deviceToken");
-      //ekmLCN7WVHU:APA91bEo70AVqCNdS1DAb_ItwqYdy3IsTVP1MBnQlOLfC78EIQm6UHQ_xXpXqhtfQTcG8-eF8UjdUK7n3e5W3jSLf_Nx-8Ofxtacq5Q6X_PXdUihD_-GDdISKYuXdKCnvmiGnDo1KYj9
     });
 
     _firebaseMessaging.configure(onMessage: (info) async {
@@ -168,7 +129,7 @@ class _PTInicialState extends State<PTInicial> {
 
   void loadUser() async {
     var user = await HttpHandler()
-        .fetchUserByPhone(numPhoneController.text, deviceToken);
+        .fetchUserByPhone(numPhoneController.text, deviceToken, _dominio, _semilla);
 
     setState(() {
       _user.addAll(user);
@@ -189,7 +150,7 @@ class _PTInicialState extends State<PTInicial> {
       }
     });
     try {
-      var matriculas = await HttpHandler().fetchMatriculas(_dni);
+      var matriculas = await HttpHandler().fetchMatriculas(_dni, _dominio, _semilla);
       setState(() {
         if (matriculas.length != 0) {
           _listMatriculas.clear();
@@ -203,12 +164,12 @@ class _PTInicialState extends State<PTInicial> {
 
       loadAcompanante();
     } catch (ex) {
-      fbarMatricula.show(context);
+      _funcGeneral.mostrarFlushBar(context, "No tienes vehículos asignados, ponte en contacto con un administrador!");
     }
   }
 
   void loadAcompanante() async {
-    var acompanante = await HttpHandler().fetchAcompanante(_idUser.toString());
+    var acompanante = await HttpHandler().fetchAcompanante(_idUser.toString(), _dominio, _semilla);
     if (acompanante.length != 0) {
       _acompanante = true;
       idUsuarioPrincipal = acompanante[0].idUsuarioPrincipal.toString();
@@ -226,12 +187,13 @@ class _PTInicialState extends State<PTInicial> {
   @override
   initState() {
     super.initState();
+    getConfiguracion();
     getVerifyDataLocal();
     getWDLocal();
     initNotifications();
     mensajes.listen((event) {
       if (event.indexOf("PDA") > -1) {
-        fbarPDA.show(context);
+        _funcGeneral.mostrarFlushBar(context, "Tienes trabajos pendientes en la PDA por cerrar o pausar!\nSerás redirigido a la PDA!");
         const url = 'https://pda.ezsa.es/';
         Future.delayed(const Duration(seconds: 5), () {
           launch(url);
@@ -249,24 +211,7 @@ class _PTInicialState extends State<PTInicial> {
   @override
   Widget build(BuildContext context) {
     _dbprovider.init();
-    pr = new ProgressDialog(context);
-    fbar = new Flushbar(
-      flushbarPosition: FlushbarPosition.TOP,
-      message: "El número ingresado, no existe en la BD!",
-      duration: Duration(seconds: 3),
-    );
-    pr.style(
-        message: 'Procesando la información...',
-        borderRadius: 0.0,
-        backgroundColor: Colors.white,
-        progressWidget: CircularProgressIndicator(),
-        elevation: 10.0,
-        progress: 0.0,
-        maxProgress: 30.0,
-        progressTextStyle: TextStyle(
-            color: Colors.black, fontSize: 10.0, fontWeight: FontWeight.w400),
-        messageTextStyle: TextStyle(
-            color: Colors.black, fontSize: 12.0, fontWeight: FontWeight.w400));
+    
 
     return Scaffold(
         body: Container(
@@ -314,12 +259,9 @@ class _PTInicialState extends State<PTInicial> {
                   height: 450,
                   child: Padding(
                     padding: EdgeInsets.only(
-                        top: 50.0, left: 25.0, right: 25.0, bottom: 25.0),
+                        top: 15.0, left: 25.0, right: 25.0, bottom: 25.0),
                     child: Column(
                       children: [
-                        /* Padding(
-                padding: EdgeInsets.only(top: 20.0),
-              ), */
                         Form(
                           key: _formKeyNum,
                           child: Column(
@@ -332,7 +274,7 @@ class _PTInicialState extends State<PTInicial> {
                                     fontFamily: 'HeeboSemiBold'),
                               ),
                               Padding(
-                                padding: EdgeInsets.only(top: 10.0),
+                                padding: EdgeInsets.only(top: 20.0),
                               ),
                               TextFormField(
                                   onChanged: (text) {
@@ -404,22 +346,6 @@ class _PTInicialState extends State<PTInicial> {
                               Padding(
                                 padding: EdgeInsets.only(top: 3.0),
                               ),
-                              /* Visibility(
-                      visible: false,
-                      child: TextFormField(
-                        controller: carPlateController,
-                        decoration: InputDecoration(
-                          labelText: 'Matrícula',
-                          icon: Icon(Icons.car_repair)
-                        ),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Debes indicar la Matrícula';
-                          }
-                          return null;
-                        },
-                      ),
-                    ), */
                               Visibility(
                                 visible: _matriculaVisible,
                                 child: DropdownButtonFormField(
@@ -448,7 +374,7 @@ class _PTInicialState extends State<PTInicial> {
                                   validator: (value) {
                                     if (matriculaSeleccionada == false &&
                                         _matriculaVisible == true) {
-                                      //fbarMatriculaSeleccionada.show(context);
+                                      //fbarMatriculaSeleccionada.show(context);                                      
                                       return 'Debes indicar una matrícula para iniciar';
                                     }
                                     return null;
@@ -472,11 +398,6 @@ class _PTInicialState extends State<PTInicial> {
                                 padding: EdgeInsets.only(top: 20.0),
                               ),
                               TextFormField(
-                                  /* onChanged: (text) {
-                          if (text.length == 9) {
-                            loadUser();
-                          }
-                        }, */
                                   obscureText: true,
                                   controller: passController,
                                   keyboardType: TextInputType.visiblePassword,
@@ -537,7 +458,8 @@ class _PTInicialState extends State<PTInicial> {
                                         numPhoneController.text, pass);
                                     validarVersion(
                                         _idUser.toString(), versionApp);
-                                    pr.show();
+                                    //pr.show();
+                                    _funcGeneral.mostrarProgressDialog(context, "Validando sus datos");
                                     Future.delayed(Duration(seconds: 3))
                                         .then((value) {
                                       if (_formKeyNum.currentState.validate() &&
@@ -545,7 +467,7 @@ class _PTInicialState extends State<PTInicial> {
                                           versionValidada == true) {
                                         print("VALOR DE IDUSER: $_idUser");
                                         if (_idUser == 0) {
-                                          fbar.show(context);
+                                          _funcGeneral.mostrarFlushBar(context, "El número ingresado, no existe en la BD!");
                                         } else {
                                           _repository.fetchLocalData(
                                               '${numPhoneController.text}',
@@ -565,25 +487,18 @@ class _PTInicialState extends State<PTInicial> {
                                           //pr.show();
                                           Future.delayed(Duration(seconds: 3))
                                               .then((value) {
-                                            pr.hide().whenComplete(() {
-                                              //Navigator.of(context).push(MaterialPagaRoute( builder: (BuildContext context)=>PTPrincipal()));
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          PTPrincipal()));
-                                            });
+                                            _funcGeneral.ocultarProgressDialogAlCompletar(context, PTPrincipal());
                                           });
                                         }
                                       } else {
-                                        pr.hide();
+                                        _funcGeneral.ocultarProgressDialog();
                                         if (versionValidada == false) {
-                                          fbarVersion.show(context);
-                                          pr.hide();
+                                          _funcGeneral.mostrarFlushBar(context, "La versión de la APP que estas usando es antigüa.\nPor favor, comunicate con el administrador para que\nte proporcione la nueva versión.");
+                                          _funcGeneral.ocultarProgressDialog();
                                         }
                                         if (usuarioValidado == false) {
-                                          fbarPass.show(context);
-                                          pr.hide();
+                                          _funcGeneral.mostrarFlushBar(context, "La contraseña ingresada no es correcta. Por favor coloque la contraseña que usa en la PDA");
+                                          _funcGeneral.ocultarProgressDialog();
                                         }
                                       }
                                     });
@@ -591,18 +506,6 @@ class _PTInicialState extends State<PTInicial> {
                               Padding(
                                 padding: EdgeInsets.only(top: 30.0),
                               ),
-                              /* Text(
-                                "Versión BDD: " + versionDB.toString() + ".0.0",
-                                style: TextStyle(fontSize: 10.0, color: Color(0xFF2eac6b),  fontFamily: 'HeeboSemiBold'),
-                              ),
-                              Text(
-                                "Versión APP: " + versionApp.toString(),
-                                style: TextStyle(fontSize: 10.0, color: Color(0xFF2eac6b),  fontFamily: 'HeeboSemiBold'),
-                              ),
-                              Text(
-                                "Dominio: EZSA ",
-                                style: TextStyle(fontSize: 10.0, color: Color(0xFF2eac6b),  fontFamily: 'HeeboSemiBold'),
-                              ) */
                             ],
                           ),
                         ),
@@ -670,7 +573,7 @@ class _PTInicialState extends State<PTInicial> {
       });
       loadAcompanante();
       if (list != null) {
-        var matriculas = await HttpHandler().fetchMatriculas(_dni);
+        var matriculas = await HttpHandler().fetchMatriculas(_dni, _dominio, _semilla);
         setState(() {
           if (matriculas.length != 0) {
             _listMatriculas.clear();
@@ -746,7 +649,7 @@ class _PTInicialState extends State<PTInicial> {
   }
 
   Future<bool> validarUsuario(telefono, pass) async {
-    var resultado = await HttpHandler().fetchValidarUsuario(telefono, pass);
+    var resultado = await HttpHandler().fetchValidarUsuario(telefono, pass, _dominio, _semilla);
     print("EL VALIDAR USUARIO FUE: " + resultado.toString());
     setState(() {
       usuarioValidado = resultado;
@@ -756,7 +659,7 @@ class _PTInicialState extends State<PTInicial> {
 
   Future<bool> validarVersion(idUsuario, numVersion) async {
     var resultado =
-        await HttpHandler().fetchValidarVersion(idUsuario, numVersion);
+        await HttpHandler().fetchValidarVersion(idUsuario, numVersion, _dominio, _semilla);
     print("EL VALIDAR VERSION FUE: " + resultado.toString());
     setState(() {
       versionValidada = resultado;
@@ -784,5 +687,26 @@ class _PTInicialState extends State<PTInicial> {
       _dateBeginning = new DateTime.now().toString();
     }
     return retunn;
+  }
+
+  getConfiguracion() async {     
+    try {
+      List<Configuracion> configuracion = await _dbprovider.getConfiguracion();
+      //print(configuracion[0].dominio);
+      if(configuracion.length>0){
+        setState(() {
+          _dominio = configuracion[0].dominio;
+          _semilla = configuracion[0].semilla;      
+        });
+         
+      }
+      else{
+        _dominio = null;
+        _semilla = null;
+      }
+    } catch (Ex) {
+      _dominio = null;
+        _semilla = null;
+    }
   }
 }
