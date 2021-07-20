@@ -4,6 +4,7 @@ import 'package:eszaworker/class/ConfiguracionClass.dart';
 import 'package:eszaworker/class/HojaControlHorasAppClass.dart';
 import 'package:eszaworker/resources/HttpHandler.dart';
 import 'package:eszaworker/resources/db_provider.dart';
+import 'package:eszaworker/utilities/funciones_generales.dart';
 import 'package:flutter/material.dart';
 
 import 'lista_observacionesAdmin.dart';
@@ -27,10 +28,10 @@ class _PTTabObservacionesState extends State<PTTabObservaciones>{
   List<HojaControlHorasAppClass> _listaObs = [];
 
   @override 
-  void initState(){
-    getConfiguracion();
-    super.initState();
+  void initState(){    
     
+    super.initState(); 
+    getConfiguracion();   
     leerObservaciones();
   }
 
@@ -40,7 +41,11 @@ class _PTTabObservacionesState extends State<PTTabObservaciones>{
     String fechaDesde = fechaSplit[0];
     String fechaHasta = fechaSplit[1];
     print("IdUsuario: "+idUsu+" FechaDesde: "+fechaDesde+" FechaHasta: "+fechaHasta);
-    await _dbprovider.init();
+    //await _dbprovider.init();
+    var dameDom = await dameDominio();
+    var dameSemi = await dameSemilla();
+    _dominio = dameDom;
+    _semilla = dameSemi;
     var data = await HttpHandler().fetchModificacionesAdmin(idUsu,fechaDesde,fechaHasta,_dominio, _semilla);
     if(data.length>0){
       for(var i=0; i<data.length; i++) {
@@ -75,7 +80,6 @@ class _PTTabObservacionesState extends State<PTTabObservaciones>{
 
   @override 
   Widget build(BuildContext context) {
-    
     return Expanded(
       child: ListView.builder(
         itemCount: _listaObs.length,

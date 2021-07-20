@@ -1,6 +1,7 @@
 import 'package:eszaworker/class/ConfiguracionClass.dart';
 import 'package:eszaworker/class/DataLocalClass.dart';
 import 'package:eszaworker/resources/db_provider.dart';
+import 'package:eszaworker/utilities/funciones_generales.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_version/get_version.dart';
@@ -22,7 +23,7 @@ String numTelefono = "";
 var zona = DateTime.now().timeZoneName;
 var nombreZona = "";
 String _dominio;
-String _semilla;
+//String _semilla;
 
 class PTAcerca extends StatefulWidget {
   static const String routeName = "/pantalla_acerca";
@@ -34,6 +35,7 @@ class PTAcerca extends StatefulWidget {
 class _PTAcercaState extends State<PTAcerca> {
   @override
   void initState() {
+    inicializarBDLocal();
     getConfiguracion();
     super.initState();
     if(zona=="WEST"){
@@ -206,6 +208,7 @@ class _PTAcercaState extends State<PTAcerca> {
   }
 
   Future<List<DataLocal>> getVerifyDataLocal() async {
+    
     List<DataLocal> retunn = new List<DataLocal>.empty();
     try {
       List<DataLocal> list = await _dbprovider.getVerifyPantallaInicial();
@@ -226,22 +229,22 @@ class _PTAcercaState extends State<PTAcerca> {
 
   getConfiguracion() async {     
     try {
-      await _dbprovider.init();
+      //await _dbprovider.init();
       List<Configuracion> configuracion = await _dbprovider.getConfiguracion();
       //print(configuracion[0].dominio);
       if(configuracion.length>0){
           setState(() {
           _dominio = configuracion[0].dominio;
-          _semilla = configuracion[0].semilla;      
+          //_semilla = configuracion[0].semilla;      
         });
       }
       else{
         _dominio = null;
-        _semilla = null;
+        //_semilla = null;
       }
     } catch (Ex) {
       _dominio = null;
-        _semilla = null;
+        //_semilla = null;
     }
   }
 }

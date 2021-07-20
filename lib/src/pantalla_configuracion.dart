@@ -127,7 +127,7 @@ class _PTConfiguracionState extends State<PTConfiguracion> {
                                   ),
                                 ),
                                 child: Container(
-                                  padding: EdgeInsets.only(left: 50.0, right: 50.0, top:10, bottom: 10.0),
+                                  padding: EdgeInsets.only(left: 30.0, right: 30.0, top:10, bottom: 10.0),
                                   child: Text(
                                     "Guardar",
                                     style: TextStyle(
@@ -196,5 +196,6 @@ class _PTConfiguracionState extends State<PTConfiguracion> {
         
       }
     }
+    return empresas;
   }
 }

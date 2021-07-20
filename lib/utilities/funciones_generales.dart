@@ -1,3 +1,4 @@
+import 'package:eszaworker/class/ConfiguracionClass.dart';
 import 'package:eszaworker/resources/db_provider.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
@@ -51,3 +52,25 @@ void ocultarProgressDialogAlCompletar(BuildContext context, Widget paginaNavegac
                 paginaNavegacion));
   });
 }
+
+void inicializarBDLocal() async{
+  await _dbprovider.init();
+}
+
+Future<String> dameDominio() async{
+    String domi = "";
+    List<Configuracion> configuracion = await _dbprovider.getConfiguracion();
+    if(configuracion.length>0){
+      domi = configuracion[0].dominio;    
+    }
+    return domi;
+  }
+
+  Future<String> dameSemilla() async{
+    String semi = "";
+    List<Configuracion> configuracion = await _dbprovider.getConfiguracion();
+    if(configuracion.length>0){
+      semi = configuracion[0].semilla;    
+    }
+    return semi;
+  }

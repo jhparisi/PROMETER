@@ -5,6 +5,7 @@ import 'package:eszaworker/class/ControlHourClass.dart';
 import 'package:eszaworker/resources/HttpHandler.dart';
 import 'package:eszaworker/resources/db_provider.dart';
 import 'package:eszaworker/src/pantalla_resumenLT.dart';
+import 'package:eszaworker/utilities/funciones_generales.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:eszaworker/src/formularioHoras.dart';
@@ -235,8 +236,11 @@ class _MultiFormState extends State<MultiForm>
     formularios.clear();
     var horaIni = [];
     var horaFin = [];
-    await _dbprovider.init();
-    print("DOMINIO: $_dominio");
+    //await _dbprovider.init();
+    var dameDom = await dameDominio();
+    var dameSemi = await dameSemilla();
+    _dominio = dameDom;
+    _semilla = dameSemi;
     var data = await HttpHandler().fetchControlHorasFecha(idUsuario, fecha, _dominio, _semilla);
     if (data != null) {
       for (var item in data) {

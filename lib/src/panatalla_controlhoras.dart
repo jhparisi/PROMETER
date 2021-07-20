@@ -1,14 +1,14 @@
 import 'dart:async';
-import 'package:eszaworker/class/ConfiguracionClass.dart';
 import 'package:eszaworker/class/ControlHourAllClass.dart';
 import 'package:eszaworker/class/ControlHourClass.dart';
 import 'package:eszaworker/resources/HttpHandler.dart';
-import 'package:eszaworker/resources/db_provider.dart';
+//import 'package:eszaworker/resources/db_provider.dart';
 import 'package:eszaworker/src/menu.dart';
 import 'package:eszaworker/src/pantalla_TabObservaciones.dart';
 import 'package:eszaworker/src/pantalla_editarhoras.dart';
 import 'package:eszaworker/src/pantalla_inicial.dart';
 import 'package:eszaworker/src/pantalla_resumenLT.dart';
+import 'package:eszaworker/utilities/funciones_generales.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart' show CalendarCarousel;
@@ -16,7 +16,7 @@ import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
-DBProvider _dbprovider = DBProvider.get();
+//DBProvider _dbprovider = DBProvider.get();
 ProgressDialog prd;
 Menu _menu = new Menu();
 int _idUser = _menu.getuserId();
@@ -126,7 +126,7 @@ class _PTControlHorasState extends State<PTControlHoras> {
 
   @override
   void initState() {
-    getConfiguracion();
+    //getConfiguracion();
     getControlHorasAll(_idUser.toString());
     super.initState();
     cargarPTObsWidget(userId,fechaRango);
@@ -345,9 +345,12 @@ class _PTControlHorasState extends State<PTControlHoras> {
   Future<List<ControlHourAllClass>> getControlHorasAll(String idUsuario) async {
     List<ControlHourAllClass> retunn = [];
     try {
-      await _dbprovider.init();
-      List<ControlHourAllClass> list =
-          await HttpHandler().fetchControlHorasTodas(idUsuario, _dominio, _semilla);
+      //await _dbprovider.init();
+      var dameDom = await dameDominio();
+      var dameSemi = await dameSemilla();
+      _dominio = dameDom;
+      _semilla = dameSemi;
+      List<ControlHourAllClass> list = await HttpHandler().fetchControlHorasTodas(idUsuario, _dominio, _semilla);
       setState(() {
         if (list != null) {
           for (var i = 0; i < list.length; i++) {
@@ -397,10 +400,12 @@ class _PTControlHorasState extends State<PTControlHoras> {
     return retunn;
   }
 
-  Future<bool> postControlHour(
-      idUsuario, fecha, modificadoManual, evento, comentario, hora) async {
+  Future<bool> postControlHour(idUsuario, fecha, modificadoManual, evento, comentario, hora) async {
     var respuesta = false;
-    await _dbprovider.init();
+    var dameDom = await dameDominio();
+    var dameSemi = await dameSemilla();
+    _dominio = dameDom;
+    _semilla = dameSemi;
     var control = await HttpHandler().postControlHour(
         idUsuario, fecha, modificadoManual, evento, comentario, hora, _dominio, _semilla);
     if (control == "OK") {
@@ -418,7 +423,7 @@ class _PTControlHorasState extends State<PTControlHoras> {
     return ptObsWidget;
   }
 
-  getConfiguracion() async {     
+  /* getConfiguracion() async {     
     try {      
       List<Configuracion> configuracion = await _dbprovider.getConfiguracion();
       //print(configuracion[0].dominio);
@@ -436,5 +441,7 @@ class _PTControlHorasState extends State<PTControlHoras> {
       _dominio = null;
         _semilla = null;
     }
-  }
+  } */
+
+  
 }

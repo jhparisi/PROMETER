@@ -1,4 +1,5 @@
 import 'package:eszaworker/resources/db_provider.dart';
+import 'package:eszaworker/utilities/funciones_generales.dart';
 import 'package:flutter/material.dart';
 import 'package:eszaworker/class/MensajesChatClass.dart';
 
@@ -18,7 +19,8 @@ class _PTChatInternoState extends State<PTChatInterno>
   bool _isTyped = false;
 
   void _listadoMensaje() async {
-    await _dbprovider.init();
+    //await _dbprovider.init();
+    inicializarBDLocal();
     var mensajes = await _dbprovider.fethMensajesAll();
     if(mensajes!=null){
       mensajes.reversed.forEach((element) {

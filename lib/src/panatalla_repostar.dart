@@ -185,14 +185,14 @@ class _PTRepostarState extends State<PTRepostar> {
               child: SingleChildScrollView(
                   child: Padding(
                       padding:
-                          EdgeInsets.only(right: 50.0, left: 50.0, top: 50.0),
+                          EdgeInsets.only(right: 25.0, left: 25.0, top: 50.0),
                       child: new Form(
                           key: _formKey,
                           //child: Container(
                           child: SingleChildScrollView(
                               child: Padding(
                             padding: EdgeInsets.only(
-                                left: 50.0, right: 50.0, top: 0.0),
+                                left: 25.0, right: 25.0, top: 0.0),
                             child: Column(
                               children: <Widget>[
                                 DropdownButtonFormField(

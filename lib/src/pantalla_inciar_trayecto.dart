@@ -154,13 +154,13 @@ class _PTIniciarRutaState extends State<PTIniciarRuta> {
               child: SingleChildScrollView(
                   child: Padding(
                       padding:
-                          EdgeInsets.only(right: 50.0, left: 50.0, top: 25.0),
+                          EdgeInsets.only(right: 25.0, left: 25.0, top: 25.0),
                       child: Form(
                           key: _formKey,
                           child: SingleChildScrollView(
                               child: Padding(
                             padding: EdgeInsets.only(
-                                left: 50.0, right: 50.0, top: 0.0),
+                                left: 25.0, right: 25.0, top: 0.0),
                             child: Column(
                               children: <Widget>[
                                 Padding(padding: EdgeInsets.only(top: 25.0)),

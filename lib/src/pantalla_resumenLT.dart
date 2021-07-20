@@ -6,6 +6,7 @@ import 'package:eszaworker/class/ControlHourDateClass.dart';
 import 'package:eszaworker/resources/HttpHandler.dart';
 import 'package:eszaworker/resources/db_provider.dart';
 import 'package:eszaworker/src/pantalla_editarhoras.dart';
+import 'package:eszaworker/utilities/funciones_generales.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:timeline_tile/timeline_tile.dart';
@@ -272,7 +273,11 @@ class _PTResumenLTState extends State<PTResumenLT> {
         fecha = new DateTime.now().toString().substring(0, 19);
       });
     }
-    await _dbprovider.init();
+    //await _dbprovider.init();
+    var dameDom = await dameDominio();
+    var dameSemi = await dameSemilla();
+    _dominio = dameDom;
+    _semilla = dameSemi;
     var data = await HttpHandler().fetchControlHorasFecha(idUsuario, fecha, _dominio, _semilla);
     Iterable inReverse = data.reversed;
     var dataList = inReverse.toList();

@@ -236,7 +236,7 @@ class _PTInicialState extends State<PTInicial> {
       child: SafeArea(
           child: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(left: 50.0, right: 50.0, top: 0.0),
+          padding: EdgeInsets.only(left: 30.0, right: 30.0, top: 0.0),
           child: Column(
             children: <Widget>[
               Padding(
@@ -255,7 +255,7 @@ class _PTInicialState extends State<PTInicial> {
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: SizedBox(
-                  width: 350,
+                  width: 400,
                   height: 450,
                   child: Padding(
                     padding: EdgeInsets.only(

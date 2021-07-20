@@ -1,6 +1,7 @@
 import 'package:eszaworker/class/MensajesChatClass.dart';
 import 'package:eszaworker/class/MensajesClass.dart';
 import 'package:eszaworker/resources/db_provider.dart';
+import 'package:eszaworker/utilities/funciones_generales.dart';
 import 'package:flutter/material.dart';
 import 'package:eszaworker/src/pantalla_chat_list.dart';
 import 'package:eszaworker/src/pantalla_contactos.dart';
@@ -33,7 +34,8 @@ class _PTMensajesState extends State<PTMensajes>
   }
 
   void loadMensajes() async {
-    await _dbprovider.init();
+    //await _dbprovider.init();
+    inicializarBDLocal();
     var mensajes = await _dbprovider.fethMensajesAll();
     setState(() {
       if(mensajes!= null){

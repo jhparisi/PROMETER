@@ -10,6 +10,7 @@ import 'package:eszaworker/src/pantalla_principal.dart';
 import 'package:eszaworker/src/services/background_fetch_service.dart';
 import 'package:eszaworker/src/services/location_service.dart';
 import 'package:eszaworker/src/services/stoppable_service.dart';
+import 'package:eszaworker/utilities/funciones_generales.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter/services.dart';
@@ -666,7 +667,11 @@ class _PTCerrarRutaState extends State<PTCerrarRuta>
 
   Future postControlHour(
       idUsuario, fecha, modificadoManual, evento, comentario, fechaHora) async {
-    await _dbprovider.init();
+    //await _dbprovider.init();
+    var dameDom = await dameDominio();
+    var dameSemi = await dameSemilla();
+    _dominio = dameDom;
+    _semilla = dameSemi;
     var respuesta = "";
     var control = await HttpHandler().postControlHour(
         idUsuario, fecha, modificadoManual, evento, comentario, fechaHora, _dominio, _semilla);
@@ -677,7 +682,11 @@ class _PTCerrarRutaState extends State<PTCerrarRuta>
   }
 
   Future getEventos(idUsuario, fecha) async{
-    await _dbprovider.init();
+    //await _dbprovider.init();
+    var dameDom = await dameDominio();
+    var dameSemi = await dameSemilla();
+    _dominio = dameDom;
+    _semilla = dameSemi;
     var eventos = await HttpHandler().fetchUltimoEvento(idUsuario, fecha.toString().substring(0,10), _dominio, _semilla);
     if(eventos.length>0){  
       if(eventos[0].evento == "Fin"){

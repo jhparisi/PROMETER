@@ -3,6 +3,7 @@ import 'package:eszaworker/class/ConfiguracionClass.dart';
 import 'package:eszaworker/resources/db_provider.dart';
 import 'package:eszaworker/src/pantalla_configuracion.dart';
 import 'package:eszaworker/src/pantalla_inicial.dart';
+import 'package:eszaworker/utilities/funciones_generales.dart';
 import 'package:flutter/material.dart';
 
 Widget paginaIniciaApp = PTConfiguracion();
@@ -16,6 +17,7 @@ class PTCargando extends StatefulWidget {
 class _PTCargandoState extends State<PTCargando> {
   @override
   initState() {
+    inicializarBDLocal();
     super.initState();
     Timer(Duration(seconds: 3), () {
       getConfiguracion();      
@@ -80,7 +82,8 @@ class _PTCargandoState extends State<PTCargando> {
 
   getConfiguracion() async {     
     try {
-      await _dbprovider.init();
+      //await _dbprovider.init();
+      
       List<Configuracion> configuracion = await _dbprovider.getConfiguracion();
       //print(configuracion[0].dominio);
       if(configuracion.length>0){
