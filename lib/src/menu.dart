@@ -1,7 +1,11 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:eszaworker/class/DataLocalClass.dart';
 import 'package:eszaworker/class/HistoricoClass.dart';
+import 'package:eszaworker/class/UserByPhoneAPIClass.dart';
+import 'package:eszaworker/resources/HttpHandler.dart';
+import 'package:eszaworker/utilities/funciones_generales.dart';
 //import 'package:eszaworker/src/pantalla_inicial.dart';
 import 'package:flutter/material.dart';
 import 'package:eszaworker/resources/db_provider.dart';
@@ -16,6 +20,7 @@ int versionDB = 0;
 int acompanante = 0;
 var mostrarMenu = true;
 String ultimoLogin;
+String _imagenAvatar = "";
 
 class _DatosDelUsuario extends StatelessWidget {
   _DatosDelUsuario({
@@ -158,6 +163,7 @@ class ListItemDatosUsuario extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    getFotoUsuario();
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: SizedBox(
@@ -166,11 +172,7 @@ class ListItemDatosUsuario extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             CircleAvatar(
-              child: Icon(
-                Icons.person,
-                size: 50.0,
-                color: Colors.blueGrey,
-              ),
+              backgroundImage: NetworkImage(_imagenAvatar),
               minRadius: 50.0,
               backgroundColor: Colors.white,
             ),
@@ -189,6 +191,19 @@ class ListItemDatosUsuario extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<FotoUsuarioClass> getFotoUsuario() async{
+    var dameDomi = await dameDominio();
+    var dameSemi = await dameSemilla();
+    var dominio = dameDomi;
+    var semilla = dameSemi;
+    var data = await HttpHandler.get().fetchFotoUsuarioAPI(dominio, semilla, userId.toString());
+    if(data.length>0){
+      var foto = data[0].foto;      
+      _imagenAvatar = foto;
+    }
+    return null;
   }
 }
 
@@ -291,6 +306,8 @@ class Menu extends StatelessWidget {
       return null;
     }
   }
+
+  
 
   String getCarPlate() {
     return carPlate;

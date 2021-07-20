@@ -29,3 +29,22 @@ class UserByPhoneAPIClass{
 
 
 enum MediaType { content, show }
+
+
+class FotoUsuarioClass{
+  String foto;
+
+  factory FotoUsuarioClass(Map jsonMap, MediaTypeFotoUsuario mediaType) {
+    try {
+      return new FotoUsuarioClass.deserialize(jsonMap, mediaType);
+    } catch (ex) {
+      throw ex;
+    }
+  }
+
+  FotoUsuarioClass.deserialize(Map json, MediaTypeFotoUsuario mediaType): 
+        foto = json["foto"];
+}
+
+
+enum MediaTypeFotoUsuario { content, show }

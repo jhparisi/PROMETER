@@ -31,6 +31,7 @@ class HttpHandler {
   final String _urlGetModificacionesAdmin = "api/Prometer/GetModificacionesAdmin";
   final String _urlGetConfiguracion = "api/Prometer/getConfiguracion";
   final String _urlGetEmpresas = "api/Prometer/getEmpresasApp";
+  final String _urlGetFotoUsuario = "api/Prometer/getFotoUsuario";
   
   static HttpHandler get() {
     return _httpHandler;
@@ -311,6 +312,21 @@ class HttpHandler {
     return postJson(uri, body).then(((data) => data
         .map<EmpresaAPI>((item) =>
             new EmpresaAPI(item, MediaTypeEmpresaAPI.content))
+        .toList()));
+  }
+
+  //SE CONECTA CON LA API Y TRAE LA IMAGEN DEL USUARIO
+  Future<List<FotoUsuarioClass>> fetchFotoUsuarioAPI(dominio, semilla,idUsuario) {
+    var uri = new Uri.http(_baseUrl, _urlGetFotoUsuario);
+    var body = jsonEncode(<String, String>{
+      "dominio": dominio,
+      "semilla": semilla,
+      "userId": idUsuario
+    });
+    print(uri);
+    return postJson(uri, body).then(((data) => data
+        .map<FotoUsuarioClass>((item) =>
+            new FotoUsuarioClass(item, MediaTypeFotoUsuario.content))
         .toList()));
   }
 }
