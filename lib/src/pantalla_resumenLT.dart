@@ -209,7 +209,7 @@ class _PTResumenLTState extends State<PTResumenLT> {
                   child: ListTile(
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                    trailing: Text(fecha, style: TextStyle(fontFamily: 'HeeboSemiBold'),),
+                    trailing: Text(fecha, style: TextStyle(fontFamily: 'HeeboSemiBold', fontSize: 12.0),),
                   ),
                 ),
               ),
@@ -387,7 +387,7 @@ class _PTResumenLTState extends State<PTResumenLT> {
         _dominio = null;
         _semilla = null;
       }
-    } catch (Ex) {
+    } catch (ex) {
       _dominio = null;
         _semilla = null;
     }

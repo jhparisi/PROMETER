@@ -592,7 +592,7 @@ class _PTInicialState extends State<PTInicial> {
           }
         });
       }
-    } catch (Ex) {
+    } catch (ex) {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => PTInicial()));
     }
@@ -638,7 +638,7 @@ class _PTInicialState extends State<PTInicial> {
 
         return list;
       });
-    } catch (Ex) {
+    } catch (ex) {
       //Navigator.push(context, MaterialPageRoute(builder: (context)=>PTInicial()));
     }
     return retunn;
@@ -682,7 +682,7 @@ class _PTInicialState extends State<PTInicial> {
         }
         return list;
       });
-    } catch (Ex) {
+    } catch (ex) {
       //Navigator.push(context, MaterialPageRoute(builder: (context)=>PTPrincipal()));
       _dateBeginning = new DateTime.now().toString();
     }
@@ -704,7 +704,7 @@ class _PTInicialState extends State<PTInicial> {
         _dominio = null;
         _semilla = null;
       }
-    } catch (Ex) {
+    } catch (ex) {
       _dominio = null;
         _semilla = null;
     }

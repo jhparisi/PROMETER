@@ -393,7 +393,7 @@ class _PTControlHorasState extends State<PTControlHoras> {
         }
         return list;
       });
-    } catch (Ex) {
+    } catch (ex) {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => PTInicial()));
     }
@@ -437,7 +437,7 @@ class _PTControlHorasState extends State<PTControlHoras> {
         _dominio = null;
         _semilla = null;
       }
-    } catch (Ex) {
+    } catch (ex) {
       _dominio = null;
         _semilla = null;
     }

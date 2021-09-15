@@ -6,8 +6,9 @@ class Refuel {
   String litre;
   String refuelDate;
   String userId;
+  String priceOnDay;
 
-  Refuel({this.idTipoCombustible, this.kms, this.plate,this.price,this.litre,this.refuelDate,this.userId});
+  Refuel({this.idTipoCombustible, this.kms, this.plate,this.price,this.litre,this.refuelDate,this.userId,this.priceOnDay});
 
   Map<String, dynamic> toMap() {
     return {
@@ -17,13 +18,14 @@ class Refuel {
       'price' : price,
       'litre' : litre,
       'refuelDate' : refuelDate,
-      'userId' : userId
+      'userId' : userId,
+      'priceOnDay' : priceOnDay
     };
   }
 
   @override
   String toString() {
-    return 'Refuel{idTipoCombustible: $idTipoCombustible, kms: $kms, plate: $plate, price:$price, litre:$litre refuelDate:$refuelDate, userId:$userId}';
+    return 'Refuel{idTipoCombustible: $idTipoCombustible, kms: $kms, plate: $plate, price:$price, litre:$litre refuelDate:$refuelDate, userId:$userId, priceOnDay:$priceOnDay}';
   }
 
   Refuel.fromDb(Map<String, dynamic> parsedJson) :
@@ -33,5 +35,6 @@ class Refuel {
     price = parsedJson["price"],
     litre = parsedJson["litre"],
     refuelDate = parsedJson["refuelDate"],
-    userId = parsedJson["userId"];
+    userId = parsedJson["userId"],
+    priceOnDay = parsedJson["priceOnDay"];
 }

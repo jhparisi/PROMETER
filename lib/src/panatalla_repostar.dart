@@ -1,5 +1,6 @@
 import 'dart:async';
-
+import 'dart:convert';
+import 'dart:io';
 import 'package:eszaworker/class/ConfiguracionClass.dart';
 import 'package:eszaworker/class/RefuelClass.dart';
 import 'package:eszaworker/class/WorkingDayClass.dart';
@@ -13,6 +14,7 @@ import 'package:eszaworker/class/PlayPauseTrackingClass.dart';
 import 'package:eszaworker/resources/repository.dart';
 import 'package:eszaworker/resources/db_provider.dart';
 import 'package:eszaworker/src/pantalla_play_pause.dart';
+import 'package:image_picker/image_picker.dart';
 
 ProgressDialog prd;
 Menu _menu = new Menu();
@@ -21,6 +23,8 @@ int _idUser = _menu.getuserId();
 String _carPlateRepostar = _menu.getCarPlate();
 final carPlateController = TextEditingController();
 final priceController = TextEditingController();
+final fotoController = TextEditingController();
+final priceOnDayController = TextEditingController();
 final litreController = TextEditingController();
 final kmsController = TextEditingController();
 String lastCarPlate = "";
@@ -46,20 +50,37 @@ String unidadMedida = "Litros";
 String _semilla;
 String _dominio;
 
+Future<File> file;
+String status = '';
+String base64Image;
+File tmpFile;
+File sampleImage;
+String errMessage = 'Error subiendo imagen';
+bool msgExito = false;
+List<int> imageBytes = [];
+
 class PTRepostar extends StatefulWidget {
   static const String routeName = "/pantalla_repostar";
   PTRepostar({Key key}) : super(key: key);
   _PTRepostarState createState() => _PTRepostarState();
 }
 
-class _PTRepostarState extends State<PTRepostar> {
-  void loadRefuel(
-      idTipoCombustible, kms, plate, price, litre, refuelDate, userId) async {
-    var fuel = await HttpHandler().postRefuel(idTipoCombustible, kms, plate,
-        price, litre, refuelDate, userId, _dominio, _semilla);
+class _PTRepostarState extends State<PTRepostar> {  
+
+  void loadRefuel(idTipoCombustible, kms, plate, price, litre, refuelDate, userId, priceOnDay) async {
+
+    String fileName = sampleImage.path.split('/').last;
+    imageBytes = sampleImage.readAsBytesSync();
+    base64Image = base64Encode(imageBytes);
+    if(idTipoCombustible==""){
+      idTipoCombustible=1;
+    }
+    var fuel = await HttpHandler().postRefuel(idTipoCombustible, kms, plate,price, litre, refuelDate, userId, _dominio, _semilla, priceOnDay);
+
+    var refuelIma = await HttpHandler().getUploadImg(sampleImage, fileName, base64Image, _dominio, _semilla, userId, fuel);
     setState(() {
       //_response.addAll(fuel);
-      if (fuel == "OK") {
+      if (fuel != "" && refuelIma !="") {
         fbar = new Flushbar(
           flushbarPosition: FlushbarPosition.TOP,
           message: "Se ha registrado correctamente!",
@@ -80,12 +101,13 @@ class _PTRepostarState extends State<PTRepostar> {
     getWDLocal();
   }
 
+
   @override
   Widget build(BuildContext context) {
     //***************************AlertDialog*************************************************//
     showAlertDialog(BuildContext context, String pregunta, String datos,
         Color color, int btnAceptar) {
-      List<Widget> accion = new List<Widget>.empty();
+      //List<Widget> accion = new List<Widget>.empty();
 
       // set up the buttons
       Widget botonCancelar = TextButton(
@@ -105,7 +127,8 @@ class _PTRepostarState extends State<PTRepostar> {
               priceController.text,
               litreController.text,
               DateTime.now().toString(),
-              _idUser.toString());
+              _idUser.toString(),
+              priceOnDayController.text);
           prd.show();
           Future.delayed(Duration(seconds: 3)).then((value) {
             prd.hide().whenComplete(() {
@@ -117,19 +140,20 @@ class _PTRepostarState extends State<PTRepostar> {
                   _carPlateRepostar,
                   priceController.text,
                   DateTime.now().toString(),
-                  _idUser.toString());
+                  _idUser.toString(),
+                  priceOnDayController.text);
               getPlayPause();
             });
           });
         },
       );
 
-      if (btnAceptar == 1) {
+      /* if (btnAceptar == 1) {
         accion.add(botonAceptar);
         accion.add(botonCancelar);
       } else {
         accion.add(botonCancelar);
-      }
+      } */
       // set up the AlertDialog
       AlertDialog alert = AlertDialog(
         title: Text(pregunta),
@@ -137,7 +161,10 @@ class _PTRepostarState extends State<PTRepostar> {
           datos,
           style: TextStyle(color: color),
         ),
-        actions: accion,
+        actions: <Widget>[
+          botonAceptar,
+          botonCancelar
+        ],
       );
       // show the dialog
       showDialog(
@@ -325,9 +352,8 @@ class _PTRepostarState extends State<PTRepostar> {
                                           Colors.red,
                                           0);
                                       return "Debes indicar los kilometros";
-                                    } else if (int.parse(kmsController.text) <
-                                            lastKM &&
-                                        lastCarPlate == _carPlateRepostar) {
+                                    } 
+                                    else if (int.parse(kmsController.text) < lastKM && lastCarPlate == _carPlateRepostar) {
                                       var indicados = kmsController.text;
                                       showAlertDialog(
                                           context,
@@ -336,9 +362,8 @@ class _PTRepostarState extends State<PTRepostar> {
                                           Colors.red,
                                           1);
                                       return 'Los Km indicados no pueden ser inferiores \na los valores del último repostaje';
-                                    } else if (int.parse(kmsController.text) >
-                                            (lastKM + 1500) &&
-                                        lastKM != 0) {
+                                    } 
+                                    else if (int.parse(kmsController.text) >(lastKM + 1500) && lastKM != 0) {
                                       showAlertDialog(
                                           context,
                                           "Error!",
@@ -366,8 +391,95 @@ class _PTRepostarState extends State<PTRepostar> {
                                 ),
                                 Padding(padding: EdgeInsets.only(top: 25.0)),
                                 TextFormField(
+                                  controller: priceOnDayController,
+                                  //decoration: InputDecoration(labelText: 'Importe total respostado:'),
+                                  style: TextStyle(color: Colors.black, fontFamily: 'HeeboSemiBold'),
+                                  decoration: InputDecoration(
+                                    labelText: "Importe del combustible al día",
+                                    contentPadding: const EdgeInsets.all(15.0),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(70.0)),
+                                        borderSide: BorderSide(
+                                          color: Colors.transparent,
+                                        )),
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(70.0)),
+                                        borderSide: BorderSide.none),
+                                    prefixIcon: Icon(
+                                      Icons.euro,
+                                      color: Colors.blue,
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.blue[100],
+                                  ),
+                                  keyboardType: TextInputType.number,
+                                  onChanged: (value){
+                                    priceController.text = (double.parse(value) * double.parse(litreController.text)).toString();
+                                  },
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      showAlertDialog(
+                                          context,
+                                          "Error!",
+                                          "Debes indicar el importe",
+                                          Colors.red,
+                                          0);
+                                      return 'Debes indicar el importe';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                
+                                Padding(padding: EdgeInsets.only(top: 25.0)),
+                                TextFormField(
+                                  controller: litreController,
+                                  //decoration: InputDecoration(labelText: '$unidadMedida:',),
+                                  style: TextStyle(color: Colors.black, fontFamily: 'HeeboSemiBold'),
+                                  decoration: InputDecoration(
+                                    labelText: "$unidadMedida",
+                                    contentPadding: const EdgeInsets.all(15.0),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(70.0)),
+                                        borderSide: BorderSide(
+                                          color: Colors.transparent,
+                                        )),
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(70.0)),
+                                        borderSide: BorderSide.none),
+                                    prefixIcon: Icon(
+                                      Icons.local_drink,
+                                      color: Colors.blue,
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.blue[100],
+                                  ),
+                                  onChanged: (value){
+                                    priceController.text = (double.parse(value) * double.parse(priceOnDayController.text)).toString();
+                                  },
+                                  keyboardType: TextInputType.number,
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      showAlertDialog(
+                                          context,
+                                          "Error!",
+                                          "Debes indicar los $unidadMedida",
+                                          Colors.red,
+                                          0);
+                                      return 'Debes indicar los $unidadMedida';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                Padding(padding: EdgeInsets.only(top:25.0)),
+                                TextFormField(
                                   controller: priceController,
                                   //decoration: InputDecoration(labelText: 'Importe total respostado:'),
+                                  readOnly: true,
+                                  enabled: false,
                                   style: TextStyle(color: Colors.black, fontFamily: 'HeeboSemiBold'),
                                   decoration: InputDecoration(
                                     labelText: "Importe total repostado",
@@ -403,13 +515,15 @@ class _PTRepostarState extends State<PTRepostar> {
                                     return null;
                                   },
                                 ),
-                                Padding(padding: EdgeInsets.only(top: 25.0)),
+                                
+                                Padding(padding: EdgeInsets.only(top:25.0)),
                                 TextFormField(
-                                  controller: litreController,
-                                  //decoration: InputDecoration(labelText: '$unidadMedida:',),
-                                  style: TextStyle(color: Colors.black, fontFamily: 'HeeboSemiBold'),
+                                  //decoration: InputDecoration(labelText: 'Importe total respostado:'),
+                                  style: TextStyle(color: Colors.grey, fontFamily: 'HeeboSemiBold'),
+                                  controller: fotoController,
+                                  readOnly: true,
                                   decoration: InputDecoration(
-                                    labelText: "$unidadMedida",
+                                    labelText: "Foto del ticket",
                                     contentPadding: const EdgeInsets.all(15.0),
                                     focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.all(
@@ -422,30 +536,39 @@ class _PTRepostarState extends State<PTRepostar> {
                                             Radius.circular(70.0)),
                                         borderSide: BorderSide.none),
                                     prefixIcon: Icon(
-                                      Icons.local_drink,
+                                      Icons.photo,
                                       color: Colors.blue,
                                     ),
                                     filled: true,
                                     fillColor: Colors.blue[100],
                                   ),
-                                  keyboardType: TextInputType.number,
+                                  onTap: (){
+                                    print("AQUI FUNCION PARA TOMAR LA FOTO");
+                                    getImage();
+                                  },
                                   validator: (value) {
                                     if (value.isEmpty) {
                                       showAlertDialog(
                                           context,
                                           "Error!",
-                                          "Debes indicar los $unidadMedida",
+                                          "Debes colocar una foto del ticket",
                                           Colors.red,
                                           0);
-                                      return 'Debes indicar los $unidadMedida';
+                                      return 'Debes colocar una foto del ticket';
                                     }
                                     return null;
                                   },
                                 ),
+                                Padding(padding: EdgeInsets.only(top:25.0)),
+                                Center(
+                                  child: sampleImage == null
+                                      ? Text('')
+                                      : enableUpload(),
+                                ),
                                 Padding(padding: EdgeInsets.only(top: 25.0)),
                                 ElevatedButton(
                                     onPressed: () {
-                                      if (_formKey.currentState.validate()) {
+                                      if (_formKey.currentState.validate()) {                                        
                                         loadRefuel(
                                             _combustible,
                                             kmsController.text,
@@ -453,7 +576,8 @@ class _PTRepostarState extends State<PTRepostar> {
                                             priceController.text,
                                             litreController.text,
                                             DateTime.now().toString(),
-                                            _idUser.toString());
+                                            _idUser.toString(),
+                                            priceOnDayController.text);
                                         prd.show();
                                         Future.delayed(Duration(seconds: 3))
                                             .then((value) {
@@ -467,7 +591,8 @@ class _PTRepostarState extends State<PTRepostar> {
                                                 _carPlateRepostar,
                                                 priceController.text,
                                                 DateTime.now().toString(),
-                                                _idUser.toString());
+                                                _idUser.toString(),
+                                                priceOnDayController.text);
                                             getPlayPause();
                                           });
                                         });
@@ -493,11 +618,32 @@ class _PTRepostarState extends State<PTRepostar> {
                                           fontWeight: FontWeight.bold,
                                           fontFamily: 'HeeboSemiBold'),
                                     ),
-                                  ),)
+                                  ),),
+                                  Padding(padding: EdgeInsets.only(top: 25.0)),
                               ],
                             ),
                           )))))),
-        ));
+        ),);
+  }
+
+  Future getImage() async {
+    var pickedFile = await ImagePicker().getImage(source: ImageSource.camera);
+    var tempImage = File(pickedFile.path);
+    setState(() {
+      sampleImage = tempImage;
+    });
+  }
+
+  Widget enableUpload() {
+    String fileName = sampleImage.path.split('/').last;
+    fotoController.text = fileName.toString();
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Image.file(sampleImage, height: 300.0, width: 300.0),          
+        ],
+      ),
+    );
   }
 
   Future<List<PlayPauseTracking>> getPlayPause() async {
@@ -531,7 +677,7 @@ class _PTRepostarState extends State<PTRepostar> {
       }
 
       return list;
-    } catch (Ex) {
+    } catch (ex) {
       //Navigator.push(context, MaterialPageRoute(builder: (context)=>PTInicial()));
     }
     return retunn;
@@ -550,6 +696,7 @@ class _PTRepostarState extends State<PTRepostar> {
             //carPlateController.text = list[0].plate;
             priceController.text = list[0].price;
             litreController.text = list[0].litre;
+            priceOnDayController.text = list[0].priceOnDay;
             kmsController.text = list[0].kms;
             lastKM = int.parse(list[0].kms);
             switch (list[0].idTipoCombustible) {
@@ -589,7 +736,7 @@ class _PTRepostarState extends State<PTRepostar> {
         }
         return list;
       });
-    } catch (Ex) {}
+    } catch (ex) {}
     return retunn;
   }
 
@@ -605,7 +752,7 @@ class _PTRepostarState extends State<PTRepostar> {
         }
         return list;
       });
-    } catch (Ex) {
+    } catch (ex) {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => PTPrincipal()));
     }
@@ -625,7 +772,7 @@ class _PTRepostarState extends State<PTRepostar> {
         _dominio = null;
         _semilla = null;
       }
-    } catch (Ex) {
+    } catch (ex) {
       _dominio = null;
       _semilla = null;
     }

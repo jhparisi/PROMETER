@@ -178,24 +178,30 @@ class _PTConfiguracionState extends State<PTConfiguracion> {
         }
       }
     }
-    catch(Ex){
-      print(Ex);
+    catch(ex){
+      print(ex);
     }
     
   }
 
   Future<List<EmpresaAPI>> getEmpresas() async{
-    var empresas = await HttpHandler.get().fetchEmpresaAPI();
-    if(empresas.length>0){   
-      _listEmpresas.clear();   
-      for(var i=0; i<empresas.length; i++){
-        setState(() {
+    try{
+      var empresas = await HttpHandler.get().fetchEmpresaAPI();
+      if(empresas.length>0){   
+        _listEmpresas.clear();   
+        for(var i=0; i<empresas.length; i++){
+          setState(() {
+            
+            _listEmpresas.add(empresas[i].nombre);   
+          });
           
-          _listEmpresas.add(empresas[i].nombre);   
-        });
-        
+        }
       }
+      return empresas;
     }
-    return empresas;
+    catch(ex){
+      print(ex.toString());
+      return null;
+    }
   }
 }

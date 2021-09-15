@@ -69,7 +69,7 @@ class Repository{
     //return list;
   }
 
-  Future<List<Refuel>> fetchRefuelLocal(String idTipoCombustible, String kms, String litre, String plate, String price, String refuelDate, String userId) async{
+  Future<List<Refuel>> fetchRefuelLocal(String idTipoCombustible, String kms, String litre, String plate, String price, String refuelDate, String userId,String priceOnDay) async{
 
     List<Refuel> list = await _dbProvider.getVerifyRefuel();
     if(list != null){
@@ -83,6 +83,7 @@ class Repository{
       _refuelLocal.price = price;
       _refuelLocal.refuelDate = refuelDate;
       _refuelLocal.userId =userId;
+      _refuelLocal.priceOnDay = priceOnDay;
       
       _dbProvider.addRefuelLocal(_refuelLocal);
       

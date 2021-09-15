@@ -441,7 +441,7 @@ class _MultiFormState extends State<MultiForm>
         _dominio = null;
         _semilla = null;
       }
-    } catch (Ex) {
+    } catch (ex) {
       _dominio = null;
         _semilla = null;
     }

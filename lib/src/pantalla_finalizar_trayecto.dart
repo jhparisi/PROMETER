@@ -506,7 +506,7 @@ class _PTFinalizarRutaState extends State<PTFinalizarRuta> {
         }
         return list;
       });
-    } catch (Ex) {
+    } catch (ex) {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => PTFinalizarRuta()));
     }
@@ -591,7 +591,7 @@ class _PTFinalizarRutaState extends State<PTFinalizarRuta> {
         _dominio = null;
         _semilla = null;
       }
-    } catch (Ex) {
+    } catch (ex) {
       _dominio = null;
         _semilla = null;
     }

@@ -217,7 +217,7 @@ class _PTPrincipalState extends State<PTPrincipal> {
         }
         return list;
       });
-    } catch (Ex) {
+    } catch (ex) {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => PTPrincipal()));
     }
@@ -256,7 +256,7 @@ class _PTPrincipalState extends State<PTPrincipal> {
       } */
 
       return list;
-    } catch (Ex) {
+    } catch (ex) {
       //Navigator.push(context, MaterialPageRoute(builder: (context)=>PTInicial()));
     }
     return retunn;

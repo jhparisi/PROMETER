@@ -98,7 +98,7 @@ class _PTCargandoState extends State<PTCargando> {
         MaterialPageRoute(
             builder: (context) => PTConfiguracion()));
       }
-    } catch (Ex) {
+    } catch (ex) {
       Navigator.push(
         context,
         MaterialPageRoute(

@@ -302,7 +302,7 @@ class Menu extends StatelessWidget {
       }
       //print(list);
       return list;
-    } catch (Ex) {
+    } catch (ex) {
       return null;
     }
   }

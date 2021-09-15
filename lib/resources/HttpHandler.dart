@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:eszaworker/class/AcompananteAPIClass.dart';
 import 'package:eszaworker/class/ConfiguracionClass.dart';
 import 'package:eszaworker/class/ControlHourAllClass.dart';
@@ -18,20 +19,21 @@ class HttpHandler {
   final String _urlUsuarioPhone = "/api/Prometer/UserByPhone";
   final String _urlTrackingData = "/api/Prometer/InsertTrackingData/";
   final String _urlRepostear = "/api/Prometer/InsertRefuel/";
+  final String _urlRepostarImagen = "/api/Prometer/InsertRefuelConImagen";
   final String _urlMatriculas = "/api/Prometer/getDameVehiculos";
   final String _urlAcompanante = "/api/Prometer/getAcompanante";
   final String _urlControlHour = "/api/Prometer/InsertControlHora";
   final String _urlControlHourEliminar = "/api/Prometer/EliminarControlHora";
   final String _urlControlHorasTodas = "/api/Prometer/GetControlHorasTodas";
   final String _urlControlHorasFecha = "/api/Prometer/GetControlHorasFecha";
-  final String _urlValidarUsuario = "api/Prometer/ValidarUsuario";
-  final String _urlValidarVersion = "api/Prometer/ValidarVersion";
-  final String _urlNotificacionGPS = "api/Prometer/NotificacionGPSInactivo";
-  final String _urlGetUltimoEvento = "api/Prometer/GetUltimoEvento";
-  final String _urlGetModificacionesAdmin = "api/Prometer/GetModificacionesAdmin";
-  final String _urlGetConfiguracion = "api/Prometer/getConfiguracion";
-  final String _urlGetEmpresas = "api/Prometer/getEmpresasApp";
-  final String _urlGetFotoUsuario = "api/Prometer/getFotoUsuario";
+  final String _urlValidarUsuario = "/api/Prometer/ValidarUsuario";
+  final String _urlValidarVersion = "/api/Prometer/ValidarVersion";
+  final String _urlNotificacionGPS = "/api/Prometer/NotificacionGPSInactivo";
+  final String _urlGetUltimoEvento = "/api/Prometer/GetUltimoEvento";
+  final String _urlGetModificacionesAdmin = "/api/Prometer/GetModificacionesAdmin";
+  final String _urlGetConfiguracion = "/api/Prometer/getConfiguracion";
+  final String _urlGetEmpresas = "/api/Prometer/getEmpresasApp";
+  final String _urlGetFotoUsuario = "/api/Prometer/getFotoUsuario";
   
   static HttpHandler get() {
     return _httpHandler;
@@ -45,10 +47,15 @@ class HttpHandler {
   }
 
   Future<dynamic> postJson(Uri uri, String body) async {
-    http.Response response = await http.post(uri,
+    try{
+      http.Response response = await http.post(uri,
         headers: {"Content-Type": "application/json"}, body: body);
-    //print("respondio ");
-    return json.decode(response.body);
+      print("respondio ");
+      return json.decode(response.body);
+    }
+    catch(ex){
+      print(ex);
+    }
   }
 
   //SE CONECTA CON LA API Y TRAE LOS VALORES DEL USUARIO SEGUN EL NUMERO TELEFONICO
@@ -110,7 +117,7 @@ class HttpHandler {
 
   //SE CONECTA CON LA API PARA REGISTRAR LOS DATOS DE REFUEL
   Future postRefuel(
-      idTipoCombustible, kms, plate, price, litre, refuelDate, userId, dominio, semilla) {
+      idTipoCombustible, kms, plate, price, litre, refuelDate, userId, dominio, semilla,priceOnDay) {
     var uri = new Uri.http(_baseUrl, _urlRepostear);
     var body = jsonEncode(<String, String>{
       "idTipoCombustible": idTipoCombustible,
@@ -121,10 +128,35 @@ class HttpHandler {
       "refuelDate": refuelDate,
       "userId": userId.toString(),
       "dominio": dominio,
-      "semilla": semilla
+      "semilla": semilla,
+      "priceOnDay": priceOnDay
     });
     //print(uri);
     return postJson(uri, body);
+  }
+
+  Future getUploadImg(File _image, nombre, image64, dominio,semilla,userId,idRefuel) async {
+
+    final length = await _image.length();
+    var uri = "http://"+_baseUrl+_urlRepostarImagen;
+    final request = new http.MultipartRequest('POST', Uri.parse(uri))
+        ..files.add(new http.MultipartFile('file', _image.openRead(), length));
+    request.fields['nombreImagen'] = nombre;
+    request.fields['anio'] = DateTime.now().toString();
+    request.fields['typedoc'] = "PROMETER";
+    request.fields['idRefuel'] = idRefuel;
+    request.fields['dominio'] = dominio;
+    request.fields['semilla'] = semilla;
+    request.fields['userId'] = userId;
+    request.fields['base64Image'] = image64.toString();
+    request.headers["content-type"] = "multipart/form-data";
+    request.headers["content-type"] = "image/jpeg";
+    http.Response response = await http.Response.fromStream(await request.send());
+
+    print("Result: ${response.body}");
+    return response.body;
+    //return JSON.decode(response.body);
+
   }
 
   //SE CONECTA CON LA API PARA REGISTRAR LOS DATOS DE WORKINGDAY
@@ -309,10 +341,8 @@ class HttpHandler {
     var uri = new Uri.http(_baseUrl, _urlGetEmpresas);
     var body = "";
     print(uri);
-    return postJson(uri, body).then(((data) => data
-        .map<EmpresaAPI>((item) =>
-            new EmpresaAPI(item, MediaTypeEmpresaAPI.content))
-        .toList()));
+    return postJson(uri, body).then(((data) => data.map<EmpresaAPI>((item) =>
+            new EmpresaAPI(item, MediaTypeEmpresaAPI.content)).toList()));
   }
 
   //SE CONECTA CON LA API Y TRAE LA IMAGEN DEL USUARIO

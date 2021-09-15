@@ -513,7 +513,7 @@ class _PTCerrarRutaState extends State<PTCerrarRuta>
           //timeSendData=65;
         }
       }
-    } catch (Ex) {
+    } catch (ex) {
       //timeSendData=30;
       //startTimerSendData();
     }
@@ -811,7 +811,7 @@ class _PTCerrarRutaState extends State<PTCerrarRuta>
         _dominio = null;
         _semilla = null;
       }
-    } catch (Ex) {
+    } catch (ex) {
       _dominio = null;
         _semilla = null;
     }

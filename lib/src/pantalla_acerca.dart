@@ -223,7 +223,7 @@ class _PTAcercaState extends State<PTAcerca> {
         }
         return list;
       });
-    } catch (Ex) {}
+    } catch (ex) {}
     return retunn;
   }
 
@@ -242,7 +242,7 @@ class _PTAcercaState extends State<PTAcerca> {
         _dominio = null;
         //_semilla = null;
       }
-    } catch (Ex) {
+    } catch (ex) {
       _dominio = null;
         //_semilla = null;
     }

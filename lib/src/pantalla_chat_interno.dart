@@ -55,7 +55,7 @@ class _PTChatInternoState extends State<PTChatInterno>
 
   Widget _buildTextComposer() {
     return new IconTheme(
-        data: new IconThemeData(color: Theme.of(context).accentColor),
+        data: new IconThemeData(color: Colors.white),
         child: new Container(
           child: new Row(children: <Widget>[
             new Flexible(

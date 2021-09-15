@@ -104,7 +104,7 @@ class _PTTabObservacionesState extends State<PTTabObservaciones>{
         _dominio = null;
         _semilla = null;
       }
-    } catch (Ex) {
+    } catch (ex) {
       _dominio = null;
         _semilla = null;
     }

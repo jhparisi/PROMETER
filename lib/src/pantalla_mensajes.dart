@@ -73,7 +73,7 @@ class _PTMensajesState extends State<PTMensajes>
         ],
       ),
       floatingActionButton: new FloatingActionButton(
-        backgroundColor: Theme.of(context).accentColor,
+        backgroundColor: Colors.white,
         child: new Icon(
           Icons.message,
           color: Colors.white,

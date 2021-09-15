@@ -418,7 +418,7 @@ class _PTIniciarRutaState extends State<PTIniciarRuta> {
         }
         return list;
       });
-    } catch (Ex) {
+    } catch (ex) {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => PTInicial()));
     }
@@ -468,7 +468,7 @@ class _PTIniciarRutaState extends State<PTIniciarRuta> {
         _dominio = null;
         _semilla = null;
       }
-    } catch (Ex) {
+    } catch (ex) {
       _dominio = null;
       _semilla = null;
     }

@@ -27,7 +27,7 @@ class DBProvider {
   void init() async {
     Directory documentDirectory = await getApplicationDocumentsDirectory();
     final path = join(documentDirectory.path, "EszaWorker.db");
-    db = await openDatabase(path, version: 7,
+    db = await openDatabase(path, version: 8,
         onCreate: (Database newDb, int version) {
       newDb.execute("""
             CREATE TABLE WorkingDay(
@@ -76,7 +76,8 @@ class DBProvider {
             litre TEXT,
             plate TEXT,
             price TEXT,
-            refuelDate TEXT
+            refuelDate TEXT,
+            priceOnDay TEXT
           );""");
       newDb.execute("""
           CREATE TABLE Mensajes(
