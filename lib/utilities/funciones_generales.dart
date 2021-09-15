@@ -54,6 +54,7 @@ void ocultarProgressDialogAlCompletar(BuildContext context, Widget paginaNavegac
 }
 
 void inicializarBDLocal() async{
+  // ignore: await_only_futures
   await _dbprovider.init();
 }
 

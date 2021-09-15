@@ -627,7 +627,7 @@ class _PTRepostarState extends State<PTRepostar> {
   }
 
   Future getImage() async {
-    var pickedFile = await ImagePicker().getImage(source: ImageSource.camera);
+    var pickedFile = await ImagePicker().pickImage(source: ImageSource.camera);
     var tempImage = File(pickedFile.path);
     setState(() {
       sampleImage = tempImage;

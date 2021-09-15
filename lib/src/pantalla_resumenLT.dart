@@ -294,14 +294,21 @@ class _PTResumenLTState extends State<PTResumenLT> {
       }
       if (dataList.length > 0) {
         _dataLT = [];
+        var tieneModManual = false;
+        for (var i = 0; i < dataList.length; i++){
+          if (dataList[i].modificadoManual == true){
+            tieneModManual = true;
+            break;
+          }
+        }
         for (var i = 0; i < dataList.length; i++) {
-          if (dataList[i].modificadoManual == true) {
+          if (dataList[i].modificadoManual == true && tieneModManual==true) {
             _dataLT.add(dataList[i]);
             existe = 1;
             colorIcono = Colors.red;
             textoBoton = "Editar";
           }
-          if (dataList[i].modificadoManual == false && existe == 0) {
+          if (dataList[i].modificadoManual == false && existe == 0 && tieneModManual==false) {
             _dataLT.add(dataList[i]);
             colorIcono = Colors.blue;
             textoBoton = "Crear Nuevo";

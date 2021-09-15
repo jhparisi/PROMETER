@@ -4,8 +4,8 @@ import 'package:eszaworker/resources/db_provider.dart';
 import 'package:eszaworker/utilities/funciones_generales.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get_version/get_version.dart';
-
+//import 'package:get_version/get_version.dart';
+import 'package:eszaworker/class/GetVersionLibrary.dart' as GetVersion;
 import 'menu.dart';
 
 DBProvider _dbprovider = DBProvider.get();
@@ -59,23 +59,24 @@ class _PTAcercaState extends State<PTAcerca> {
       versionOS = 'Error al leer la versión';
     }
 
-    try {
-      versionOS = await GetVersion.platformVersion;
+    /* try {
+      versionOS = await GetVersion.GetVersionLibrary.projectCode;
     } on PlatformException {
       versionOS = 'Error al leer la versión';
-    }
+    } */
+
     try {
-      versionApp = await GetVersion.projectVersion;
+      versionApp = await GetVersion.GetVersionLibrary.projectVersion;
     } on PlatformException {
       versionApp = 'Error al leer la versión';
     }
     try {
-      appName = await GetVersion.appName;
+      appName = await GetVersion.GetVersionLibrary.appName;
     } on PlatformException {
       appName = 'Error al leer la versión';
     }
     try {
-      packageName = await GetVersion.appID;
+      packageName = await GetVersion.GetVersionLibrary.appID;
     } on PlatformException {
       packageName = 'Error al leer la versión';
     }
@@ -114,7 +115,7 @@ class _PTAcercaState extends State<PTAcerca> {
                 ),
                 subtitle: Text('$versionDB' + ".0.0"),
               ),
-              ListTile(
+              /* ListTile(
                 leading: Icon(
                   Icons.android,
                   color: Colors.blue,
@@ -124,7 +125,7 @@ class _PTAcercaState extends State<PTAcerca> {
                   style: TextStyle(fontSize: 14.0,fontFamily: 'HeeboSemiBold'),
                 ),
                 subtitle: Text('$versionOS'),
-              ),
+              ), */
               ListTile(
                 leading: Icon(
                   Icons.apps,

@@ -4,13 +4,13 @@ import 'package:sqflite/sqflite.dart';
 import 'dart:io';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
-import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
+//import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:path/path.dart';
 import 'menu.dart';
+import 'package:eszaworker/utilities/funciones_generales.dart' as _funcGeneral;
 
 const String telefonoWS = "+34651405480";
-const String mensajeContacto =
-    "Hola, necesito ayuda con la aplicación PRO-METER.\n¿Puedes ayudarme?";
+const String mensajeContacto ="Hola, necesito ayuda con la aplicación PRO-METER.\n¿Puedes ayudarme?";
 const String telefonoContacto = "902430715";
 const String urlPreguntas = "https://www.ezsa.es/";
 Menu _menu = new Menu();
@@ -28,24 +28,21 @@ class _PTAyudaState extends State<PTAyuda> {
     super.initState();
   }
 
-  void launchWhatsApp() async {
-    String url() {
-      if (Platform.isIOS) {
-        return "whatsapp://wa.me/$telefonoWS/?text=${Uri.parse(mensajeContacto)}";
-      } else {
-        return "whatsapp://send?   phone=$telefonoWS&text=${Uri.parse(mensajeContacto)}";
-      }
-    }
-
-    if (await canLaunch(url())) {
-      await launch(url());
-    } else {
-      throw 'Could not launch ${url()}';
-    }
-  }
+  
 
   @override
   Widget build(BuildContext context) {
+    
+    void launchWhatsApp() async {
+    final whatsappURlAndroid = "whatsapp://send?phone=$telefonoWS&text=${Uri.parse(mensajeContacto)}";
+    if( await canLaunch(whatsappURlAndroid)){
+      await launch(whatsappURlAndroid);
+    }
+    else{
+      _funcGeneral.mostrarFlushBar(context,"No tienes Whatsapp instalado en tu movil");
+    }
+  }
+
     //***************************AlertDialog*************************************************//
     showAlertDialog(BuildContext context, String pregunta, String datos,
         Color color, int btnAceptar) {
@@ -117,9 +114,8 @@ class _PTAyudaState extends State<PTAyuda> {
                 ),
                 subtitle: Text('$telefonoWS'),
                 onTap: () {
-                  //launchWhatsApp();
-                  FlutterOpenWhatsapp.sendSingleMessage(
-                      telefonoWS, mensajeContacto);
+                  launchWhatsApp();
+                  //FlutterOpenWhatsapp.sendSingleMessage(telefonoWS, mensajeContacto);
                 },
               ),
               ListTile(

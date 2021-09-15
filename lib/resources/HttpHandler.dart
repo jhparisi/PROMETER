@@ -13,7 +13,7 @@ import 'package:eszaworker/class/UserByPhoneAPIClass.dart';
 
 class HttpHandler {
   static final _httpHandler = new HttpHandler();
-  final String _baseUrl ="apidatos.erp.avanzadi.com"; //"apidatos.erp.avanzadi.com"
+  final String _baseUrl ="apidatos.pre.erp.avanzadi.com"; //"apidatos.erp.avanzadi.com"
   
   final String _urlWorkingDay = "/api/Prometer/InsertWorkingDay/";
   final String _urlUsuarioPhone = "/api/Prometer/UserByPhone";
@@ -120,7 +120,7 @@ class HttpHandler {
       idTipoCombustible, kms, plate, price, litre, refuelDate, userId, dominio, semilla,priceOnDay) {
     var uri = new Uri.http(_baseUrl, _urlRepostear);
     var body = jsonEncode(<String, String>{
-      "idTipoCombustible": idTipoCombustible,
+      "idTipoCombustible": idTipoCombustible.toString(),
       "kms": kms,
       "plate": plate,
       "price": price,

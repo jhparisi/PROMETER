@@ -1,24 +1,21 @@
-//import 'dart:convert';
-
 import 'package:eszaworker/class/ConfiguracionClass.dart';
 import 'package:eszaworker/class/DataLocalClass.dart';
 import 'package:eszaworker/class/MensajesClass.dart';
 import 'package:eszaworker/class/WorkingDayClass.dart';
 import 'package:eszaworker/resources/db_provider.dart';
-import 'package:eszaworker/src/pantalla_finalizar_trayecto.dart';
-import 'package:eszaworker/src/pantalla_mensajes.dart';
 import 'package:eszaworker/src/pantalla_play_pause.dart';
 import 'package:eszaworker/src/pantalla_principal.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get_version/get_version.dart';
+//import 'package:get_version/get_version.dart';
+import 'package:eszaworker/class/GetVersionLibrary.dart' as GetVersion;
 import 'package:eszaworker/resources/repository.dart';
 import 'dart:async';
 import 'package:eszaworker/resources/HttpHandler.dart';
 import 'package:eszaworker/class/UserByPhoneAPIClass.dart';
 import 'package:eszaworker/class/PlayPauseTrackingClass.dart';
 import 'package:eszaworker/src/menu.dart';
-import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -65,66 +62,20 @@ class PTInicial extends StatefulWidget {
 
 class _PTInicialState extends State<PTInicial> {
   List<UserByPhoneAPIClass> _user = [];
-
+  FirebaseMessaging messaging;
   /// ********************************** INICIO NOTIFICACIONES DE FIREBASE ************************************** */
-  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-  final _mensajesStreamController = StreamController<String>.broadcast();
-  Stream<String> get mensajes => _mensajesStreamController.stream;
-
-  initNotifications() {
-    _firebaseMessaging.requestNotificationPermissions();
-    _firebaseMessaging.getToken().then((token) {
-      deviceToken = token;
-      print("El token es: $deviceToken");
-    });
-
-    _firebaseMessaging.configure(onMessage: (info) async {
-      print("====== OnMessage ======");
-      print(info);
-      String data = 'no-data';
-      if (Platform.isAndroid) {
-        data = info['data']['aplicacion'] ?? 'no-data';
-      }
-      _mensaje.fecha = new DateTime.now().toString();
-      _mensaje.titulo = info['data']['titulo'];
-      _mensaje.mensaje = info['data']['mensaje'];
-      _mensaje.url = "";
-      _dbprovider.addMensajes(_mensaje);
-      _mensajesStreamController.sink.add(data);
-    }, onLaunch: (info) async {
-      print("====== OnLaunch ======");
-      print(info);
-      String data = 'no-data';
-      if (Platform.isAndroid) {
-        data = info['data']['aplicacion'] ?? 'no-data';
-      }
-      _mensaje.fecha = new DateTime.now().toString();
-      _mensaje.titulo = info['data']['titulo'];
-      _mensaje.mensaje = info['data']['mensaje'];
-      _mensaje.url = "";
-      _dbprovider.addMensajes(_mensaje);
-      _mensajesStreamController.sink.add(data);
-    }, onResume: (info) async {
-      print("====== OnResume ======");
-      print(info);
-      String data = 'no-data';
-      if (Platform.isAndroid) {
-        data = info['data']['aplicacion'] ?? 'no-data';
-      }
-      _mensaje.fecha = new DateTime.now().toString();
-      _mensaje.titulo = info['data']['titulo'];
-      _mensaje.mensaje = info['data']['mensaje'];
-      _mensaje.url = "";
-      _dbprovider.addMensajes(_mensaje);
-      _mensajesStreamController.sink.add(data);
-    });
-
-    // ignore: unused_element
-    dispose() {
-      _mensajesStreamController?.close();
-    }
+  
+  Future<void> _messageHandler(RemoteMessage message) async {
+    print('background message ${message.notification.body}');
   }
 
+  Future<void> _registrarMensaje(String titulo, String mensaje, String url) async{
+      _mensaje.fecha = new DateTime.now().toString();
+      _mensaje.titulo = titulo;
+      _mensaje.mensaje = mensaje;
+      _mensaje.url = url;
+      _dbprovider.addMensajes(_mensaje);
+  }
   /// ********************************** FIN NOTIFICACIONES DE FIREBASE ************************************** */
 
   void loadUser() async {
@@ -187,25 +138,50 @@ class _PTInicialState extends State<PTInicial> {
   @override
   initState() {
     super.initState();
-    getConfiguracion();
-    getVerifyDataLocal();
-    getWDLocal();
-    initNotifications();
-    mensajes.listen((event) {
-      if (event.indexOf("PDA") > -1) {
-        _funcGeneral.mostrarFlushBar(context, "Tienes trabajos pendientes en la PDA por cerrar o pausar!\nSerás redirigido a la PDA!");
-        const url = 'https://pda.ezsa.es/';
-        Future.delayed(const Duration(seconds: 5), () {
-          launch(url);
+    
+    Firebase.initializeApp().whenComplete(() { 
+      messaging = FirebaseMessaging.instance;
+      messaging.getToken().then((token){
+        deviceToken = token;
+        print(token);
+        getConfiguracion();
+        getVerifyDataLocal();
+        getWDLocal();
+        FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+            print("message recieved");
+            print(event.notification.body);
+            _registrarMensaje(event.notification.title,event.notification.body,"");
+            if (event.data.containsValue("PDA")) {
+              _funcGeneral.mostrarFlushBar(context, "Tienes trabajos pendientes en la PDA por cerrar o pausar!\nSerás redirigido a la PDA!");
+              const url = 'https://pda.ezsa.es/';
+              Future.delayed(const Duration(seconds: 5), () {
+                launch(url);
+              });
+            } 
+            else{
+              _funcGeneral.mostrarFlushBar(context, event.notification.title + "\nTienes una notificacion de PRO-METER.\nVe a mensajes para leerla");
+            }
+            
         });
-      } else if (event == "EZSAWORKER") {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => PTFinalizarRuta()));
-      } else if (event == "MENSAJE") {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => PTMensajes()));
-      }
+        FirebaseMessaging.onMessageOpenedApp.listen((message) {
+          print('Message clicked!');
+          _registrarMensaje(message.notification.title,message.notification.body,"");
+            if (message.data.containsValue("PDA")) {
+              _funcGeneral.mostrarFlushBar(context, "Tienes trabajos pendientes en la PDA por cerrar o pausar!\nSerás redirigido a la PDA!");
+              const url = 'https://pda.ezsa.es/';
+              Future.delayed(const Duration(seconds: 5), () {
+                launch(url);
+              });
+            } 
+            else{
+              _funcGeneral.mostrarFlushBar(context, message.notification.title + "\nTienes una notificacion de PRO-METER.\nVe a mensajes para leerla");
+            }
+        });
+
+        FirebaseMessaging.onBackgroundMessage(_messageHandler);
+      });
     });
+    
   }
 
   @override
@@ -669,7 +645,7 @@ class _PTInicialState extends State<PTInicial> {
 
   Future<List<WorkingDay>> getWDLocal() async {
     versionDB = await _dbprovider.db.getVersion();
-    versionApp = await GetVersion.projectVersion;
+    versionApp = await GetVersion.GetVersionLibrary.projectVersion;
     print("VERSION BD: " + versionDB.toString());
     List<WorkingDay> retunn = new List<WorkingDay>.empty();
     try {
