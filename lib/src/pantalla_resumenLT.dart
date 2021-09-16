@@ -22,6 +22,7 @@ String textoBoton = "Editar";
 var zona = DateTime.now().timeZoneName;
 String _dominio;
 String _semilla;
+bool mostrarNota = false;
 
 class PTResumenLT extends StatefulWidget {
   final ControlHour data;
@@ -39,6 +40,9 @@ class _PTResumenLTState extends State<PTResumenLT> {
     getControlHorasDate(
         widget.data.idUsuario, widget.data.fecha, widget.data.comentario);
     super.initState();
+    setState(() {
+      mostrarNota = false;
+    });
   }
 
   Flushbar fbar = new Flushbar(
@@ -98,6 +102,7 @@ class _PTResumenLTState extends State<PTResumenLT> {
   //***************************FIN AlertDialog*************************************************//
   @override
   Widget build(BuildContext context) {
+    
     var fec = widget.data.fecha.split("-");
     String fechaFormateadaES =
         fec[2].split(" ")[0] + "-" + fec[1] + "-" + fec[0];
@@ -158,7 +163,12 @@ class _PTResumenLTState extends State<PTResumenLT> {
               "Tiempo total: $tiempoTotal",
               style: TextStyle(fontSize: 20.0, color: Colors.blue,fontFamily: 'HeeboSemiBold'),
             ),
-            Padding(padding: EdgeInsets.only(top: 70.0)),
+            Padding(padding: EdgeInsets.only(top: 40.0)),
+            Visibility(
+              child: Text("* El tramo es de 1 minuto, ya que no hubo un evento fin para ese tramo.\nSi el resumen NO indica los valores correctos, por favor, ingrese los\ndatos en Crear nuevo.",style: TextStyle(fontSize: 12.0, color: Colors.red,fontFamily: 'HeeboSemiBold')),
+              visible: mostrarNota,
+            ),
+            Padding(padding: EdgeInsets.only(top: 30.0)),
           ],
         ),
       ),
@@ -294,21 +304,21 @@ class _PTResumenLTState extends State<PTResumenLT> {
       }
       if (dataList.length > 0) {
         _dataLT = [];
-        var tieneModManual = false;
+        /* var tieneModManual = false;
         for (var i = 0; i < dataList.length; i++){
           if (dataList[i].modificadoManual == true){
             tieneModManual = true;
             break;
           }
-        }
+        } */
         for (var i = 0; i < dataList.length; i++) {
-          if (dataList[i].modificadoManual == true && tieneModManual==true) {
+          if (dataList[i].modificadoManual == true ) {
             _dataLT.add(dataList[i]);
             existe = 1;
             colorIcono = Colors.red;
             textoBoton = "Editar";
           }
-          if (dataList[i].modificadoManual == false && existe == 0 && tieneModManual==false) {
+          if (dataList[i].modificadoManual == false && existe == 0 ) {
             _dataLT.add(dataList[i]);
             colorIcono = Colors.blue;
             textoBoton = "Crear Nuevo";
@@ -349,7 +359,14 @@ class _PTResumenLTState extends State<PTResumenLT> {
               hor += int.parse(fech[0]);
               min += int.parse(fech[1]);
               seg += int.parse(fech[2]);
+              if(item.tiempoTotal=="00:01:00"){
+                mostrarNota = true;
+              }
+              /* else{
+                mostrarNota=false;
+              } */
             }
+            
           }
           
         }
