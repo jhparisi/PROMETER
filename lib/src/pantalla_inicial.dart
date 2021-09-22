@@ -158,6 +158,9 @@ class _PTInicialState extends State<PTInicial> {
                 launch(url);
               });
             } 
+            else if(event.notification.body.contains("antigua")){
+              _funcGeneral.mostrarFlushBar(context, event.notification.title + "\n" + event.notification.body);
+            }
             else{
               _funcGeneral.mostrarFlushBar(context, event.notification.title + "\nTienes una notificacion de PRO-METER.\nVe a mensajes para leerla");
             }
@@ -173,6 +176,9 @@ class _PTInicialState extends State<PTInicial> {
                 launch(url);
               });
             } 
+            else if(message.notification.body.contains("antigua")){
+              _funcGeneral.mostrarFlushBar(context, message.notification.title + "\n" + message.notification.body);
+            }
             else{
               _funcGeneral.mostrarFlushBar(context, message.notification.title + "\nTienes una notificacion de PRO-METER.\nVe a mensajes para leerla");
             }
