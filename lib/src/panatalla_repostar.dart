@@ -8,6 +8,7 @@ import 'package:eszaworker/src/menu.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:eszaworker/src/pantalla_principal.dart';
+import 'package:flutter/services.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:eszaworker/resources/HttpHandler.dart';
 import 'package:eszaworker/class/PlayPauseTrackingClass.dart';
@@ -58,6 +59,7 @@ File sampleImage;
 String errMessage = 'Error subiendo imagen';
 bool msgExito = false;
 List<int> imageBytes = [];
+bool btnAceptarVisible = false;
 
 class PTRepostar extends StatefulWidget {
   static const String routeName = "/pantalla_repostar";
@@ -148,12 +150,11 @@ class _PTRepostarState extends State<PTRepostar> {
         },
       );
 
-      /* if (btnAceptar == 1) {
-        accion.add(botonAceptar);
-        accion.add(botonCancelar);
+      if (btnAceptar == 1) {
+        btnAceptarVisible = true;
       } else {
-        accion.add(botonCancelar);
-      } */
+        btnAceptarVisible = false;
+      } 
       // set up the AlertDialog
       AlertDialog alert = AlertDialog(
         title: Text(pregunta),
@@ -162,7 +163,10 @@ class _PTRepostarState extends State<PTRepostar> {
           style: TextStyle(color: color),
         ),
         actions: <Widget>[
-          botonAceptar,
+          Visibility(
+            child: botonAceptar, 
+            visible: btnAceptarVisible,
+          ),
           botonCancelar
         ],
       );
@@ -360,7 +364,7 @@ class _PTRepostarState extends State<PTRepostar> {
                                           "Error!",
                                           "Los Km indicados ($indicados) no pueden ser inferiores \na los valores del último repostaje ($lastKM).\n¿Estas seguro de querer guardar estos valores?",
                                           Colors.red,
-                                          1);
+                                          0);
                                       return 'Los Km indicados no pueden ser inferiores \na los valores del último repostaje';
                                     } 
                                     else if (int.parse(kmsController.text) >(lastKM + 1500) && lastKM != 0) {
@@ -371,7 +375,7 @@ class _PTRepostarState extends State<PTRepostar> {
                                               lastKM.toString() +
                                               ' Km).\n¿Estas seguro de querer guardar estos valores?',
                                           Colors.red,
-                                          1);
+                                          0);
                                       /* fbar = new Flushbar(
                               flushbarPosition: FlushbarPosition.TOP,
                               message: 'El Kilómetraje, no puede ser superior a los \n1.500km adicionales al último repostaje (' + lastKM.toString() + ' Km)',
@@ -413,10 +417,13 @@ class _PTRepostarState extends State<PTRepostar> {
                                     ),
                                     filled: true,
                                     fillColor: Colors.blue[100],
-                                  ),
-                                  keyboardType: TextInputType.number,
+                                  ), 
+                                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                  inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d+\,?\d{0,2}')),],
                                   onChanged: (value){
-                                    priceController.text = (double.parse(value) * double.parse(litreController.text)).toString();
+                                    if(litreController.text!="" && value!=""){
+                                      priceController.text = (double.parse(value.replaceAll(',', '.')) * double.parse(litreController.text.replaceAll(',', '.'))).toString().replaceAll(".", ",");
+                                    }                                    
                                   },
                                   validator: (value) {
                                     if (value.isEmpty) {
@@ -457,10 +464,14 @@ class _PTRepostarState extends State<PTRepostar> {
                                     filled: true,
                                     fillColor: Colors.blue[100],
                                   ),
+                                  
+                                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                  inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d+\,?\d{0,2}')),],
                                   onChanged: (value){
-                                    priceController.text = (double.parse(value) * double.parse(priceOnDayController.text)).toString();
+                                    if(priceOnDayController.text!="" && value!=""){
+                                      priceController.text = (double.parse(value.replaceAll(',', '.')) * double.parse(priceOnDayController.text.replaceAll(',', '.'))).toString().replaceAll(".", ",");
+                                    }                                    
                                   },
-                                  keyboardType: TextInputType.number,
                                   validator: (value) {
                                     if (value.isEmpty) {
                                       showAlertDialog(
@@ -501,7 +512,8 @@ class _PTRepostarState extends State<PTRepostar> {
                                     filled: true,
                                     fillColor: Colors.blue[100],
                                   ),
-                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d+\,?\d{0,2}')),],
+                                  keyboardType: TextInputType.numberWithOptions(decimal: true),
                                   validator: (value) {
                                     if (value.isEmpty) {
                                       showAlertDialog(
