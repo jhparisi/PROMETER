@@ -9,6 +9,7 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:eszaworker/src/pantalla_principal.dart';
 import 'package:flutter/services.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:eszaworker/resources/HttpHandler.dart';
 import 'package:eszaworker/class/PlayPauseTrackingClass.dart';
@@ -28,6 +29,7 @@ final fotoController = TextEditingController();
 final priceOnDayController = TextEditingController();
 final litreController = TextEditingController();
 final kmsController = TextEditingController();
+var isFirst = false;
 String lastCarPlate = "";
 Flushbar fbar;
 String trackingPlay = "0";
@@ -60,7 +62,8 @@ String errMessage = 'Error subiendo imagen';
 bool msgExito = false;
 List<int> imageBytes = [];
 bool btnAceptarVisible = false;
-
+var maskFormatter = new MaskTextInputFormatter(mask: '##,###', filter: {"#": RegExp(r'[0-9]')});
+var maskFormatterPrice = new MaskTextInputFormatter(mask: '#,###', filter: {"#": RegExp(r'[0-9]')});
 class PTRepostar extends StatefulWidget {
   static const String routeName = "/pantalla_repostar";
   PTRepostar({Key key}) : super(key: key);
@@ -228,6 +231,7 @@ class _PTRepostarState extends State<PTRepostar> {
                               children: <Widget>[
                                 DropdownButtonFormField(
                                   //decoration: InputDecoration(labelText: 'Combustible:'),
+                                  
                                   decoration: InputDecoration(
                                     labelText: "Combustible",
                                     contentPadding: const EdgeInsets.all(15.0),
@@ -395,10 +399,12 @@ class _PTRepostarState extends State<PTRepostar> {
                                 ),
                                 Padding(padding: EdgeInsets.only(top: 25.0)),
                                 TextFormField(
+                                  textDirection: TextDirection.rtl,
                                   controller: priceOnDayController,
                                   //decoration: InputDecoration(labelText: 'Importe total respostado:'),
                                   style: TextStyle(color: Colors.black, fontFamily: 'HeeboSemiBold'),
                                   decoration: InputDecoration(
+                                    hintText: "0,000",
                                     labelText: "Importe del combustible al día",
                                     contentPadding: const EdgeInsets.all(15.0),
                                     focusedBorder: OutlineInputBorder(
@@ -419,8 +425,9 @@ class _PTRepostarState extends State<PTRepostar> {
                                     fillColor: Colors.blue[100],
                                   ), 
                                   keyboardType: TextInputType.numberWithOptions(decimal: true),
-                                  inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d+\,?\d{0,2}')),],
+                                  inputFormatters: [maskFormatterPrice],//[FilteringTextInputFormatter.allow(RegExp(r'^\d+\,?\d{0,2}')),], 
                                   onChanged: (value){
+                                    
                                     if(litreController.text!="" && value!=""){
                                       priceController.text = (double.parse(value.replaceAll(',', '.')) * double.parse(litreController.text.replaceAll(',', '.'))).toString().replaceAll(".", ",");
                                     }                                    
@@ -441,10 +448,12 @@ class _PTRepostarState extends State<PTRepostar> {
                                 
                                 Padding(padding: EdgeInsets.only(top: 25.0)),
                                 TextFormField(
-                                  controller: litreController,
+                                  controller: litreController, 
+                                  textDirection: TextDirection.rtl,                                 
                                   //decoration: InputDecoration(labelText: '$unidadMedida:',),
                                   style: TextStyle(color: Colors.black, fontFamily: 'HeeboSemiBold'),
                                   decoration: InputDecoration(
+                                    hintText: "00,000",
                                     labelText: "$unidadMedida",
                                     contentPadding: const EdgeInsets.all(15.0),
                                     focusedBorder: OutlineInputBorder(
@@ -466,12 +475,13 @@ class _PTRepostarState extends State<PTRepostar> {
                                   ),
                                   
                                   keyboardType: TextInputType.numberWithOptions(decimal: true),
-                                  inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d+\,?\d{0,2}')),],
+                                  inputFormatters: [maskFormatter],//[FilteringTextInputFormatter.allow(RegExp(r'^\d+\,?\d{0,2}')),],                                  
                                   onChanged: (value){
                                     if(priceOnDayController.text!="" && value!=""){
                                       priceController.text = (double.parse(value.replaceAll(',', '.')) * double.parse(priceOnDayController.text.replaceAll(',', '.'))).toString().replaceAll(".", ",");
                                     }                                    
                                   },
+                                  
                                   validator: (value) {
                                     if (value.isEmpty) {
                                       showAlertDialog(
@@ -488,6 +498,7 @@ class _PTRepostarState extends State<PTRepostar> {
                                 Padding(padding: EdgeInsets.only(top:25.0)),
                                 TextFormField(
                                   controller: priceController,
+                                  textDirection: TextDirection.rtl,
                                   //decoration: InputDecoration(labelText: 'Importe total respostado:'),
                                   readOnly: true,
                                   enabled: false,
@@ -580,7 +591,8 @@ class _PTRepostarState extends State<PTRepostar> {
                                 Padding(padding: EdgeInsets.only(top: 25.0)),
                                 ElevatedButton(
                                     onPressed: () {
-                                      if (_formKey.currentState.validate()) {                                        
+                                      if (_formKey.currentState.validate()) { 
+                                        //_combustible = dameCombustibleSeleccionado(),                                       
                                         loadRefuel(
                                             _combustible,
                                             kmsController.text,
@@ -714,33 +726,43 @@ class _PTRepostarState extends State<PTRepostar> {
             switch (list[0].idTipoCombustible) {
               case "":
                 _nameRefuel = "Gasolina 98";
+                _combustible= "1";
                 break;
               case "1":
                 _nameRefuel = "Gasolina 98";
+                _combustible= "1";
                 break;
               case "2":
                 _nameRefuel = "Gasolina 95";
+                _combustible= "2";
                 break;
               case "3":
                 _nameRefuel = "Bioetanol";
+                _combustible= "3";
                 break;
               case "4":
                 _nameRefuel = "Diésel Normal";
+                _combustible= "4";
                 break;
               case "5":
                 _nameRefuel = "Diésel Plus";
+                _combustible= "5";
                 break;
               case "6":
                 _nameRefuel = "Diésel 1D, 2D,4D";
+                _combustible= "6";
                 break;
               case "7":
                 _nameRefuel = "Gas Natural";
+                _combustible= "7";
                 break;
               case "8":
                 _nameRefuel = "Eléctrico (Kw)";
+                _combustible= "8";
                 break;
               case "9":
                 _nameRefuel = "AdBlue";
+                _combustible= "9";
                 break;
             }
             _selectedLocation = _nameRefuel;
@@ -789,4 +811,7 @@ class _PTRepostarState extends State<PTRepostar> {
       _semilla = null;
     }
   }
+
+  
 }
+
